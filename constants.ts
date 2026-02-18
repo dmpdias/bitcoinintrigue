@@ -1,6 +1,11 @@
+
 import { BriefingData } from './types';
 
+// Fixed missing properties: id, status, and lastUpdated to match BriefingData interface
 export const BRIEFING_CONTENT: BriefingData = {
+  id: 'initial-issue',
+  status: 'published',
+  lastUpdated: new Date().toISOString(),
   date: new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }),
   issueNumber: 421,
   intro: {

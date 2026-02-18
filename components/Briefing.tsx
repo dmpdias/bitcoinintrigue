@@ -1,17 +1,23 @@
+
 import React from 'react';
-import { BRIEFING_CONTENT } from '../constants';
+import { BriefingData } from '../types';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-export const Briefing: React.FC = () => {
-  const featuredStory = BRIEFING_CONTENT.stories[0];
-  const sideStories = BRIEFING_CONTENT.stories.slice(1, 4);
+interface BriefingProps {
+  data: BriefingData | null;
+}
+
+export const Briefing: React.FC<BriefingProps> = ({ data }) => {
+  if (!data) return null;
+  
+  const featuredStory = data.stories[0];
+  const sideStories = data.stories.slice(1, 4);
 
   return (
     <section id="latest" className="py-12 md:py-24 bg-paper">
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
             
-            {/* Header - Unified Design */}
             <div className="flex flex-col md:flex-row justify-between md:items-end mb-10 md:mb-16 gap-6">
                 <div>
                     <div className="inline-block bg-brand-200 text-slate-900 text-[10px] font-black uppercase tracking-widest px-2 py-1 mb-2 border border-slate-900 shadow-[2px_2px_0px_0px_rgba(15,23,42,1)]">
@@ -22,17 +28,16 @@ export const Briefing: React.FC = () => {
                     </h2>
                 </div>
                 
-                <div className="max-w-md">
+                <div className="max-w-md text-right">
                     <p className="text-sm md:text-base font-serif text-slate-800 leading-relaxed mb-2">
-                        Global signals, separated from the noise.
+                        Issue #{data.issueNumber} • {data.date}
                     </p>
-                    <div className="h-1 w-12 bg-slate-900"></div>
+                    <div className="h-1 w-12 bg-slate-900 ml-auto"></div>
                 </div>
             </div>
 
             <div className="grid lg:grid-cols-12 gap-8 md:gap-12">
                 
-                {/* FEATURED STORY (Left Column) */}
                 <div className="lg:col-span-7 flex flex-col">
                     <div className="mb-3 md:mb-4">
                         <span className="bg-[#fbbf24] text-slate-900 font-bold uppercase text-[10px] md:text-xs px-2 md:px-3 py-1 tracking-widest inline-block">
@@ -40,17 +45,15 @@ export const Briefing: React.FC = () => {
                         </span>
                     </div>
                     
-                    {/* Image */}
                     <Link to={`/story/${featuredStory.id}`} className="block w-full aspect-video bg-stone-200 mb-4 md:mb-6 relative overflow-hidden group">
                         <img 
-                            src="https://images.unsplash.com/photo-1518546305927-5a555bb7020d?q=80&w=2069&auto=format&fit=crop" 
+                            src={featuredStory.image || "https://picsum.photos/800/400?grayscale"} 
                             alt="Featured" 
                             className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
                         />
                          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent"></div>
                     </Link>
 
-                    {/* Content */}
                     <Link to={`/story/${featuredStory.id}`} className="block group">
                         <h3 className="font-sans font-black text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-slate-900 mb-3 md:mb-4 leading-[0.95] tracking-tight group-hover:text-brand-600 transition-colors">
                             {featuredStory.headline}
@@ -64,14 +67,13 @@ export const Briefing: React.FC = () => {
                     <div className="flex items-center gap-3 text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest mt-auto">
                         <span className="text-slate-900">{featuredStory.category}</span>
                         <span>•</span>
-                        <span>{BRIEFING_CONTENT.date}</span>
+                        <span>Today</span>
                     </div>
                 </div>
 
-                {/* SIDE LIST (Right Column) */}
                 <div className="lg:col-span-5 flex flex-col gap-0 mt-8 lg:mt-0">
                     <div className="bg-[#e8e4db] px-4 md:px-6 py-2 mb-4 md:mb-6 uppercase text-[10px] md:text-xs font-bold text-slate-600 tracking-widest inline-block self-start">
-                        Latest Stories
+                        Market Pulse
                     </div>
 
                     <div className="flex flex-col divide-y divide-slate-300">
@@ -91,15 +93,11 @@ export const Briefing: React.FC = () => {
                                             <span>Today</span>
                                         </div>
                                     </div>
-                                    <div className="w-20 h-20 md:w-24 md:h-24 bg-[#e8e4db] shrink-0 relative overflow-hidden rounded-sm md:rounded-none">
-                                        {/* Placeholder pattern for thumbnail */}
-                                        <div className="absolute inset-0 flex items-center justify-center opacity-20">
-                                            <div className="w-8 h-8 md:w-12 md:h-12 rounded-full border border-slate-900"></div>
+                                    <div className="w-20 h-20 md:w-24 md:h-24 bg-slate-900 shrink-0 relative overflow-hidden">
+                                        <img src={story.image || "https://picsum.photos/200/200?grayscale"} className="absolute inset-0 w-full h-full object-cover grayscale opacity-50 group-hover:opacity-100 transition-opacity" />
+                                        <div className="absolute inset-0 flex items-center justify-center">
+                                            <div className="w-8 h-8 rounded-full border border-white/20"></div>
                                         </div>
-                                        {/* Fallback image simulation if needed, or actual image */}
-                                        {story.image && (
-                                            <img src={story.image} className="absolute inset-0 w-full h-full object-cover grayscale" />
-                                        )}
                                     </div>
                                 </div>
                             </Link>
@@ -107,7 +105,7 @@ export const Briefing: React.FC = () => {
                     </div>
 
                     <div className="mt-4 pt-4 border-t-2 border-slate-900 inline-block">
-                        <Link to="/" className="font-bold text-slate-900 uppercase text-xs md:text-sm tracking-widest hover:text-brand-600 flex items-center gap-2">
+                        <Link to="/newsletter" className="font-bold text-slate-900 uppercase text-xs md:text-sm tracking-widest hover:text-brand-600 flex items-center gap-2">
                             View More Articles <ArrowRight size={16} />
                         </Link>
                     </div>

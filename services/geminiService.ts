@@ -1,17 +1,18 @@
+
 import { GoogleGenAI } from "@google/genai";
 import { BRIEFING_CONTENT } from "../constants";
 
-let aiClient: GoogleGenAI | null = null;
-
-// Initialize client with environment variable safely
-if (process.env.API_KEY) {
-  aiClient = new GoogleGenAI({ apiKey: process.env.API_KEY });
-}
-
+/**
+ * Service to analyze the current briefing content using Gemini.
+ * Uses gemini-3-flash-preview for efficient text summarization and reasoning.
+ */
 export const analyzeBriefing = async (userQuestion: string): Promise<string> => {
-  if (!aiClient) {
+  if (!process.env.API_KEY) {
     return "API Key is missing. Please check your configuration.";
   }
+
+  // Create a new instance right before making an API call
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
   // Construct context from the current briefing content
   const context = `
@@ -33,11 +34,12 @@ export const analyzeBriefing = async (userQuestion: string): Promise<string> => 
   `;
 
   try {
-    const response = await aiClient.models.generateContent({
+    const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
       contents: context,
     });
     
+    // Use .text property directly (it's a getter)
     return response.text || "I couldn't generate an analysis at this moment.";
   } catch (error) {
     console.error("Gemini API Error:", error);

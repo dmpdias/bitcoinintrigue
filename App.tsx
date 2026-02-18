@@ -1,4 +1,5 @@
-import React from 'react';
+
+import React, { useEffect } from 'react';
 import { HashRouter, Routes, Route } from 'react-router-dom';
 import { Header } from './components/Header';
 import { HomePage } from './components/HomePage';
@@ -9,8 +10,17 @@ import { AdvertisePage } from './components/AdvertisePage';
 import { ContactPage } from './components/ContactPage';
 import { PrivacyPolicyPage } from './components/PrivacyPolicyPage';
 import { Footer } from './components/Footer';
+import { BackOffice } from './components/Admin/BackOffice';
+import { Login } from './components/Admin/Login';
+import { ProtectedRoute } from './components/Admin/ProtectedRoute';
+import { storageService } from './services/storageService';
+import { AskAnalyst } from './components/AskAnalyst';
 
 function App() {
+  useEffect(() => {
+    storageService.initialize();
+  }, []);
+
   return (
     <HashRouter>
       <div className="min-h-screen bg-paper selection:bg-brand-200 selection:text-brand-900 font-sans">
@@ -24,9 +34,19 @@ function App() {
             <Route path="/advertise" element={<AdvertisePage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/privacy" element={<PrivacyPolicyPage />} />
+            <Route path="/login" element={<Login />} />
+            <Route 
+              path="/admin" 
+              element={
+                <ProtectedRoute>
+                  <BackOffice />
+                </ProtectedRoute>
+              } 
+            />
           </Routes>
         </main>
         <Footer />
+        <AskAnalyst />
       </div>
     </HashRouter>
   );

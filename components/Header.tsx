@@ -1,5 +1,6 @@
+
 import React, { useState } from 'react';
-import { Menu, X, Bitcoin, Search, Twitter, Linkedin, Instagram } from 'lucide-react';
+import { Menu, X, Bitcoin, Search, Twitter, Linkedin, Instagram, ShieldCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export const Header: React.FC = () => {
@@ -14,6 +15,9 @@ export const Header: React.FC = () => {
                     <div className="flex gap-6">
                         <Link to="/about" className="hover:text-brand-600 transition-colors">About Us</Link>
                         <Link to="/advertise" className="hover:text-brand-600 transition-colors">Advertise with us</Link>
+                        <Link to="/admin" className="flex items-center gap-1 opacity-20 hover:opacity-100 transition-opacity text-slate-400">
+                            <ShieldCheck size={12} /> Admin
+                        </Link>
                     </div>
                     <div className="flex gap-4">
                         <a href="#" className="hover:text-brand-600 transition-colors"><Twitter size={14} /></a>
@@ -72,24 +76,7 @@ export const Header: React.FC = () => {
                 <Link to="/" className="block text-2xl font-black text-slate-900 uppercase tracking-tight" onClick={() => setIsMenuOpen(false)}>Home</Link>
                 <Link to="/newsletter" className="block text-2xl font-black text-slate-900 uppercase tracking-tight" onClick={() => setIsMenuOpen(false)}>Newsletter</Link>
                 <Link to="/about" className="block text-2xl font-black text-slate-900 uppercase tracking-tight" onClick={() => setIsMenuOpen(false)}>About</Link>
-            </div>
-            
-            <div className="pt-6 border-t border-slate-300 space-y-3">
-                <Link to="/about" className="flex items-center justify-between text-sm font-bold text-slate-600 hover:text-brand-600" onClick={() => setIsMenuOpen(false)}>
-                    About Us <span className="text-slate-300">→</span>
-                </Link>
-                <Link to="/advertise" className="flex items-center justify-between text-sm font-bold text-slate-600 hover:text-brand-600" onClick={() => setIsMenuOpen(false)}>
-                    Advertise <span className="text-slate-300">→</span>
-                </Link>
-                <Link to="/contact" className="flex items-center justify-between text-sm font-bold text-slate-600 hover:text-brand-600" onClick={() => setIsMenuOpen(false)}>
-                    Contact <span className="text-slate-300">→</span>
-                </Link>
-            </div>
-
-            <div className="pt-6 border-t border-slate-300 flex justify-center gap-8">
-                 <a href="#" className="text-slate-500 hover:text-brand-600 transition-colors"><Twitter size={20} /></a>
-                 <a href="#" className="text-slate-500 hover:text-brand-600 transition-colors"><Instagram size={20} /></a>
-                 <a href="#" className="text-slate-500 hover:text-brand-600 transition-colors"><Linkedin size={20} /></a>
+                <Link to="/admin" className="block text-xl font-bold text-slate-400 uppercase tracking-tight" onClick={() => setIsMenuOpen(false)}>Admin Console</Link>
             </div>
           </div>
       </div>
