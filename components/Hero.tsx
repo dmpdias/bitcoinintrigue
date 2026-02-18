@@ -19,9 +19,7 @@ export const Hero: React.FC = () => {
     setStatus('loading');
     try {
       await storageService.saveSubscriber({
-        id: Date.now().toString(),
         email: email,
-        joinedDate: new Date().toISOString(),
         status: 'active',
         source: 'homepage_hero'
       });

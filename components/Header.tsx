@@ -69,8 +69,8 @@ export const Header: React.FC = () => {
             </div>
         </div>
 
-      {/* Mobile Menu Dropdown */}
-      <div className={`md:hidden absolute w-full left-0 top-full bg-paper border-b-2 border-slate-900 shadow-2xl transition-all duration-300 ease-in-out origin-top overflow-hidden ${isMenuOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}>
+      {/* Menu Dropdown - Visible on all screen sizes when open */}
+      <div className={`absolute w-full left-0 top-full bg-paper border-b-2 border-slate-900 shadow-2xl transition-all duration-300 ease-in-out origin-top overflow-hidden ${isMenuOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}>
           <div className="px-6 py-6 space-y-6">
             <div className="space-y-4">
                 <Link to="/" className="block text-2xl font-black text-slate-900 uppercase tracking-tight" onClick={() => setIsMenuOpen(false)}>Home</Link>

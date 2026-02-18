@@ -1,11 +1,13 @@
+
 import React, { useState } from 'react';
-import { Check, AlertCircle } from 'lucide-react';
+import { Check, AlertCircle, Loader2 } from 'lucide-react';
+import { storageService } from '../services/storageService';
 
 export const NewsletterCTA: React.FC = () => {
   const [email, setEmail] = useState('');
-  const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     
@@ -14,8 +16,19 @@ export const NewsletterCTA: React.FC = () => {
         return;
     }
     
-    setStatus('success');
-    setEmail('');
+    setStatus('loading');
+    try {
+        await storageService.saveSubscriber({
+            email,
+            status: 'active',
+            source: 'newsletter_cta'
+        });
+        setStatus('success');
+        setEmail('');
+    } catch (e) {
+        console.error(e);
+        setStatus('error');
+    }
   };
 
   return (
@@ -24,7 +37,7 @@ export const NewsletterCTA: React.FC = () => {
         <div 
             className="absolute inset-0 opacity-10 pointer-events-none mix-blend-overlay"
             style={{
-                backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='1' fill-rule='evenodd'/%3E%3C/svg%3E")`
+                backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 2.24 5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 2.24 5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='1' fill-rule='evenodd'/%3E%3C/svg%3E")`
             }}
         ></div>
 
@@ -61,17 +74,22 @@ export const NewsletterCTA: React.FC = () => {
                                         setEmail(e.target.value);
                                         if(status === 'error') setStatus('idle');
                                     }}
+                                    disabled={status === 'loading'}
                                     placeholder="Your email address..." 
                                     className={`w-full h-12 sm:h-full flex-grow px-4 md:px-6 bg-white sm:bg-transparent focus:outline-none text-slate-900 placeholder:text-slate-400 text-base md:text-lg rounded-sm sm:rounded-none ${status === 'error' ? 'border-2 border-red-500 sm:border-0' : ''}`}
                                 />
-                                <button type="submit" className="w-full sm:w-auto h-12 sm:h-full bg-slate-900 hover:bg-slate-800 text-white font-black uppercase text-base md:text-lg px-8 transition-colors whitespace-nowrap rounded-sm sm:rounded-none">
-                                    Join Free
+                                <button 
+                                    type="submit" 
+                                    disabled={status === 'loading'}
+                                    className="w-full sm:w-auto h-12 sm:h-full bg-slate-900 hover:bg-slate-800 text-white font-black uppercase text-base md:text-lg px-8 transition-colors whitespace-nowrap rounded-sm sm:rounded-none flex items-center justify-center"
+                                >
+                                    {status === 'loading' ? <Loader2 className="animate-spin" /> : 'Join Free'}
                                 </button>
                             </div>
                             {status === 'error' && (
                                 <p className="text-white text-[10px] md:text-xs font-bold flex items-center gap-1.5 mt-2 animate-fade-in bg-red-500/20 py-1 px-2 inline-block rounded">
                                     <AlertCircle size={12} />
-                                    Please enter a valid email address (e.g. name@domain.com)
+                                    Please check your email.
                                 </p>
                             )}
                         </form>

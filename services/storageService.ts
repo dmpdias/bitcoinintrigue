@@ -1,214 +1,216 @@
 
 import { BriefingData, AgentDefinition, WorkflowDefinition, Subscriber, AnalyticsData, DistributionEvent } from '../types';
-import { BRIEFING_CONTENT } from '../constants';
 import { supabase, supabaseConfig } from './supabaseClient';
 
-const ISSUES_KEY = 'bitcoin_intrigue_issues';
-const AGENTS_KEY = 'bitcoin_intrigue_agents';
-const WORKFLOWS_KEY = 'bitcoin_intrigue_workflows';
-const SUBSCRIBERS_KEY = 'bitcoin_intrigue_subscribers';
-const DISTRIBUTION_KEY = 'bitcoin_intrigue_distribution';
-
-const DEFAULT_AGENTS: AgentDefinition[] = [
-  {
-    id: 'agent-scout',
-    name: 'The Scout',
-    role: 'scout',
-    model: 'gemini-3-pro-preview',
-    isActive: true,
-    instructions: "Find today's Bitcoin price in USD and EUR, 24h % change. Also find the top 3 global news stories about Bitcoin, any major whale movements or ETF inflows, and a common Bitcoin technical concept for beginners to learn today."
-  },
-  {
-    id: 'agent-journalist',
-    name: 'The Journalist',
-    role: 'journalist',
-    model: 'gemini-3-flash-preview',
-    isActive: true,
-    instructions: "You are a professional financial journalist. Draft a newsletter issue based on the provided data. Structure it with an Intro, Price Story, Global Drama, and Whale Watch. Output valid JSON matching the BriefingData structure."
-  },
-  {
-    id: 'agent-uncle',
-    name: 'The Friendly Uncle',
-    role: 'reviewer',
-    model: 'gemini-3-flash-preview',
-    isActive: true,
-    instructions: "You are the 'Friendly Bitcoin Uncle'. Review the text. Simplify jargon by defining terms in parentheses. Ensure the tone is warm and non-technical. Do not change the JSON structure."
-  },
-  {
-    id: 'agent-social',
-    name: 'The X Threader',
-    role: 'social',
-    model: 'gemini-3-flash-preview',
-    isActive: true,
-    instructions: "Take the newsletter briefing and turn it into a high-engagement 5-7 post X (Twitter) thread. Use emojis, bold hooks, and end with a call to subscribe."
-  }
-];
-
-const DEFAULT_WORKFLOWS: WorkflowDefinition[] = [
-  {
-    id: 'wf-daily',
-    name: 'Full Pipeline',
-    description: 'Scout data, Draft JSON, Review tone, and Prepare X Thread.',
-    steps: ['agent-scout', 'agent-journalist', 'agent-uncle', 'agent-social'],
-    isActive: true
-  }
-];
+// Helper to map DB snake_case to CamelCase
+const mapIssueFromDB = (i: any): BriefingData => ({
+  id: i.id,
+  issueNumber: i.issue_number,
+  date: i.date,
+  intro: i.intro,
+  stories: i.stories,
+  status: i.status,
+  lastUpdated: i.last_updated
+});
 
 export const storageService = {
-  initialize: async () => {
-    // Initial local setup
-    if (!localStorage.getItem(ISSUES_KEY)) localStorage.setItem(ISSUES_KEY, JSON.stringify([BRIEFING_CONTENT]));
-    if (!localStorage.getItem(AGENTS_KEY)) localStorage.setItem(AGENTS_KEY, JSON.stringify(DEFAULT_AGENTS));
-    if (!localStorage.getItem(WORKFLOWS_KEY)) localStorage.setItem(WORKFLOWS_KEY, JSON.stringify(DEFAULT_WORKFLOWS));
-    if (!localStorage.getItem(SUBSCRIBERS_KEY)) localStorage.setItem(SUBSCRIBERS_KEY, JSON.stringify([]));
-
-    // Phase 1: Cloud Sync (Pull latest from DB)
-    if (supabaseConfig.isConnected) {
-      try {
-        const { data: issues } = await supabase.from('issues').select('*');
-        if (issues && issues.length > 0) localStorage.setItem(ISSUES_KEY, JSON.stringify(issues));
-
-        const { data: agents } = await supabase.from('agents').select('*');
-        if (agents && agents.length > 0) localStorage.setItem(AGENTS_KEY, JSON.stringify(agents));
-
-        const { data: workflows } = await supabase.from('workflows').select('*');
-        if (workflows && workflows.length > 0) localStorage.setItem(WORKFLOWS_KEY, JSON.stringify(workflows));
-
-        const { data: subs } = await supabase.from('subscribers').select('*');
-        if (subs && subs.length > 0) localStorage.setItem(SUBSCRIBERS_KEY, JSON.stringify(subs));
-        
-        console.log("🚀 Storage Service: Live Cloud Sync Complete.");
-      } catch (e) {
-        console.error("Cloud Sync Error:", e);
-      }
-    }
+  initialize: () => {
+    // No-op for Supabase version
   },
 
-  // Issues
-  getAllIssues: (): BriefingData[] => JSON.parse(localStorage.getItem(ISSUES_KEY) || '[]'),
-  getPublishedIssue: (): BriefingData | null => {
-    const issues = storageService.getAllIssues();
-    return issues.find(i => i.status === 'published') || issues[0] || null;
+  // --- ISSUES ---
+
+  fetchPublishedIssue: async (): Promise<BriefingData | null> => {
+    const { data, error } = await supabase
+        .from('issues')
+        .select('*')
+        .eq('status', 'published')
+        .order('issue_number', { ascending: false })
+        .limit(1)
+        .single();
+    
+    if (error || !data) return null;
+    return mapIssueFromDB(data);
   },
+
+  getAllIssues: async (): Promise<BriefingData[]> => {
+    const { data } = await supabase.from('issues').select('*').order('last_updated', { ascending: false });
+    return (data || []).map(mapIssueFromDB);
+  },
+  
   saveIssue: async (issue: BriefingData) => {
-    const issues = storageService.getAllIssues();
-    const idx = issues.findIndex(i => i.id === issue.id);
-    const updatedIssue = { ...issue, lastUpdated: new Date().toISOString() };
-    
-    if (idx >= 0) issues[idx] = updatedIssue;
-    else issues.push(updatedIssue);
-    
-    localStorage.setItem(ISSUES_KEY, JSON.stringify(issues));
-
-    if (supabaseConfig.isConnected) {
-      await supabase.from('issues').upsert({
-        id: updatedIssue.id,
-        issue_number: updatedIssue.issueNumber,
-        date: updatedIssue.date,
-        intro: updatedIssue.intro,
-        stories: updatedIssue.stories,
-        status: updatedIssue.status,
-        last_updated: updatedIssue.lastUpdated
-      });
-    }
+    const { error } = await supabase.from('issues').upsert({
+      id: issue.id,
+      issue_number: issue.issueNumber,
+      date: issue.date,
+      intro: issue.intro,
+      stories: issue.stories,
+      status: issue.status,
+      last_updated: new Date().toISOString()
+    });
+    if (error) throw error;
   },
+
   deleteIssue: async (id: string) => {
-    localStorage.setItem(ISSUES_KEY, JSON.stringify(storageService.getAllIssues().filter(i => i.id !== id)));
-    if (supabaseConfig.isConnected) {
-      await supabase.from('issues').delete().eq('id', id);
+    // 1. Delete related distributions first to satisfy Foreign Key constraints
+    const { error: distError } = await supabase.from('distributions').delete().eq('issue_id', id);
+    if (distError) {
+        console.warn("Error cleaning up distributions:", distError);
     }
+
+    // 2. Delete the issue
+    const { error } = await supabase.from('issues').delete().eq('id', id);
+    if (error) throw error;
   },
 
-  // Agents
-  getAgents: (): AgentDefinition[] => JSON.parse(localStorage.getItem(AGENTS_KEY) || '[]'),
+  // --- AGENTS ---
+
+  getAgents: async (): Promise<AgentDefinition[]> => {
+    const { data, error } = await supabase.from('agents').select('*').order('name');
+    if (error) {
+        console.error("Error fetching agents:", error);
+        return [];
+    }
+    if (!data || data.length === 0) return [];
+    return data.map((a: any) => ({
+      id: a.id,
+      name: a.name,
+      role: a.role,
+      instructions: a.instructions,
+      isActive: a.is_active,
+      model: a.model
+    }));
+  },
+  
   saveAgent: async (agent: AgentDefinition) => {
-    const agents = storageService.getAgents();
-    const idx = agents.findIndex(a => a.id === agent.id);
-    if (idx >= 0) agents[idx] = agent;
-    else agents.push(agent);
-    localStorage.setItem(AGENTS_KEY, JSON.stringify(agents));
-
-    if (supabaseConfig.isConnected) {
-      await supabase.from('agents').upsert({
-        id: agent.id,
-        name: agent.name,
-        role: agent.role,
-        instructions: agent.instructions,
-        is_active: agent.isActive,
-        model: agent.model
-      });
-    }
+    const { error } = await supabase.from('agents').upsert({
+      id: agent.id,
+      name: agent.name,
+      role: agent.role,
+      instructions: agent.instructions,
+      is_active: agent.isActive,
+      model: agent.model
+    });
+    if (error) throw error;
   },
 
-  // Workflows
-  getWorkflows: (): WorkflowDefinition[] => JSON.parse(localStorage.getItem(WORKFLOWS_KEY) || '[]'),
+  deleteAgent: async (id: string) => {
+    const { error } = await supabase.from('agents').delete().eq('id', id);
+    if (error) throw error;
+  },
+
+  // --- WORKFLOWS ---
+
+  getWorkflows: async (): Promise<WorkflowDefinition[]> => {
+    const { data, error } = await supabase.from('workflows').select('*');
+    if (error) {
+        console.error("Error fetching workflows:", error);
+        return [];
+    }
+    if (!data) return [];
+    return data.map((w: any) => ({
+        id: w.id,
+        name: w.name,
+        description: w.description,
+        steps: w.steps,
+        isActive: w.is_active
+    }));
+  },
+  
   saveWorkflow: async (workflow: WorkflowDefinition) => {
-    const workflows = storageService.getWorkflows();
-    const idx = workflows.findIndex(w => w.id === workflow.id);
-    if (idx >= 0) workflows[idx] = workflow;
-    else workflows.push(workflow);
-    localStorage.setItem(WORKFLOWS_KEY, JSON.stringify(workflows));
-
-    if (supabaseConfig.isConnected) {
-      await supabase.from('workflows').upsert({
-        id: workflow.id,
-        name: workflow.name,
-        description: workflow.description,
-        steps: workflow.steps,
-        is_active: workflow.isActive
-      });
-    }
+    const { error } = await supabase.from('workflows').upsert({
+      id: workflow.id,
+      name: workflow.name,
+      description: workflow.description,
+      steps: workflow.steps,
+      is_active: workflow.isActive
+    });
+    if (error) throw error;
   },
 
-  // Subscribers
-  getSubscribers: (): Subscriber[] => JSON.parse(localStorage.getItem(SUBSCRIBERS_KEY) || '[]'),
-  saveSubscriber: async (sub: Subscriber) => {
-    const subs = storageService.getSubscribers();
-    const idx = subs.findIndex(s => s.id === sub.id);
-    if (idx >= 0) subs[idx] = sub;
-    else subs.push(sub);
-    localStorage.setItem(SUBSCRIBERS_KEY, JSON.stringify(subs));
+  deleteWorkflow: async (id: string) => {
+    const { error } = await supabase.from('workflows').delete().eq('id', id);
+    if (error) throw error;
+  },
 
-    if (supabaseConfig.isConnected) {
-      await supabase.from('subscribers').upsert({
-        email: sub.email,
-        status: sub.status,
-        source: sub.source
-      });
+  // --- SUBSCRIBERS ---
+
+  getSubscribers: async (): Promise<Subscriber[]> => {
+    const { data } = await supabase.from('subscribers').select('*').order('joined_date', { ascending: false });
+    if (!data) return [];
+    return data.map((s: any) => ({
+        id: s.id,
+        email: s.email,
+        joinedDate: s.joined_date,
+        status: s.status,
+        source: s.source
+    }));
+  },
+  
+  saveSubscriber: async (sub: Omit<Subscriber, 'id' | 'joinedDate'> & { id?: string, joinedDate?: string }) => {
+    // Generate UUID and Date client-side to ensure specific values are sent
+    const newId = sub.id || crypto.randomUUID();
+    const newDate = sub.joinedDate || new Date().toISOString();
+
+    // STRICTLY USE INSERT. Do NOT use Upsert. Do NOT chain .select().
+    // This prevents RLS "SELECT" policy violations for public users.
+    const { error } = await supabase.from('subscribers').insert({
+      id: newId,
+      email: sub.email,
+      status: sub.status,
+      source: sub.source,
+      joined_date: newDate
+    });
+    
+    // Handle Errors
+    if (error) {
+       // '23505' is the Postgres error code for unique_violation (duplicate email)
+       // We treat this as a success because the user effectively subscribed, even if they were already there.
+       if (error.code === '23505') {
+           return;
+       }
+       console.error("Supabase Insert Error:", error);
+       throw error;
     }
   },
+  
   deleteSubscriber: async (id: string) => {
-    const sub = storageService.getSubscribers().find(s => s.id === id);
-    localStorage.setItem(SUBSCRIBERS_KEY, JSON.stringify(storageService.getSubscribers().filter(s => s.id !== id)));
-    if (supabaseConfig.isConnected && sub) {
-      await supabase.from('subscribers').delete().eq('email', sub.email);
-    }
+    const { error } = await supabase.from('subscribers').delete().eq('id', id);
+    if (error) throw error;
   },
 
-  // Distribution
-  getDistributions: (): DistributionEvent[] => JSON.parse(localStorage.getItem(DISTRIBUTION_KEY) || '[]'),
+  // --- DISTRIBUTION & ANALYTICS ---
+
+  getDistributions: async (): Promise<DistributionEvent[]> => {
+    const { data } = await supabase.from('distributions').select('*').order('timestamp', { ascending: false });
+    if (!data) return [];
+    return data.map((d: any) => ({
+        id: d.id,
+        issueId: d.issue_id,
+        channel: d.channel,
+        timestamp: d.timestamp,
+        status: d.status,
+        reach: d.reach
+    }));
+  },
+  
   trackDistribution: async (event: DistributionEvent) => {
-    const events = storageService.getDistributions();
-    events.push(event);
-    localStorage.setItem(DISTRIBUTION_KEY, JSON.stringify(events));
-
-    if (supabaseConfig.isConnected) {
-      await supabase.from('distributions').insert({
-        id: event.id,
-        issue_id: event.issueId,
-        channel: event.channel,
-        status: event.status,
-        reach: event.reach
-      });
-    }
+    const { error } = await supabase.from('distributions').insert({
+      id: event.id,
+      issue_id: event.issueId,
+      channel: event.channel,
+      status: event.status,
+      reach: event.reach,
+      timestamp: event.timestamp
+    });
+    if (error) throw error;
   },
 
-  // Analytics
-  getAnalytics: (): AnalyticsData => {
-    const subs = storageService.getSubscribers();
-    const activeSubs = subs.filter(s => s.status === 'active').length;
+  getAnalytics: async (): Promise<AnalyticsData> => {
+    const { count } = await supabase.from('subscribers').select('*', { count: 'exact', head: true }).eq('status', 'active');
+    
     return {
-      totalSubscribers: activeSubs,
+      totalSubscribers: count || 0,
       openRate: 48.2,
       clickRate: 12.4,
       webViews: 12450,

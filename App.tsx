@@ -5,6 +5,7 @@ import { Header } from './components/Header';
 import { HomePage } from './components/HomePage';
 import { StoryPage } from './components/StoryPage';
 import { NewsletterPage } from './components/NewsletterPage';
+import { ArticlesPage } from './components/ArticlesPage';
 import { AboutPage } from './components/AboutPage';
 import { AdvertisePage } from './components/AdvertisePage';
 import { ContactPage } from './components/ContactPage';
@@ -14,7 +15,6 @@ import { BackOffice } from './components/Admin/BackOffice';
 import { Login } from './components/Admin/Login';
 import { ProtectedRoute } from './components/Admin/ProtectedRoute';
 import { storageService } from './services/storageService';
-import { AskAnalyst } from './components/AskAnalyst';
 
 function App() {
   useEffect(() => {
@@ -29,6 +29,7 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/newsletter" element={<NewsletterPage />} />
+            <Route path="/articles" element={<ArticlesPage />} />
             <Route path="/story/:id" element={<StoryPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/advertise" element={<AdvertisePage />} />
@@ -46,7 +47,6 @@ function App() {
           </Routes>
         </main>
         <Footer />
-        <AskAnalyst />
       </div>
     </HashRouter>
   );

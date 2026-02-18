@@ -1,4 +1,13 @@
 
+export interface SEOData {
+  title: string;
+  metaDescription: string;
+  primaryKeyword: string;
+  secondaryKeywords: string[];
+  urlSlug: string;
+  imageAltText: string;
+}
+
 export interface Story {
   id: string;
   category: string;
@@ -7,6 +16,7 @@ export interface Story {
   image?: string;
   highlight?: boolean;
   intrigueTake?: string;
+  seo?: SEOData;
 }
 
 export interface BriefingData {
@@ -29,7 +39,7 @@ export interface AgentLog {
   type: 'info' | 'success' | 'warning' | 'error';
 }
 
-export type AgentRole = 'scout' | 'journalist' | 'reviewer' | 'social';
+export type AgentRole = 'scout' | 'journalist' | 'reviewer' | 'social' | 'researcher' | 'planner' | 'writer' | 'seo';
 
 export interface AgentDefinition {
   id: string;
@@ -59,7 +69,7 @@ export interface Subscriber {
 export interface AnalyticsData {
   totalSubscribers: number;
   openRate: number;
-  clickRate: number;
+  clickRate: 12.4;
   webViews: number;
   dailyGrowth: number[];
 }

@@ -8,6 +8,17 @@ interface BriefingProps {
   data: BriefingData | null;
 }
 
+// Helper to clean markdown for preview text
+const stripMarkdown = (text: string | undefined) => {
+  if (!text) return '';
+  return text
+    .replace(/\*\*/g, '')
+    .replace(/__/g, '')
+    .replace(/^#+\s*/g, '')
+    .replace(/`/g, '')
+    .trim();
+};
+
 export const Briefing: React.FC<BriefingProps> = ({ data }) => {
   if (!data) return null;
   
@@ -45,30 +56,34 @@ export const Briefing: React.FC<BriefingProps> = ({ data }) => {
                         </span>
                     </div>
                     
-                    <Link to={`/story/${featuredStory.id}`} className="block w-full aspect-video bg-stone-200 mb-4 md:mb-6 relative overflow-hidden group">
-                        <img 
-                            src={featuredStory.image || "https://picsum.photos/800/400?grayscale"} 
-                            alt="Featured" 
-                            className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
-                        />
-                         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent"></div>
-                    </Link>
+                    {featuredStory && (
+                        <>
+                            <Link to={`/story/${featuredStory.id}`} className="block w-full aspect-video bg-stone-200 mb-4 md:mb-6 relative overflow-hidden group">
+                                <img 
+                                    src={featuredStory.image || "https://picsum.photos/800/400?grayscale"} 
+                                    alt="Featured" 
+                                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent"></div>
+                            </Link>
 
-                    <Link to={`/story/${featuredStory.id}`} className="block group">
-                        <h3 className="font-sans font-black text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-slate-900 mb-3 md:mb-4 leading-[0.95] tracking-tight group-hover:text-brand-600 transition-colors">
-                            {featuredStory.headline}
-                        </h3>
-                    </Link>
-                    
-                    <p className="text-base md:text-lg text-slate-700 font-medium mb-4 leading-relaxed line-clamp-3">
-                        {featuredStory.content[0]}
-                    </p>
+                            <Link to={`/story/${featuredStory.id}`} className="block group">
+                                <h3 className="font-sans font-black text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-slate-900 mb-3 md:mb-4 leading-[0.95] tracking-tight group-hover:text-brand-600 transition-colors">
+                                    {featuredStory.headline}
+                                </h3>
+                            </Link>
+                            
+                            <p className="text-base md:text-lg text-slate-700 font-medium mb-4 leading-relaxed line-clamp-3">
+                                {stripMarkdown(featuredStory.content?.[0])}
+                            </p>
 
-                    <div className="flex items-center gap-3 text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest mt-auto">
-                        <span className="text-slate-900">{featuredStory.category}</span>
-                        <span>•</span>
-                        <span>Today</span>
-                    </div>
+                            <div className="flex items-center gap-3 text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest mt-auto">
+                                <span className="text-slate-900">{featuredStory.category}</span>
+                                <span>•</span>
+                                <span>Today</span>
+                            </div>
+                        </>
+                    )}
                 </div>
 
                 <div className="lg:col-span-5 flex flex-col gap-0 mt-8 lg:mt-0">
@@ -85,7 +100,7 @@ export const Briefing: React.FC<BriefingProps> = ({ data }) => {
                                             {story.headline}
                                         </h4>
                                         <p className="text-slate-600 text-xs md:text-sm font-medium mb-2 md:mb-3 line-clamp-2 leading-relaxed">
-                                            {story.content[0]}
+                                            {stripMarkdown(story.content?.[0])}
                                         </p>
                                         <div className="flex items-center gap-2 text-[9px] md:text-[10px] font-bold text-slate-500 uppercase tracking-widest">
                                             <span className="text-slate-800">{story.category}</span>
@@ -105,7 +120,7 @@ export const Briefing: React.FC<BriefingProps> = ({ data }) => {
                     </div>
 
                     <div className="mt-4 pt-4 border-t-2 border-slate-900 inline-block">
-                        <Link to="/newsletter" className="font-bold text-slate-900 uppercase text-xs md:text-sm tracking-widest hover:text-brand-600 flex items-center gap-2">
+                        <Link to="/articles" className="font-bold text-slate-900 uppercase text-xs md:text-sm tracking-widest hover:text-brand-600 flex items-center gap-2">
                             View More Articles <ArrowRight size={16} />
                         </Link>
                     </div>

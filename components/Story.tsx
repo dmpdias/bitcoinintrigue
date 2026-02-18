@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Story as StoryType } from '../types';
 import { ArrowRight } from 'lucide-react';
@@ -38,7 +39,7 @@ export const Story: React.FC<StoryProps> = ({ story }) => {
         </Link>
 
         <p className={`mb-6 font-sans leading-relaxed flex-grow line-clamp-3 ${isHighlighted ? 'text-slate-300' : 'text-slate-600'}`}>
-          {story.content[0]}
+          {story.content?.[0]}
         </p>
 
         <Link to={`/story/${story.id}`} className={`group flex items-center text-xs font-bold uppercase tracking-widest transition-colors ${isHighlighted ? 'text-brand-400 hover:text-white' : 'text-slate-900 hover:text-brand-600'}`}>
