@@ -26,28 +26,28 @@ export const Briefing: React.FC<BriefingProps> = ({ data }) => {
   const sideStories = data.stories.slice(1, 4);
 
   return (
-    <section id="latest" className="py-12 md:py-24 bg-paper">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-            
-            <div className="flex flex-col md:flex-row justify-between md:items-end mb-10 md:mb-16 gap-6">
+    <section id="latest" className="py-8 md:py-12 lg:py-24 bg-paper">
+        <div className="max-w-[1400px] mx-auto px-3 xs:px-4 sm:px-6 lg:px-8">
+
+            <div className="flex flex-col md:flex-row justify-between md:items-end mb-6 sm:mb-8 md:mb-12 lg:mb-16 gap-4 md:gap-6">
                 <div>
-                    <div className="inline-block bg-brand-200 text-slate-900 text-[10px] font-black uppercase tracking-widest px-2 py-1 mb-2 border border-slate-900 shadow-[2px_2px_0px_0px_rgba(15,23,42,1)]">
+                    <div className="inline-block bg-brand-200 text-slate-900 text-[8px] xs:text-[9px] sm:text-[10px] font-black uppercase tracking-widest px-2 py-1 mb-2 border border-slate-900 shadow-[1px_1px_0px_0px_rgba(15,23,42,1)] xs:shadow-[1.5px_1.5px_0px_0px_rgba(15,23,42,1)] sm:shadow-[2px_2px_0px_0px_rgba(15,23,42,1)]">
                         Latest Stories
                     </div>
-                    <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-slate-900 uppercase tracking-tighter leading-[0.9]">
+                    <h2 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-black text-slate-900 uppercase tracking-tighter leading-[0.9]">
                         The Daily <span className="text-brand-600">Dispatch</span>
                     </h2>
                 </div>
-                
-                <div className="max-w-md text-right">
-                    <p className="text-sm md:text-base font-serif text-slate-800 leading-relaxed mb-2">
+
+                <div className="text-left md:text-right">
+                    <p className="text-[10px] xs:text-xs sm:text-sm md:text-base font-serif text-slate-800 leading-relaxed mb-1.5 xs:mb-2">
                         Issue #{data.issueNumber} • {data.date}
                     </p>
-                    <div className="h-1 w-12 bg-slate-900 ml-auto"></div>
+                    <div className="h-0.5 xs:h-1 w-12 bg-slate-900 md:ml-auto"></div>
                 </div>
             </div>
 
-            <div className="grid lg:grid-cols-12 gap-8 md:gap-12">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 lg:gap-12">
                 
                 <div className="lg:col-span-7 flex flex-col">
                     <div className="mb-3 md:mb-4">
@@ -59,9 +59,10 @@ export const Briefing: React.FC<BriefingProps> = ({ data }) => {
                     {featuredStory && (
                         <>
                             <Link to={`/story/${featuredStory.id}`} className="block w-full aspect-video bg-stone-200 mb-4 md:mb-6 relative overflow-hidden group">
-                                <img 
-                                    src={featuredStory.image || "https://picsum.photos/800/400?grayscale"} 
-                                    alt="Featured" 
+                                <img
+                                    src={featuredStory.image || "https://picsum.photos/800/400?grayscale"}
+                                    alt="Featured"
+                                    loading="lazy"
                                     className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent"></div>
@@ -109,7 +110,7 @@ export const Briefing: React.FC<BriefingProps> = ({ data }) => {
                                         </div>
                                     </div>
                                     <div className="w-20 h-20 md:w-24 md:h-24 bg-slate-900 shrink-0 relative overflow-hidden">
-                                        <img src={story.image || "https://picsum.photos/200/200?grayscale"} className="absolute inset-0 w-full h-full object-cover grayscale opacity-50 group-hover:opacity-100 transition-opacity" />
+                                        <img src={story.image || "https://picsum.photos/200/200?grayscale"} alt={story.headline} loading="lazy" className="absolute inset-0 w-full h-full object-cover grayscale opacity-50 group-hover:opacity-100 transition-opacity" />
                                         <div className="absolute inset-0 flex items-center justify-center">
                                             <div className="w-8 h-8 rounded-full border border-white/20"></div>
                                         </div>

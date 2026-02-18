@@ -31,16 +31,16 @@ export const Header: React.FC = () => {
         {/* Main Nav */}
         <div className="border-b border-slate-900">
             <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between items-center h-16 md:h-20">
-                    
+                <div className="flex justify-between items-center h-14 md:h-16 lg:h-20">
+
                     {/* Left & Center */}
-                    <div className="flex items-center gap-4 md:gap-12">
+                    <div className="flex items-center gap-3 md:gap-8 lg:gap-12">
                         {/* Logo */}
-                        <Link to="/" className="flex items-center gap-2 group" onClick={() => setIsMenuOpen(false)}>
-                            <div className="w-9 h-9 md:w-10 md:h-10 bg-brand-600 rounded-full flex items-center justify-center text-white shrink-0 group-hover:rotate-12 transition-transform">
-                                <Bitcoin size={22} strokeWidth={2.5} />
+                        <Link to="/" className="flex items-center gap-1.5 md:gap-2 group" onClick={() => setIsMenuOpen(false)}>
+                            <div className="w-8 h-8 md:w-9 md:h-9 lg:w-10 lg:h-10 bg-brand-600 rounded-full flex items-center justify-center text-white shrink-0 group-hover:rotate-12 transition-transform">
+                                <Bitcoin size={18} className="md:w-[22px] md:h-[22px]" strokeWidth={2.5} />
                             </div>
-                            <span className="font-sans font-black text-xl md:text-2xl text-brand-600 tracking-tight lowercase">
+                            <span className="font-sans font-black text-lg md:text-xl lg:text-2xl text-brand-600 tracking-tight lowercase">
                                 intrigue
                             </span>
                         </Link>
