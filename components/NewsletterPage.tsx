@@ -49,16 +49,16 @@ export const NewsletterPage: React.FC = () => {
         <div className="max-w-[1400px] mx-auto text-center">
             
             <div className="inline-block bg-brand-200 text-slate-900 text-[10px] md:text-xs font-black uppercase tracking-widest px-2 py-1 mb-6 border border-slate-900 shadow-[2px_2px_0px_0px_rgba(15,23,42,1)]">
-                Free Daily Briefing
+                FREE DAILY BRIEFING
             </div>
 
             <h1 className="font-sans font-black text-5xl sm:text-6xl md:text-8xl text-slate-900 mb-8 leading-[0.9] tracking-tighter uppercase">
                 Bitcoin, <br className="hidden md:block" />
-                <span className="text-brand-600">Translated.</span>
+                <span className="text-brand-600">Explained Every Morning.</span>
             </h1>
 
             <p className="text-lg md:text-2xl text-slate-800 font-serif mb-10 max-w-2xl mx-auto leading-relaxed">
-                Join <span className="font-bold bg-brand-200 px-1 border-b-2 border-slate-900">45,000+ smart investors</span> who start their day with our 5-minute explanation of Bitcoin, the world, and your wallet.
+                Every day, one clear story about what happened in Bitcoin — and why it matters to you. Five minutes. Plain English. No finance background needed.
             </p>
 
             {/* Main Conversion Form */}
@@ -78,7 +78,7 @@ export const NewsletterPage: React.FC = () => {
                                     setHeroEmail(e.target.value);
                                     if(heroStatus === 'error') setHeroStatus('idle');
                                 }}
-                                placeholder="Enter your email address..." 
+                                placeholder="Your email address..."
                                 className="flex-grow px-4 md:px-6 h-12 sm:h-full bg-transparent focus:outline-none text-slate-900 placeholder:text-slate-400 text-base md:text-lg font-medium min-w-0 border-b-2 sm:border-b-0 border-slate-100 sm:border-none"
                             />
                             <button type="submit" className="bg-brand-600 hover:bg-brand-700 text-white font-black uppercase text-sm md:text-lg px-6 md:px-10 h-12 sm:h-full transition-colors whitespace-nowrap sm:border-l-2 border-slate-900">
@@ -96,7 +96,7 @@ export const NewsletterPage: React.FC = () => {
                 {heroStatus !== 'success' && (
                     <p className="mt-4 text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-widest flex items-center justify-center gap-2">
                         <Check size={14} className="text-brand-600" strokeWidth={3} />
-                        No Spam. Unsubscribe anytime.
+                        No Spam. No Noise. Unsubscribe Any Time.
                     </p>
                 )}
             </div>
@@ -106,7 +106,7 @@ export const NewsletterPage: React.FC = () => {
       {/* Social Proof / Trust Banner - MARQUEE */}
       <div className="border-y border-slate-900 bg-brand-50 py-10 mb-20 overflow-hidden">
         <div className="max-w-[1400px] mx-auto px-4 text-center">
-             <p className="text-[10px] md:text-xs font-black text-slate-400 uppercase tracking-widest mb-6">Read by curious minds at</p>
+             <p className="text-[10px] md:text-xs font-black text-slate-400 uppercase tracking-widest mb-6">Read by 1,000+ people who just wanted to understand what they bought.</p>
              
              <div className="overflow-hidden relative w-full">
                 <div className="flex animate-scroll whitespace-nowrap gap-16 items-center opacity-60 grayscale w-max">
@@ -127,17 +127,14 @@ export const NewsletterPage: React.FC = () => {
         <div className="flex flex-col md:flex-row justify-between md:items-end mb-12 md:mb-20 gap-6">
             <div>
                 <div className="inline-block bg-brand-200 text-slate-900 text-[10px] font-black uppercase tracking-widest px-2 py-1 mb-2 border border-slate-900 shadow-[2px_2px_0px_0px_rgba(15,23,42,1)]">
-                    The Method
+                    WHAT YOU GET EVERY MORNING
                 </div>
                 <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-slate-900 uppercase tracking-tighter leading-[0.9]">
-                    Why <span className="text-brand-600">Subscribe?</span>
+                    What You Get <span className="text-brand-600">Every Morning</span>
                 </h2>
             </div>
-            
+
             <div className="max-w-md">
-                <p className="text-sm md:text-base font-serif text-slate-800 leading-relaxed mb-2">
-                    Three reasons why this is the only crypto newsletter you need.
-                </p>
                 <div className="h-1 w-12 bg-slate-900"></div>
             </div>
         </div>
@@ -152,9 +149,9 @@ export const NewsletterPage: React.FC = () => {
                         <TrendingUp className="text-brand-600" size={24} strokeWidth={2.5} />
                     </div>
                     <div>
-                        <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-2 uppercase leading-none mt-2">Simple Stories</h3>
+                        <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-2 uppercase leading-none mt-2">The Story That Matters</h3>
                         <p className="text-slate-700 leading-relaxed font-medium text-sm md:text-base">
-                            We monitor the charts so you don't have to. We tell you <span className="italic font-serif bg-brand-100 px-1">why</span> the price is moving in plain English stories, not complicated graphs.
+                            We monitor Bitcoin news globally. Every day, there's one story that actually affects you. We find it, explain what triggered it, and tell you what happens next.
                         </p>
                     </div>
                 </div>
@@ -165,9 +162,9 @@ export const NewsletterPage: React.FC = () => {
                         <BookOpen className="text-brand-600" size={24} strokeWidth={2.5} />
                     </div>
                     <div>
-                        <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-2 uppercase leading-none mt-2">Daily Lessons</h3>
+                        <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-2 uppercase leading-none mt-2">One Real Lesson</h3>
                         <p className="text-slate-700 leading-relaxed font-medium text-sm md:text-base">
-                            Each email teaches you one new concept—like "Mining" or "Cold Storage"—in a way that your grandma would understand.
+                            Every article teaches something concrete — how wallets work, what mining is, why fees exist. One concept. Explained simply. You'll retain it. In a month, you'll know more than you ever thought you would.
                         </p>
                     </div>
                 </div>
@@ -180,7 +177,7 @@ export const NewsletterPage: React.FC = () => {
                     <div>
                         <h3 className="text-xl md:text-2xl font-black text-slate-900 mb-2 uppercase leading-none mt-2">Global Context</h3>
                         <p className="text-slate-700 leading-relaxed font-medium text-sm md:text-base">
-                            We bring you stories from El Salvador to Wall Street, showing you how Bitcoin is changing the world, not just the stock market.
+                            Bitcoin is reshaping how money moves in El Salvador. It's changing how companies store cash. It's creating jobs in unexpected places. We bring you the stories that show how Bitcoin is changing the world — not just your portfolio.
                         </p>
                     </div>
                 </div>
@@ -227,20 +224,20 @@ export const NewsletterPage: React.FC = () => {
       <section className="bg-slate-900 py-16 md:py-24 px-4 mb-0 relative overflow-hidden">
           {/* Pattern */}
           <div className="absolute inset-0 opacity-10" style={{backgroundImage: "radial-gradient(#ffffff 1px, transparent 1px)", backgroundSize: "20px 20px"}}></div>
-          
+
           <div className="max-w-4xl mx-auto text-center relative z-10">
               <div className="inline-block bg-brand-600 text-white text-[10px] font-black uppercase tracking-widest px-2 py-1 mb-6 border border-white shadow-[4px_4px_0px_0px_rgba(255,255,255,0.2)]">
-                  Subscriber Love
+                  WHAT READERS SAY
               </div>
               <h2 className="text-2xl md:text-4xl font-serif text-white leading-relaxed mb-10">
-                  <span className="text-brand-600 text-6xl float-left mr-2 leading-[0]">“</span>
+                  <span className="text-brand-600 text-6xl float-left mr-2 leading-[0]">"</span>
                   I used to feel stupid when people talked about crypto. Bitcoin Intrigue is the only newsletter that explains it without making me feel like I need a PhD.
               </h2>
               <div className="flex items-center justify-center gap-4">
                   <div className="w-12 h-12 bg-slate-700 rounded-full border-2 border-brand-600"></div>
                   <div className="text-left">
                       <div className="font-bold uppercase tracking-wider text-white">James P.</div>
-                      <div className="text-brand-400 text-xs font-bold uppercase tracking-widest">Beginner Investor</div>
+                      <div className="text-brand-400 text-xs font-bold uppercase tracking-widest">Reader</div>
                   </div>
               </div>
           </div>
@@ -250,9 +247,13 @@ export const NewsletterPage: React.FC = () => {
       <section className="bg-brand-600 py-16 md:py-24 px-4 border-t border-slate-900">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="font-black text-3xl sm:text-5xl uppercase mb-8 text-white leading-none">
-                Ready to finally <br/>
-                <span className="text-slate-900">understand Bitcoin?</span>
+                READY TO FINALLY <br/>
+                <span className="text-slate-900">UNDERSTAND BITCOIN?</span>
             </h2>
+
+            <p className="text-white font-bold text-lg md:text-xl opacity-90 max-w-lg mx-auto mb-8">
+                It's free. It takes five minutes. And you'll understand more about Bitcoin after one week than most people do after a year of following the price.
+            </p>
             
             {footerStatus === 'success' ? (
                  <div className="flex h-12 sm:h-14 items-center justify-center bg-white border-2 border-slate-900 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] animate-fade-in">
@@ -285,7 +286,7 @@ export const NewsletterPage: React.FC = () => {
                 </form>
             )}
             {footerStatus !== 'success' && (
-                <p className="mt-4 text-xs font-bold text-brand-100 uppercase tracking-widest">100% Free. Unsubscribe anytime.</p>
+                <p className="mt-4 text-xs font-bold text-brand-100 uppercase tracking-widest">100% FREE. NO SPAM. UNSUBSCRIBE ANY TIME.</p>
             )}
           </div>
       </section>
