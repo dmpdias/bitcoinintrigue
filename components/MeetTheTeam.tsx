@@ -63,12 +63,39 @@ export const MeetTheTeam: React.FC = () => {
             </div>
         </div>
 
-        {/* Grid Container - Responsive grid for mobile optimization */}
-        <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2 xs:gap-2.5 sm:gap-3 md:gap-4 lg:gap-6">
+        {/* Mobile Horizontal Scroller */}
+        <div className="block sm:hidden -mx-3 xs:-mx-4 px-3 xs:px-4 mb-8 sm:hidden">
+          <div className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-2 hide-scrollbar">
+            {TEAM.map((member, index) => (
+                <div key={index} className="flex flex-col items-center text-center group shrink-0 w-[70px] xs:w-[85px]">
+                    {/* Square Image */}
+                    <div className="w-full aspect-square mb-2 relative overflow-hidden border-2 border-slate-900 bg-white transition-all duration-300 shadow-[1.5px_1.5px_0px_0px_rgba(15,23,42,1)]">
+                         <img
+                            src={member.image}
+                            alt={member.name}
+                            loading="lazy"
+                            className="w-full h-full object-cover"
+                         />
+                    </div>
+                    {/* Name */}
+                    <h3 className="font-sans font-black text-[9px] xs:text-[10px] text-slate-900 mb-0.5 leading-tight line-clamp-2">
+                        {member.name}
+                    </h3>
+                    {/* Role */}
+                    <p className="font-bold text-brand-600 text-[6px] xs:text-[7px] uppercase tracking-widest leading-tight line-clamp-2">
+                        {member.role}
+                    </p>
+                </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Desktop Grid */}
+        <div className="hidden sm:grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2 xs:gap-2.5 sm:gap-3 md:gap-4 lg:gap-6">
             {TEAM.map((member, index) => (
                 <div key={index} className="flex flex-col items-center text-center group">
 
-                    {/* Square Image with Brand Border - Mobile optimized */}
+                    {/* Square Image with Brand Border */}
                     <div className="w-full aspect-square mb-2 xs:mb-2.5 sm:mb-3 md:mb-4 relative overflow-hidden border-2 xs:border-2 sm:border-2 md:border-3 border-slate-900 bg-white transition-all duration-300 group-hover:scale-105 group-hover:shadow-[2px_2px_0px_0px_rgba(234,88,12,0.4)] xs:group-hover:shadow-[3px_3px_0px_0px_rgba(234,88,12,0.5)] shadow-[1px_1px_0px_0px_rgba(15,23,42,1)] xs:shadow-[2px_2px_0px_0px_rgba(15,23,42,1)] sm:shadow-[2.5px_2.5px_0px_0px_rgba(15,23,42,1)] md:shadow-[3px_3px_0px_0px_rgba(15,23,42,1)]">
                          <img
                             src={member.image}
@@ -88,7 +115,7 @@ export const MeetTheTeam: React.FC = () => {
                         {member.role}
                     </p>
 
-                    {/* Bio - Hidden on very small screens, shown from xs up */}
+                    {/* Bio */}
                     <p className="font-serif text-slate-700 text-[7px] xs:text-[8px] sm:text-xs md:text-sm leading-tight xs:leading-relaxed opacity-90 line-clamp-3 xs:line-clamp-none">
                         {member.bio}
                     </p>

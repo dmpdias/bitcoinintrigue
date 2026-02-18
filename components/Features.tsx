@@ -30,53 +30,53 @@ export const Features: React.FC = () => {
         </div>
 
         {/* Mobile-First Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 md:gap-6 lg:gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 xs:gap-4 sm:gap-5 md:gap-6 lg:gap-10">
 
             {/* Card 1 */}
-            <div className="group bg-white p-4 xs:p-5 sm:p-6 md:p-8 border-2 border-slate-900 shadow-[2px_2px_0px_0px_rgba(15,23,42,1)] xs:shadow-[3px_3px_0px_0px_rgba(15,23,42,1)] hover:shadow-[4px_4px_0px_0px_rgba(234,88,12,0.8)] md:hover:shadow-[8px_8px_0px_0px_rgba(234,88,12,1)] hover:border-brand-600 transition-all duration-300 transform hover:-translate-y-0.5 md:hover:-translate-y-1">
-                <div className="w-10 h-10 xs:w-12 xs:h-12 md:w-16 md:h-16 rounded-full bg-slate-900 text-white flex items-center justify-center mb-3 xs:mb-4 md:mb-6 group-hover:bg-brand-600 transition-colors shrink-0">
-                     <MessageCircle size={20} className="xs:w-[22px] xs:h-[22px] md:w-8 md:h-8" strokeWidth={2} />
+            <div className="group bg-slate-50 hover:bg-white p-3 xs:p-4 sm:p-6 md:p-8 border-2 border-slate-200 hover:border-brand-600 hover:border-slate-900 shadow-[1px_1px_0px_0px_rgba(15,23,42,0.1)] xs:shadow-[2px_2px_0px_0px_rgba(15,23,42,0.1)] hover:shadow-[4px_4px_0px_0px_rgba(234,88,12,0.8)] md:hover:shadow-[8px_8px_0px_0px_rgba(234,88,12,1)] transition-all duration-300 transform hover:-translate-y-0.5 md:hover:-translate-y-1 rounded-sm">
+                <div className="w-9 h-9 xs:w-11 xs:h-11 md:w-16 md:h-16 rounded-full bg-slate-900 text-white flex items-center justify-center mb-2 xs:mb-3 md:mb-6 group-hover:bg-brand-600 transition-colors shrink-0">
+                     <MessageCircle size={18} className="xs:w-[20px] xs:h-[20px] md:w-8 md:h-8" strokeWidth={2} />
                 </div>
-                <h3 className="font-sans font-black text-sm xs:text-base sm:text-lg md:text-2xl mb-2 xs:mb-3 md:mb-4 text-slate-900 leading-tight group-hover:text-brand-600 transition-colors">
+                <h3 className="font-sans font-black text-[13px] xs:text-sm sm:text-lg md:text-2xl mb-1.5 xs:mb-2 md:mb-4 text-slate-900 leading-tight group-hover:text-brand-600 transition-colors">
                     No "Crypto-Bro" Speak
                 </h3>
-                <p className="text-slate-600 leading-relaxed font-medium text-xs xs:text-sm md:text-base mb-3 xs:mb-4 md:mb-6">
+                <p className="text-slate-600 leading-relaxed font-medium text-[12px] xs:text-sm md:text-base mb-2 xs:mb-3 md:mb-6">
                     We speak English, not hype. If we have to use a technical term, we explain it simply right there in the sentence.
                 </p>
-                <div className="flex items-center gap-2 text-[8px] xs:text-[9px] md:text-xs font-black uppercase tracking-widest text-slate-400 group-hover:text-brand-600 transition-colors mt-auto">
-                    Clear & Simple <ArrowRight size={12} className="xs:w-3 xs:h-3 md:w-4 md:h-4" />
+                <div className="flex items-center gap-2 text-[7px] xs:text-[8px] md:text-xs font-black uppercase tracking-widest text-slate-400 group-hover:text-brand-600 transition-colors mt-auto">
+                    Clear & Simple <ArrowRight size={10} className="xs:w-2.5 xs:h-2.5 md:w-4 md:h-4" />
                 </div>
             </div>
 
             {/* Card 2 */}
-            <div className="group bg-white p-4 xs:p-5 sm:p-6 md:p-8 border-2 border-slate-900 shadow-[2px_2px_0px_0px_rgba(15,23,42,1)] xs:shadow-[3px_3px_0px_0px_rgba(15,23,42,1)] hover:shadow-[4px_4px_0px_0px_rgba(234,88,12,0.8)] md:hover:shadow-[8px_8px_0px_0px_rgba(234,88,12,1)] hover:border-brand-600 transition-all duration-300 transform hover:-translate-y-0.5 md:hover:-translate-y-1">
-                <div className="w-10 h-10 xs:w-12 xs:h-12 md:w-16 md:h-16 rounded-full bg-slate-900 text-white flex items-center justify-center mb-3 xs:mb-4 md:mb-6 group-hover:bg-brand-600 transition-colors shrink-0">
-                    <Globe size={20} className="xs:w-[22px] xs:h-[22px] md:w-8 md:h-8" strokeWidth={2} />
+            <div className="group bg-slate-50 hover:bg-white p-3 xs:p-4 sm:p-6 md:p-8 border-2 border-slate-200 hover:border-brand-600 hover:border-slate-900 shadow-[1px_1px_0px_0px_rgba(15,23,42,0.1)] xs:shadow-[2px_2px_0px_0px_rgba(15,23,42,0.1)] hover:shadow-[4px_4px_0px_0px_rgba(234,88,12,0.8)] md:hover:shadow-[8px_8px_0px_0px_rgba(234,88,12,1)] transition-all duration-300 transform hover:-translate-y-0.5 md:hover:-translate-y-1 rounded-sm">
+                <div className="w-9 h-9 xs:w-11 xs:h-11 md:w-16 md:h-16 rounded-full bg-slate-900 text-white flex items-center justify-center mb-2 xs:mb-3 md:mb-6 group-hover:bg-brand-600 transition-colors shrink-0">
+                    <Globe size={18} className="xs:w-[20px] xs:h-[20px] md:w-8 md:h-8" strokeWidth={2} />
                 </div>
-                <h3 className="font-sans font-black text-sm xs:text-base sm:text-lg md:text-2xl mb-2 xs:mb-3 md:mb-4 text-slate-900 leading-tight group-hover:text-brand-600 transition-colors">
+                <h3 className="font-sans font-black text-[13px] xs:text-sm sm:text-lg md:text-2xl mb-1.5 xs:mb-2 md:mb-4 text-slate-900 leading-tight group-hover:text-brand-600 transition-colors">
                     Beyond the Charts
                 </h3>
-                <p className="text-slate-600 leading-relaxed font-medium text-xs xs:text-sm md:text-base mb-3 xs:mb-4 md:mb-6">
+                <p className="text-slate-600 leading-relaxed font-medium text-[12px] xs:text-sm md:text-base mb-2 xs:mb-3 md:mb-6">
                     Bitcoin isn't just lines on a chart. It's El Salvador adoption, Wall Street power plays, and real geopolitics. We cover the world.
                 </p>
-                <div className="flex items-center gap-2 text-[8px] xs:text-[9px] md:text-xs font-black uppercase tracking-widest text-slate-400 group-hover:text-brand-600 transition-colors mt-auto">
-                    Big Picture <ArrowRight size={12} className="xs:w-3 xs:h-3 md:w-4 md:h-4" />
+                <div className="flex items-center gap-2 text-[7px] xs:text-[8px] md:text-xs font-black uppercase tracking-widest text-slate-400 group-hover:text-brand-600 transition-colors mt-auto">
+                    Big Picture <ArrowRight size={10} className="xs:w-2.5 xs:h-2.5 md:w-4 md:h-4" />
                 </div>
             </div>
 
             {/* Card 3 */}
-            <div className="group bg-white p-4 xs:p-5 sm:p-6 md:p-8 border-2 border-slate-900 shadow-[2px_2px_0px_0px_rgba(15,23,42,1)] xs:shadow-[3px_3px_0px_0px_rgba(15,23,42,1)] hover:shadow-[4px_4px_0px_0px_rgba(234,88,12,0.8)] md:hover:shadow-[8px_8px_0px_0px_rgba(234,88,12,1)] hover:border-brand-600 transition-all duration-300 transform hover:-translate-y-0.5 md:hover:-translate-y-1">
-                <div className="w-10 h-10 xs:w-12 xs:h-12 md:w-16 md:h-16 rounded-full bg-slate-900 text-white flex items-center justify-center mb-3 xs:mb-4 md:mb-6 group-hover:bg-brand-600 transition-colors shrink-0">
-                    <BookOpen size={20} className="xs:w-[22px] xs:h-[22px] md:w-8 md:h-8" strokeWidth={2} />
+            <div className="group bg-slate-50 hover:bg-white p-3 xs:p-4 sm:p-6 md:p-8 border-2 border-slate-200 hover:border-brand-600 hover:border-slate-900 shadow-[1px_1px_0px_0px_rgba(15,23,42,0.1)] xs:shadow-[2px_2px_0px_0px_rgba(15,23,42,0.1)] hover:shadow-[4px_4px_0px_0px_rgba(234,88,12,0.8)] md:hover:shadow-[8px_8px_0px_0px_rgba(234,88,12,1)] transition-all duration-300 transform hover:-translate-y-0.5 md:hover:-translate-y-1 rounded-sm">
+                <div className="w-9 h-9 xs:w-11 xs:h-11 md:w-16 md:h-16 rounded-full bg-slate-900 text-white flex items-center justify-center mb-2 xs:mb-3 md:mb-6 group-hover:bg-brand-600 transition-colors shrink-0">
+                    <BookOpen size={18} className="xs:w-[20px] xs:h-[20px] md:w-8 md:h-8" strokeWidth={2} />
                 </div>
-                <h3 className="font-sans font-black text-sm xs:text-base sm:text-lg md:text-2xl mb-2 xs:mb-3 md:mb-4 text-slate-900 leading-tight group-hover:text-brand-600 transition-colors">
+                <h3 className="font-sans font-black text-[13px] xs:text-sm sm:text-lg md:text-2xl mb-1.5 xs:mb-2 md:mb-4 text-slate-900 leading-tight group-hover:text-brand-600 transition-colors">
                     One Thing Smarter Every Day
                 </h3>
-                <p className="text-slate-600 leading-relaxed font-medium text-xs xs:text-sm md:text-base mb-3 xs:mb-4 md:mb-6">
+                <p className="text-slate-600 leading-relaxed font-medium text-[12px] xs:text-sm md:text-base mb-2 xs:mb-3 md:mb-6">
                     Every article teaches you one thing. In a month, you'll be the most interesting person at the table when Bitcoin comes up.
                 </p>
-                <div className="flex items-center gap-2 text-[8px] xs:text-[9px] md:text-xs font-black uppercase tracking-widest text-slate-400 group-hover:text-brand-600 transition-colors mt-auto">
-                    Learn Daily <ArrowRight size={12} className="xs:w-3 xs:h-3 md:w-4 md:h-4" />
+                <div className="flex items-center gap-2 text-[7px] xs:text-[8px] md:text-xs font-black uppercase tracking-widest text-slate-400 group-hover:text-brand-600 transition-colors mt-auto">
+                    Learn Daily <ArrowRight size={10} className="xs:w-2.5 xs:h-2.5 md:w-4 md:h-4" />
                 </div>
             </div>
 

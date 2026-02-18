@@ -50,11 +50,11 @@ export const Hero: React.FC = () => {
     <section className="relative pt-4 md:pt-16 lg:pt-20 pb-6 md:pb-8 lg:pb-12 overflow-hidden">
       <div className="max-w-[1400px] mx-auto px-3 xs:px-4 sm:px-6 lg:px-8">
 
-        <div className="flex flex-col lg:grid lg:grid-cols-12 gap-3 sm:gap-5 md:gap-6 lg:gap-8 items-center">
+        <div className="flex flex-col lg:grid lg:grid-cols-12 gap-2 xs:gap-3 sm:gap-5 md:gap-6 lg:gap-8 items-center">
 
-          <div className="w-full lg:col-span-6 order-1 lg:order-2 relative h-[200px] sm:h-[280px] md:h-[500px] lg:h-[600px] flex items-center justify-center lg:justify-end z-0 mt-0 lg:mt-0">
+          <div className="hidden sm:flex w-full lg:col-span-6 order-1 lg:order-2 relative h-[180px] sm:h-[280px] md:h-[500px] lg:h-[600px] items-center justify-center lg:justify-end z-0 mt-0 lg:mt-0">
 
-            <div className="absolute top-1 sm:top-3 md:top-4 left-1 sm:left-3 md:left-4 w-[80%] sm:w-[78%] md:w-[80%] bg-[#f4f1ea] rounded-lg border-2 border-slate-900 shadow-xl overflow-hidden transform -rotate-2 z-0 block lg:block h-[150px] sm:h-[220px] md:h-[380px] lg:h-[450px]">
+            <div className="absolute top-1 sm:top-3 md:top-4 left-1 sm:left-3 md:left-4 w-[85%] sm:w-[78%] md:w-[80%] bg-[#f4f1ea] rounded-lg border-2 border-slate-900 shadow-xl overflow-hidden transform -rotate-2 z-0 block lg:block h-[140px] sm:h-[220px] md:h-[380px] lg:h-[450px]">
                 <div className="h-6 sm:h-8 bg-[#e8e4db] border-b border-slate-200 flex items-center px-2 sm:px-4 gap-2">
                     <div className="flex gap-1.5">
                         <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-slate-400"></div>
@@ -203,11 +203,11 @@ export const Hero: React.FC = () => {
                 </span>
             </div>
 
-            <h1 className="font-sans font-black text-[2rem] xs:text-4xl sm:text-5xl md:text-6xl xl:text-7xl text-slate-900 mb-3 sm:mb-5 md:mb-6 lg:mb-8 leading-[0.9] tracking-tighter uppercase animate-slide-up">
-              Bitcoin. <br/> Translated <br/> for humans.
+            <h1 className="font-sans font-black text-[1.75rem] xs:text-3xl sm:text-5xl md:text-6xl xl:text-7xl text-slate-900 mb-2 xs:mb-3 sm:mb-5 md:mb-6 lg:mb-8 leading-[0.95] xs:leading-[0.9] tracking-tighter uppercase animate-slide-up">
+              Bitcoin. <br className="hidden xs:block"/> Translated <br className="hidden xs:block"/> for humans.
             </h1>
 
-            <p className="text-xs sm:text-sm md:text-base lg:text-xl text-slate-800 font-medium mb-4 sm:mb-6 lg:mb-8 max-w-xl leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s', opacity: 0, animationFillMode: 'forwards' }}>
+            <p className="text-[13px] xs:text-sm sm:text-base md:text-lg lg:text-xl text-slate-800 font-medium mb-3 xs:mb-4 sm:mb-6 lg:mb-8 max-w-xl leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s', opacity: 0, animationFillMode: 'forwards' }}>
               You bought some. Now what? Every day, we tell you exactly what's happening — in plain English, no charts, no jargon.
             </p>
 
