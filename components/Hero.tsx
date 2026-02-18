@@ -199,7 +199,7 @@ export const Hero: React.FC = () => {
           <div className="w-full lg:col-span-6 flex flex-col items-start text-left z-10 order-2 lg:order-1 mt-0 lg:mt-0">
             <div className="mb-2 md:mb-4 lg:mb-6 inline-block">
                 <span className="font-bold text-slate-900 text-[11px] sm:text-sm md:text-base lg:text-lg tracking-tight border-b-2 border-dotted border-slate-400 pb-0.5">
-                    Your friendly Bitcoin uncle
+                    FOR ANYONE WHO BOUGHT BITCOIN AND ISN'T SURE WHAT HAPPENS NEXT
                 </span>
             </div>
 
@@ -208,7 +208,7 @@ export const Hero: React.FC = () => {
             </h1>
 
             <p className="text-xs sm:text-sm md:text-base lg:text-xl text-slate-800 font-medium mb-4 sm:mb-6 lg:mb-8 max-w-xl leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s', opacity: 0, animationFillMode: 'forwards' }}>
-              We read the charts and the whitepapers so you don't have to. The 5-minute newsletter that separates the <span className="font-black">signal from the noise</span>.
+              You bought some. Now what? Every day, we tell you exactly what's happening — in plain English, no charts, no jargon.
             </p>
 
             <div className="w-full animate-fade-in z-20" style={{ animationDelay: '0.4s', opacity: 0, animationFillMode: 'forwards' }}>
@@ -232,8 +232,8 @@ export const Hero: React.FC = () => {
                                 className="flex-grow px-2.5 sm:px-4 h-full bg-transparent focus:outline-none text-slate-900 placeholder:text-slate-400 text-xs sm:text-sm md:text-base min-w-0"
                             />
                             <button type="submit" disabled={status === 'loading'} className="bg-brand-600 hover:bg-brand-700 text-white font-black uppercase text-[9px] sm:text-xs md:text-sm lg:text-base px-3 sm:px-5 md:px-8 h-full transition-colors whitespace-nowrap flex items-center justify-center shrink-0">
-                                {status === 'loading' ? <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div> : <span className="hidden xs:inline">Start Reading</span>}
-                                {!status || status === 'loading' ? null : (status === 'loading' ? null : <span className="xs:hidden">Join</span>)}
+                                {status === 'loading' ? <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div> : <span className="hidden xs:inline">Read Today's Story</span>}
+                                {!status || status === 'loading' ? null : (status === 'loading' ? null : <span className="xs:hidden">Read</span>)}
                             </button>
                         </div>
                         {status === 'error' && (
@@ -248,7 +248,7 @@ export const Hero: React.FC = () => {
                 {status !== 'success' && (
                     <p className="text-[9px] sm:text-[10px] md:text-xs font-bold text-slate-900 uppercase tracking-wide mt-2 flex items-center gap-2">
                     <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse shrink-0"></span>
-                    <span>Join 45,000+ subscribers.</span>
+                    <span>No Spam. No Noise. Unsubscribe Any Time.</span>
                     </p>
                 )}
             </div>
@@ -258,7 +258,7 @@ export const Hero: React.FC = () => {
         <div className="mt-6 sm:mt-10 md:mt-16 lg:mt-20 pt-4 sm:pt-6 md:pt-8 lg:pt-10 border-t border-slate-300">
             <div className="flex flex-col items-center md:flex-row md:items-center gap-2 md:gap-12 lg:gap-16 overflow-hidden">
                 <span className="font-bold text-slate-900 text-[10px] xs:text-xs sm:text-sm md:text-base lg:text-lg whitespace-nowrap z-10 bg-paper md:pr-4 text-center md:text-left">
-                    Read by everyday investors at
+                    Read by 1,000+ people who just wanted to understand what they bought.
                 </span>
                 <div className="flex-grow overflow-hidden relative w-full mask-gradient">
                     <div className="flex animate-scroll whitespace-nowrap gap-8 md:gap-12 items-center opacity-60 grayscale w-max">

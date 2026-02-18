@@ -14,10 +14,10 @@ export const Features: React.FC = () => {
         <div className="flex flex-col md:flex-row justify-between md:items-end mb-6 sm:mb-8 md:mb-12 lg:mb-20 gap-4 md:gap-6">
             <div>
                 <div className="inline-block bg-brand-200 text-slate-900 text-[8px] xs:text-[9px] sm:text-[10px] font-black uppercase tracking-widest px-2 py-1 mb-2 border border-slate-900 shadow-[1px_1px_0px_0px_rgba(15,23,42,1)] xs:shadow-[1.5px_1.5px_0px_0px_rgba(15,23,42,1)] sm:shadow-[2px_2px_0px_0px_rgba(15,23,42,1)]">
-                    The Mission
+                    THE MISSION
                 </div>
                 <h2 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-black text-slate-900 uppercase tracking-tighter leading-[0.9]">
-                    Why <span className="text-brand-600">Intrigue?</span>
+                    WHY <span className="text-brand-600">INTRIGUE?</span>
                 </h2>
             </div>
 
@@ -70,10 +70,10 @@ export const Features: React.FC = () => {
                     <BookOpen size={20} className="xs:w-[22px] xs:h-[22px] md:w-8 md:h-8" strokeWidth={2} />
                 </div>
                 <h3 className="font-sans font-black text-sm xs:text-base sm:text-lg md:text-2xl mb-2 xs:mb-3 md:mb-4 text-slate-900 leading-tight group-hover:text-brand-600 transition-colors">
-                    Get 1% Smarter
+                    One Thing Smarter Every Day
                 </h3>
                 <p className="text-slate-600 leading-relaxed font-medium text-xs xs:text-sm md:text-base mb-3 xs:mb-4 md:mb-6">
-                    Every issue includes one bite-sized lesson. In 30 days, you'll go from "what is a blockchain?" to explaining it at parties.
+                    Every article teaches you one thing. In a month, you'll be the most interesting person at the table when Bitcoin comes up.
                 </p>
                 <div className="flex items-center gap-2 text-[8px] xs:text-[9px] md:text-xs font-black uppercase tracking-widest text-slate-400 group-hover:text-brand-600 transition-colors mt-auto">
                     Learn Daily <ArrowRight size={12} className="xs:w-3 xs:h-3 md:w-4 md:h-4" />

@@ -47,16 +47,16 @@ export const NewsletterCTA: React.FC = () => {
                 {/* Left Text */}
                 <div className="w-full lg:w-1/2 text-center lg:text-left">
                     <h2 className="font-sans font-black text-4xl sm:text-5xl md:text-6xl text-white uppercase leading-[0.9] mb-4">
-                        Smart money reads Intrigue.
+                        FIVE MINUTES. ONE STORY. YOU'LL ACTUALLY GET IT.
                     </h2>
                     <p className="text-brand-100 font-bold text-lg md:text-xl opacity-90 max-w-lg mx-auto lg:mx-0">
-                        Join the 45,000+ investors who start their day with clarity, not chaos.
+                        Every day, one clear explanation of what happened in Bitcoin — and why it matters to you.
                     </p>
                 </div>
 
                 {/* Right Form */}
                 <div className="w-full lg:w-1/2 max-w-xl">
-                    <p className="text-white mb-3 text-base md:text-lg font-medium text-center lg:text-left">Don't get left behind.</p>
+                    <p className="text-white mb-3 text-base md:text-lg font-medium text-center lg:text-left">Your email address...</p>
                     
                     {/* Mobile-First Stacked Form */}
                     {status === 'success' ? (

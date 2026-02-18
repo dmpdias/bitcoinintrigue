@@ -1,0 +1,58 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="200" height="200" fill="#fff7ed"/>
+
+  <!-- Head -->
+  <circle cx="100" cy="70" r="35" fill="#a88560"/>
+
+  <!-- Blonde Hair -->
+  <path d="M 65 45 Q 65 20 100 15 Q 135 20 135 50 L 135 65 Q 100 75 65 65 Z" fill="#d4af5a"/>
+
+  <!-- Hair detail -->
+  <line x1="80" y1="25" x2="82" y2="48" stroke="#b8942d" stroke-width="1" opacity="0.4"/>
+  <line x1="100" y1="18" x2="100" y2="42" stroke="#b8942d" stroke-width="1" opacity="0.4"/>
+  <line x1="120" y1="25" x2="118" y2="48" stroke="#b8942d" stroke-width="1" opacity="0.4"/>
+
+  <!-- Eyes (confident) -->
+  <circle cx="90" cy="68" r="4.5" fill="#4a5a6a"/>
+  <circle cx="110" cy="68" r="4.5" fill="#4a5a6a"/>
+  <circle cx="91" cy="67" r="2" fill="#ffffff"/>
+  <circle cx="111" cy="67" r="2" fill="#ffffff"/>
+
+  <!-- Eyebrows (serious/confident) -->
+  <line x1="83" y1="60" x2="97" y2="59" stroke="#8b7939" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="103" y1="59" x2="117" y2="60" stroke="#8b7939" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Nose -->
+  <line x1="100" y1="68" x2="100" y2="78" stroke="#9d7a5c" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Mouth (determined smile) -->
+  <path d="M 90 85 Q 100 90 110 85" stroke="#3d3d3d" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+  <!-- Stubble -->
+  <circle cx="85" cy="88" r="0.8" fill="#8b7939" opacity="0.5"/>
+  <circle cx="95" cy="90" r="0.8" fill="#8b7939" opacity="0.5"/>
+  <circle cx="105" cy="90" r="0.8" fill="#8b7939" opacity="0.5"/>
+  <circle cx="115" cy="88" r="0.8" fill="#8b7939" opacity="0.5"/>
+
+  <!-- Neck -->
+  <rect x="88" y="100" width="24" height="15" fill="#a88560"/>
+
+  <!-- Bitcoin Intrigue T-shirt -->
+  <rect x="60" y="115" width="80" height="70" fill="#ea580c" rx="5"/>
+
+  <!-- Shirt fold/shading -->
+  <ellipse cx="100" cy="125" rx="38" ry="8" fill="#c2410c" opacity="0.3"/>
+
+  <!-- BI Logo on shirt -->
+  <circle cx="100" cy="135" r="16" fill="#ffffff"/>
+  <text x="100" y="142" font-size="20" font-weight="bold" font-family="Arial" fill="#ea580c" text-anchor="middle">BI</text>
+
+  <!-- Arms (muscular) -->
+  <ellipse cx="60" cy="145" rx="14" ry="36" fill="#a88560" transform="rotate(-25 60 145)"/>
+  <ellipse cx="140" cy="145" rx="14" ry="36" fill="#a88560" transform="rotate(25 140 145)"/>
+
+  <!-- Hands -->
+  <circle cx="50" cy="170" r="8" fill="#a88560"/>
+  <circle cx="150" cy="170" r="8" fill="#a88560"/>
+</svg>

@@ -1,0 +1,53 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="200" height="200" fill="#fff7ed"/>
+
+  <!-- Head -->
+  <circle cx="100" cy="70" r="35" fill="#b8956a"/>
+
+  <!-- Dark Brown Hair -->
+  <path d="M 65 45 Q 65 25 100 20 Q 135 25 135 50 L 135 65 Q 100 75 65 65 Z" fill="#3d2817"/>
+
+  <!-- Hair texture -->
+  <line x1="75" y1="30" x2="77" y2="50" stroke="#2d1810" stroke-width="1" opacity="0.3"/>
+  <line x1="90" y1="22" x2="92" y2="45" stroke="#2d1810" stroke-width="1" opacity="0.3"/>
+  <line x1="110" y1="23" x2="108" y2="45" stroke="#2d1810" stroke-width="1" opacity="0.3"/>
+  <line x1="125" y1="32" x2="123" y2="50" stroke="#2d1810" stroke-width="1" opacity="0.3"/>
+
+  <!-- Eyes -->
+  <circle cx="90" cy="68" r="4" fill="#2d1810"/>
+  <circle cx="110" cy="68" r="4" fill="#2d1810"/>
+  <circle cx="91" cy="67" r="1.5" fill="#ffffff"/>
+  <circle cx="111" cy="67" r="1.5" fill="#ffffff"/>
+
+  <!-- Eyebrows -->
+  <line x1="83" y1="60" x2="97" y2="58" stroke="#2d1810" stroke-width="2" stroke-linecap="round"/>
+  <line x1="103" y1="58" x2="117" y2="60" stroke="#2d1810" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Nose -->
+  <line x1="100" y1="68" x2="100" y2="78" stroke="#9d7d5a" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Mouth (confident smile) -->
+  <path d="M 90 85 Q 100 91 110 85" stroke="#2d1810" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+  <!-- Neck -->
+  <rect x="88" y="100" width="24" height="15" fill="#b8956a"/>
+
+  <!-- Bitcoin Intrigue T-shirt -->
+  <rect x="60" y="115" width="80" height="70" fill="#ea580c" rx="5"/>
+
+  <!-- Shirt fold/shading -->
+  <ellipse cx="100" cy="125" rx="38" ry="8" fill="#c2410c" opacity="0.3"/>
+
+  <!-- BI Logo on shirt -->
+  <circle cx="100" cy="135" r="16" fill="#ffffff"/>
+  <text x="100" y="142" font-size="20" font-weight="bold" font-family="Arial" fill="#ea580c" text-anchor="middle">BI</text>
+
+  <!-- Arms -->
+  <ellipse cx="60" cy="145" rx="12" ry="35" fill="#b8956a" transform="rotate(-25 60 145)"/>
+  <ellipse cx="140" cy="145" rx="12" ry="35" fill="#b8956a" transform="rotate(25 140 145)"/>
+
+  <!-- Hands -->
+  <circle cx="50" cy="170" r="8" fill="#b8956a"/>
+  <circle cx="150" cy="170" r="8" fill="#b8956a"/>
+</svg>

@@ -16,14 +16,14 @@ export const AboutPage: React.FC = () => {
       <section className="pt-16 pb-12 md:pt-32 md:pb-20 px-4 relative overflow-hidden border-b border-slate-900">
          <div className="max-w-[1400px] mx-auto text-center relative z-10">
             <div className="inline-block bg-brand-200 text-slate-900 text-[10px] md:text-xs font-black uppercase tracking-widest px-2 py-1 mb-6 border border-slate-900 shadow-[2px_2px_0px_0px_rgba(15,23,42,1)]">
-                Our Mission
+                OUR MISSION
             </div>
             <h1 className="font-sans font-black text-5xl sm:text-6xl md:text-8xl text-slate-900 mb-8 leading-[0.9] tracking-tighter uppercase">
                 Bitcoin without <br/>
                 <span className="text-brand-600">the Hype.</span>
             </h1>
             <p className="text-lg md:text-2xl text-slate-800 font-serif mb-10 max-w-3xl mx-auto leading-relaxed">
-                We believe Bitcoin shouldn't be a casino. It's a technology, a currency, and a global shift. We're here to explain it without the noise.
+                Most Bitcoin content is written for people who are already obsessed with Bitcoin. Traders. Developers. People who have a "portfolio." We write for everyone else — the curious, the cautious, and the people who just want to know what they bought.
             </p>
          </div>
       </section>
@@ -84,14 +84,14 @@ export const AboutPage: React.FC = () => {
       <section className="py-20 md:py-32 px-4">
         <div className="max-w-[1200px] mx-auto">
             <div className="text-center mb-16">
-                <h2 className="text-3xl md:text-5xl font-black uppercase text-slate-900 tracking-tight">What We Stand For</h2>
+                <h2 className="text-3xl md:text-5xl font-black uppercase text-slate-900 tracking-tight">What We Believe</h2>
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-12 sm:gap-8">
                 {[
-                    { icon: Target, title: "Signal over Noise", desc: "We filter out 99% of the news to bring you the 1% that actually matters for your understanding." },
-                    { icon: Shield, title: "Trust First", desc: "We are journalists, not influencers. We verify sources and don't accept paid shills." },
-                    { icon: Globe, title: "Global View", desc: "Bitcoin is a global phenomenon. We cover stories from Lagos to London, not just Silicon Valley." },
-                    { icon: Zap, title: "Respect Time", desc: "We know you're busy. We get to the point immediately. No fluff, no filler." }
+                    { icon: Target, title: "Signal Over Noise", desc: "Hundreds of Bitcoin stories happen every day. Most of them don't matter to you. We read everything and tell you the one thing that does." },
+                    { icon: Shield, title: "Journalists, Not Influencers", desc: "We don't hold Bitcoin. We don't have affiliate deals. We verify sources and we don't get paid to say nice things about products." },
+                    { icon: Globe, title: "The World, Not Just The Charts", desc: "Bitcoin is happening in El Salvador, in Lagos, in Brussels, in a garage in Texas. We cover all of it — not just the price." },
+                    { icon: Zap, title: "We Respect Your Time", desc: "You're busy. Five minutes. One story. We get to the point and we stop." }
                 ].map((item, i) => (
                     <div key={i} className="flex flex-col items-center text-center group">
                         <div className="w-20 h-20 bg-white border-2 border-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] flex items-center justify-center mb-6 group-hover:shadow-[6px_6px_0px_0px_rgba(234,88,12,1)] group-hover:border-brand-600 transition-all duration-300">

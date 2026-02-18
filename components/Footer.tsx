@@ -18,7 +18,7 @@ export const Footer: React.FC = () => {
                     <span className="font-serif font-bold text-xl text-white">Bitcoin Intrigue</span>
                 </div>
                 <p className="text-sm leading-relaxed mb-6">
-                    The daily 5-minute newsletter that turns Bitcoin-curious beginners into confident holders through simple global stories.
+                    Bitcoin Intrigue is a daily newsletter for people who own a little Bitcoin and want to actually understand it. No jargon. No hype. Just the story.
                 </p>
                 <div className="flex gap-4">
                     <a href="#" className="hover:text-brand-500 transition-colors p-1"><Twitter size={20} /></a>
@@ -39,8 +39,7 @@ export const Footer: React.FC = () => {
         </div>
 
         <div className="border-t border-slate-900 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-medium text-center md:text-left">
-          <p>© {new Date().getFullYear()} Bitcoin Intrigue Media. All rights reserved.</p>
-          <p className="opacity-70">Made for everyday investors.</p>
+          <p>© {new Date().getFullYear()} Bitcoin Intrigue. Made for everyday people.</p>
         </div>
       </div>
     </footer>

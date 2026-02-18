@@ -3,21 +3,21 @@ import React from 'react';
 export const Testimonials: React.FC = () => {
   const testimonials = [
     {
-      quote: "Indispensable and insightful, Bitcoin Intrigue delivers a wealth of global intelligence straight to my inbox. It offers a nuanced understanding of world affairs that I really look forward to reading!",
-      name: "Allan S.",
-      role: "Head of Comms, Vinson & Elkins",
+      quote: "I bought a tiny bit of Bitcoin on a whim and had no idea what I'd bought. Now I actually understand it.",
+      name: "Maria",
+      role: "31, Teacher",
+      img: "https://randomuser.me/api/portraits/women/44.jpg"
+    },
+    {
+      quote: "I read it on my lunch break. It's the only newsletter I don't delete.",
+      name: "James",
+      role: "28, Graphic Designer",
       img: "https://randomuser.me/api/portraits/men/32.jpg"
     },
     {
-      quote: "I read Intrigue everyday as part of my morning commute into the city. As part of a global treasury team, I need to know how global events are going to impact my day before it begins.",
-      name: "Omar L.",
-      role: "Assistant Vice President, Citi",
-      img: "https://randomuser.me/api/portraits/men/86.jpg"
-    },
-    {
-      quote: "As a former US Diplomat, I love Intrigue because it gives me high-level analysis in a more enjoyable, digestible format unlike so many government briefings I used to read.",
-      name: "Lisa W.",
-      role: "Former US Diplomat",
+      quote: "I finally stopped feeling stupid when Bitcoin came up in conversation.",
+      name: "Priya",
+      role: "36, HR Manager",
       img: "https://randomuser.me/api/portraits/women/44.jpg"
     }
   ];
@@ -33,17 +33,14 @@ export const Testimonials: React.FC = () => {
         <div className="flex flex-col md:flex-row justify-between md:items-end mb-8 sm:mb-10 md:mb-14 lg:mb-20 gap-4 md:gap-6">
             <div>
                 <div className="inline-block bg-brand-200 text-slate-900 text-[8px] xs:text-[9px] sm:text-[10px] font-black uppercase tracking-widest px-2 py-1 mb-2 border border-slate-900 shadow-[1px_1px_0px_0px_rgba(15,23,42,1)] xs:shadow-[1.5px_1.5px_0px_0px_rgba(15,23,42,1)] sm:shadow-[2px_2px_0px_0px_rgba(15,23,42,1)]">
-                    Subscriber Love
+                    WHAT READERS ARE SAYING
                 </div>
                 <h2 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-black text-slate-900 uppercase tracking-tighter leading-[0.9]">
-                    Take it from <span className="text-brand-600">Them!</span>
+                    Real people. Plain English. No prior knowledge required.
                 </h2>
             </div>
 
             <div className="max-w-md">
-                <p className="text-xs xs:text-sm sm:text-base font-serif text-slate-800 leading-relaxed mb-1.5 xs:mb-2">
-                    Real reviews from real subscribers.
-                </p>
                 <div className="h-0.5 xs:h-1 w-12 bg-slate-900"></div>
             </div>
         </div>
