@@ -54,29 +54,29 @@ export const Hero: React.FC = () => {
 
           {/* Content Column - Always First */}
           <div className="flex flex-col items-start text-left z-10 order-1 pt-0 min-w-0">
-            <div className="mb-1 xs:mb-1.5 sm:mb-3 md:mb-4 lg:mb-6 inline-block">
-                <span className="font-bold text-slate-900 text-[8px] xs:text-[9px] sm:text-xs md:text-sm lg:text-lg tracking-tight border-b-2 border-dotted border-slate-400 pb-0.5 leading-tight">
-                    FOR ANYONE WHO BOUGHT BITCOIN AND ISN'T SURE WHAT HAPPENS NEXT
+            <div className="mb-1.5 xs:mb-2 sm:mb-3 md:mb-4 lg:mb-6 inline-block">
+                <span className="font-bold text-slate-900 text-[7px] xs:text-[8px] sm:text-xs md:text-sm lg:text-lg tracking-tight border-b-2 border-dotted border-slate-200 pb-0.5 leading-tight">
+                    YOU BOUGHT BITCOIN. NOW WHAT?
                 </span>
             </div>
 
-            <h1 className="font-sans font-black text-[1.1rem] xs:text-lg sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl text-slate-900 mb-1 xs:mb-1.5 sm:mb-3 md:mb-4 lg:mb-6 leading-[0.9] xs:leading-[0.9] tracking-tighter uppercase animate-slide-up">
-              Bitcoin. <br className="hidden xs:block"/> Translated <br className="hidden xs:block"/> for humans.
+            <h1 className="font-sans font-black text-[1.25rem] xs:text-xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl text-slate-900 mb-1.5 xs:mb-2 sm:mb-4 md:mb-6 lg:mb-8 leading-[0.85] xs:leading-[0.85] tracking-tighter uppercase animate-slide-up">
+              Bitcoin. <br/> Translated. <br className="hidden xs:block"/> For Humans.
             </h1>
 
-            <p className="text-[11px] xs:text-xs sm:text-sm md:text-base lg:text-lg text-slate-800 font-medium mb-1.5 xs:mb-2 sm:mb-4 md:mb-6 lg:mb-8 leading-tight sm:leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s', opacity: 0, animationFillMode: 'forwards' }}>
-              You bought some. Now what? Every day, we tell you exactly what's happening — in plain English, no charts, no jargon.
+            <p className="text-[11px] xs:text-xs sm:text-sm md:text-base lg:text-lg text-slate-800 font-medium mb-2.5 xs:mb-3 sm:mb-6 md:mb-8 lg:mb-8 leading-snug sm:leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s', opacity: 0, animationFillMode: 'forwards' }}>
+              Every day, we tell you exactly what's happening — in plain English, no charts, no jargon.
             </p>
 
-            <div className="w-full sm:max-w-sm animate-fade-in z-20 flex-shrink-0" style={{ animationDelay: '0.4s', opacity: 0, animationFillMode: 'forwards' }}>
+            <div className="w-full animate-fade-in z-20 flex-shrink-0" style={{ animationDelay: '0.4s', opacity: 0, animationFillMode: 'forwards' }}>
                 {status === 'success' ? (
-                    <div className="flex h-8 xs:h-9 sm:h-12 md:h-14 items-center px-2 xs:px-3 sm:px-6 bg-brand-50 border border-slate-900 shadow-[1px_1px_0px_0px_rgba(15,23,42,1)] xs:shadow-[2px_2px_0px_0px_rgba(15,23,42,1)] sm:shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] rounded-sm max-w-lg animate-fade-in">
-                        <Check className="text-brand-600 mr-1 xs:mr-2 sm:mr-3 shrink-0" size={16} />
-                        <span className="font-black text-slate-900 text-[8px] xs:text-[9px] sm:text-sm md:text-base uppercase tracking-wide line-clamp-1">Thanks for subscribing!</span>
+                    <div className="flex h-9 xs:h-10 sm:h-12 md:h-14 items-center px-3 xs:px-4 sm:px-6 bg-brand-50 border-2 border-slate-900 shadow-[2px_2px_0px_0px_rgba(15,23,42,1)] xs:shadow-[3px_3px_0px_0px_rgba(15,23,42,1)] sm:shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] rounded-sm w-full animate-fade-in">
+                        <Check className="text-brand-600 mr-2 xs:mr-2.5 sm:mr-3 shrink-0" size={18} />
+                        <span className="font-black text-slate-900 text-[9px] xs:text-[10px] sm:text-sm md:text-base uppercase tracking-wide line-clamp-1">Thanks for subscribing!</span>
                     </div>
                 ) : (
-                    <form onSubmit={handleSubmit} className="flex flex-col gap-1 xs:gap-1.5 sm:gap-2 max-w-lg w-full">
-                        <div className={`flex h-8 xs:h-9 sm:h-12 md:h-14 border bg-white shadow-[1px_1px_0px_0px_rgba(15,23,42,1)] xs:shadow-[2px_2px_0px_0px_rgba(15,23,42,1)] sm:shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:shadow-[2px_2px_0px_0px_rgba(234,88,12,1)] xs:hover:shadow-[3px_3px_0px_0px_rgba(234,88,12,1)] sm:hover:shadow-[6px_6px_0px_0px_rgba(234,88,12,1)] transition-shadow duration-300 rounded-sm overflow-hidden ${status === 'error' ? 'border-red-500' : 'border-slate-900'}`}>
+                    <form onSubmit={handleSubmit} className="flex flex-col gap-1.5 xs:gap-2 sm:gap-2 w-full">
+                        <div className={`flex h-9 xs:h-10 sm:h-12 md:h-14 border-2 bg-white shadow-[2px_2px_0px_0px_rgba(15,23,42,1)] xs:shadow-[3px_3px_0px_0px_rgba(15,23,42,1)] sm:shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:shadow-[3px_3px_0px_0px_rgba(234,88,12,1)] xs:hover:shadow-[4px_4px_0px_0px_rgba(234,88,12,1)] sm:hover:shadow-[6px_6px_0px_0px_rgba(234,88,12,1)] focus-within:border-brand-600 transition-all duration-300 rounded-sm overflow-hidden ${status === 'error' ? 'border-red-500' : 'border-slate-900'}`}>
                             <input
                                 type="email"
                                 value={email}
@@ -85,26 +85,33 @@ export const Hero: React.FC = () => {
                                     if(status === 'error') setStatus('idle');
                                 }}
                                 disabled={status === 'loading'}
-                                placeholder="you@email.com"
-                                className="flex-grow px-1.5 xs:px-2 sm:px-4 h-full bg-transparent focus:outline-none text-slate-900 placeholder:text-slate-400 text-[9px] xs:text-xs sm:text-sm md:text-base min-w-0"
+                                placeholder="your@email.com"
+                                className="flex-grow px-2 xs:px-3 sm:px-4 h-full bg-transparent focus:outline-none text-slate-900 placeholder:text-slate-350 text-[10px] xs:text-xs sm:text-sm md:text-base min-w-0"
                             />
-                            <button type="submit" disabled={status === 'loading'} className="bg-brand-600 hover:bg-brand-700 text-white font-black uppercase text-[7px] xs:text-[8px] sm:text-xs md:text-sm lg:text-base px-1.5 xs:px-2.5 sm:px-5 md:px-8 h-full transition-colors whitespace-nowrap flex items-center justify-center shrink-0">
-                                {status === 'loading' ? <div className="w-3 h-3 xs:w-4 xs:h-4 sm:w-5 sm:h-5 border border-white border-t-transparent rounded-full animate-spin"></div> : <span className="hidden xs:inline">Read</span>}
-                                {!status || status === 'loading' ? null : (status === 'loading' ? null : <span className="xs:hidden text-[6px]">OK</span>)}
+                            <button type="submit" disabled={status === 'loading'} className="bg-brand-600 hover:bg-brand-700 text-white font-black uppercase text-[9px] xs:text-xs sm:text-sm lg:text-base px-3 xs:px-4 sm:px-6 md:px-8 h-full transition-colors whitespace-nowrap flex items-center justify-center shrink-0 gap-1">
+                                {status === 'loading' ? (
+                                    <div className="w-3 h-3 xs:w-4 xs:h-4 sm:w-5 sm:h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                ) : (
+                                    <>
+                                        <span className="hidden xs:inline">Subscribe</span>
+                                        <span className="xs:hidden">Go</span>
+                                        <span className="hidden xs:inline">→</span>
+                                    </>
+                                )}
                             </button>
                         </div>
                         {status === 'error' && (
-                            <p className="text-red-600 text-[7px] xs:text-[8px] sm:text-[10px] md:text-xs font-bold flex items-center gap-0.5 xs:gap-1 animate-fade-in leading-tight">
-                                <AlertCircle size={10} className="shrink-0" />
-                                <span>Check email & try again.</span>
+                            <p className="text-red-600 text-[8px] xs:text-[9px] sm:text-[10px] md:text-xs font-bold flex items-center gap-1 animate-fade-in leading-tight">
+                                <AlertCircle size={11} className="shrink-0 flex-none" />
+                                <span>Check your email and try again.</span>
                             </p>
                         )}
                     </form>
                 )}
 
                 {status !== 'success' && (
-                    <p className="text-[7px] xs:text-[8px] sm:text-[10px] md:text-xs font-bold text-slate-900 uppercase tracking-tight mt-1 xs:mt-1.5 sm:mt-2 flex items-center gap-1 leading-tight">
-                    <span className="w-1 h-1 xs:w-1.5 xs:h-1.5 bg-green-500 rounded-full animate-pulse shrink-0"></span>
+                    <p className="text-[8px] xs:text-[9px] sm:text-[10px] md:text-xs font-bold text-slate-700 uppercase tracking-tight mt-2 xs:mt-2.5 sm:mt-3 flex items-center gap-1 leading-tight">
+                    <span className="w-1.5 h-1.5 xs:w-2 xs:h-2 bg-green-500 rounded-full animate-pulse shrink-0 flex-none"></span>
                     <span>No spam. Unsubscribe anytime.</span>
                     </p>
                 )}
@@ -112,7 +119,7 @@ export const Hero: React.FC = () => {
           </div>
 
           {/* Image Column - Responsive sizing */}
-          <div className="relative w-full h-[140px] xs:h-[160px] sm:h-[280px] md:h-[350px] lg:h-[500px] xl:h-[600px] flex items-center justify-center lg:justify-end z-0 order-2">
+          <div className="relative w-full h-[160px] xs:h-[180px] sm:h-[280px] md:h-[350px] lg:h-[500px] xl:h-[600px] flex items-center justify-center lg:justify-end z-0 order-2">
             {/* Illustration - Responsive */}
             <div className="relative w-full h-full flex items-center justify-center px-1 xs:px-1.5 sm:px-0">
               <img
