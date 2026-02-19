@@ -83,39 +83,62 @@ export const generateImage = async (
 
     // Validate API token
     if (!REPLICATE_API_TOKEN) {
-      console.error(`[ImageGenerator] Replicate API token not configured`);
+      console.error(`[ImageGenerator] ❌ Replicate API token not configured`);
       return null;
     }
+
+    console.log(`[ImageGenerator] ✅ API Token loaded`);
 
     // Step 1: Create prediction
-    console.log(`[ImageGenerator] Creating prediction with Replicate API...`);
+    console.log(`[ImageGenerator] 📡 Creating prediction with Replicate API...`);
+    console.log(`[ImageGenerator]    URL: ${REPLICATE_API_URL}/predictions`);
+    console.log(`[ImageGenerator]    Model: black-forest-labs/flux-schnell`);
 
-    const predictionResponse = await fetch(`${REPLICATE_API_URL}/predictions`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${REPLICATE_API_TOKEN}`,
-      },
-      body: JSON.stringify({
-        version: 'black-forest-labs/flux-schnell', // FLUX.1 [schnell] model identifier
-        input: {
-          prompt: prompt,
-          aspect_ratio: '16:9',
-          num_outputs: 1,
+    let predictionResponse;
+    try {
+      predictionResponse = await fetch(`${REPLICATE_API_URL}/predictions`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${REPLICATE_API_TOKEN}`,
         },
-      }),
-    });
-
-    if (!predictionResponse.ok) {
-      const errorData = await predictionResponse.json();
-      console.error(`[ImageGenerator] Prediction creation failed for ${category}:`, errorData);
+        body: JSON.stringify({
+          version: 'black-forest-labs/flux-schnell', // FLUX.1 [schnell] model identifier
+          input: {
+            prompt: prompt,
+            aspect_ratio: '16:9',
+            num_outputs: 1,
+          },
+        }),
+      });
+    } catch (fetchError) {
+      console.error(`[ImageGenerator] ❌ Fetch error creating prediction:`, fetchError);
       return null;
     }
 
-    const prediction = await predictionResponse.json();
-    console.log(`[ImageGenerator] Prediction created: ${prediction.id}`);
+    if (!predictionResponse.ok) {
+      try {
+        const errorData = await predictionResponse.json();
+        console.error(`[ImageGenerator] ❌ Prediction creation failed (HTTP ${predictionResponse.status}):`, errorData);
+      } catch (e) {
+        console.error(`[ImageGenerator] ❌ Prediction creation failed (HTTP ${predictionResponse.status}), couldn't parse error`);
+      }
+      return null;
+    }
+
+    let prediction;
+    try {
+      prediction = await predictionResponse.json();
+    } catch (parseError) {
+      console.error(`[ImageGenerator] ❌ Failed to parse prediction response:`, parseError);
+      return null;
+    }
+
+    console.log(`[ImageGenerator] ✅ Prediction created: ${prediction.id}`);
+    console.log(`[ImageGenerator]    Status: ${prediction.status}`);
 
     // Step 2: Poll for completion
+    console.log(`[ImageGenerator] ⏳ Polling for completion (max ${120} seconds)...`);
     let completed = false;
     let attempts = 0;
     const maxAttempts = 120; // 2 minutes with 1-second polls
@@ -124,24 +147,40 @@ export const generateImage = async (
     while (!completed && attempts < maxAttempts) {
       attempts++;
 
-      const statusResponse = await fetch(`${REPLICATE_API_URL}/predictions/${prediction.id}`, {
-        headers: {
-          'Authorization': `Bearer ${REPLICATE_API_TOKEN}`,
-        },
-      });
-
-      if (!statusResponse.ok) {
-        console.error(`[ImageGenerator] Failed to check prediction status for ${category}`);
+      let statusResponse;
+      try {
+        statusResponse = await fetch(`${REPLICATE_API_URL}/predictions/${prediction.id}`, {
+          headers: {
+            'Authorization': `Bearer ${REPLICATE_API_TOKEN}`,
+          },
+        });
+      } catch (fetchError) {
+        console.error(`[ImageGenerator] ❌ Fetch error checking status (attempt ${attempts}):`, fetchError);
         return null;
       }
 
-      finalPrediction = await statusResponse.json();
+      if (!statusResponse.ok) {
+        console.error(`[ImageGenerator] ❌ Failed to check prediction status (HTTP ${statusResponse.status})`);
+        return null;
+      }
+
+      try {
+        finalPrediction = await statusResponse.json();
+      } catch (parseError) {
+        console.error(`[ImageGenerator] ❌ Failed to parse status response:`, parseError);
+        return null;
+      }
+
+      // Only log every 5 attempts to reduce noise
+      if (attempts % 5 === 0 || finalPrediction.status !== 'processing') {
+        console.log(`[ImageGenerator]    Attempt ${attempts}: ${finalPrediction.status}`);
+      }
 
       if (finalPrediction.status === 'succeeded') {
         completed = true;
-        console.log(`[ImageGenerator] Prediction succeeded after ${attempts} checks for ${category}`);
+        console.log(`[ImageGenerator] ✅ Prediction succeeded after ${attempts} checks`);
       } else if (finalPrediction.status === 'failed') {
-        console.error(`[ImageGenerator] Prediction failed for ${category}:`, finalPrediction.error);
+        console.error(`[ImageGenerator] ❌ Prediction failed:`, finalPrediction.error);
         return null;
       } else {
         // Wait 1 second before polling again
@@ -150,18 +189,19 @@ export const generateImage = async (
     }
 
     if (!completed) {
-      console.error(`[ImageGenerator] Prediction timed out for ${category}`);
+      console.error(`[ImageGenerator] ❌ Prediction timed out after ${attempts} attempts`);
       return null;
     }
 
     // Step 3: Extract image URL from output
     if (!finalPrediction.output || finalPrediction.output.length === 0) {
-      console.error(`[ImageGenerator] No output from Replicate for ${category}`);
+      console.error(`[ImageGenerator] ❌ No output from Replicate`);
+      console.error(`[ImageGenerator]    Final prediction state:`, finalPrediction);
       return null;
     }
 
     const imageUrl = finalPrediction.output[0];
-    console.log(`[ImageGenerator] Successfully generated image: ${imageUrl}`);
+    console.log(`[ImageGenerator] ✅ Image URL extracted: ${imageUrl.substring(0, 80)}...`);
 
     return imageUrl;
   } catch (error) {
@@ -183,17 +223,32 @@ export const generateImages = async (
   stories: Story[]
 ): Promise<(string | null)[]> => {
   try {
-    console.log(`[ImageGenerator] Generating ${stories.length} images with story-specific prompts...`);
+    console.log(`\n${'='.repeat(60)}`);
+    console.log(`[ImageGenerator] 🎨 BATCH IMAGE GENERATION START`);
+    console.log(`[ImageGenerator] Total stories to process: ${stories.length}`);
+    stories.forEach((s, i) => {
+      console.log(`[ImageGenerator]    ${i + 1}. ${s.category}: "${s.headline.substring(0, 50)}..."`);
+    });
+    console.log(`${'='.repeat(60)}\n`);
 
     // Generate all images in parallel
-    const promises = stories.map((story) =>
-      generateImage(story)
-    );
+    const promises = stories.map((story, index) => {
+      console.log(`[ImageGenerator] Starting image generation for story ${index + 1}/${stories.length}...`);
+      return generateImage(story);
+    });
 
+    console.log(`[ImageGenerator] ⏳ Waiting for all images to complete...`);
     const results = await Promise.all(promises);
+
+    console.log(`\n${'='.repeat(60)}`);
+    console.log(`[ImageGenerator] 🎨 BATCH IMAGE GENERATION COMPLETE`);
+    const successCount = results.filter(url => url !== null).length;
+    console.log(`[ImageGenerator] ✅ Success: ${successCount}/${stories.length} images`);
+    console.log(`${'='.repeat(60)}\n`);
+
     return results;
   } catch (error) {
-    console.error('[ImageGenerator] Error generating batch images:', error);
+    console.error('[ImageGenerator] ❌ Error generating batch images:', error);
     return stories.map(() => null);
   }
 };

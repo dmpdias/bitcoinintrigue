@@ -136,31 +136,40 @@ async function handleImageGeneration(context: string): Promise<string> {
     }
 
     if (!briefing.stories || briefing.stories.length === 0) {
-      console.warn('[ImageGenerationAgent] No stories found in briefing');
+      console.warn('[ImageGenerationAgent] ⚠️  No stories found in briefing');
       return context;
     }
 
     // Generate images for stories that don't have them yet
-    console.log(`[ImageGenerationAgent] Generating images for ${briefing.stories.length} stories with story-specific prompts...`);
+    console.log(`[ImageGenerationAgent] 📸 Generating images for ${briefing.stories.length} stories with story-specific prompts...`);
+    console.log(`[ImageGenerationAgent]    Story categories: ${briefing.stories.map(s => s.category).join(', ')}`);
 
     // Pass full Story objects to image generation service so it can read content
+    console.log(`[ImageGenerationAgent] 🚀 Starting image generation service...`);
     const imageUrls = await replicateService.generateImages(briefing.stories);
+
+    console.log(`[ImageGenerationAgent] 📊 Image generation results:`, imageUrls.map((url, i) => ({
+      story: briefing.stories[i].category,
+      url: url ? `${url.substring(0, 60)}...` : 'null'
+    })));
 
     // Update stories with generated image URLs
     briefing.stories = briefing.stories.map((story, index) => {
       if (imageUrls[index]) {
+        console.log(`[ImageGenerationAgent] ✅ Story "${story.category}" now has image URL`);
         return {
           ...story,
           image: imageUrls[index],
         };
       }
+      console.log(`[ImageGenerationAgent] ⚠️  Story "${story.category}" has NO image URL`);
       return story;
     });
 
     // Log summary
     const successCount = imageUrls.filter((url) => url !== null).length;
     console.log(
-      `[ImageGenerationAgent] Successfully generated ${successCount}/${briefing.stories.length} images`
+      `[ImageGenerationAgent] ✅ Successfully generated ${successCount}/${briefing.stories.length} images`
     );
 
     // Return updated briefing as JSON string
