@@ -196,6 +196,16 @@ export const BackOffice: React.FC = () => {
                 addLog(agent.name, 'SEO Metadata added.', 'success');
             }
         }
+        else if (agent.role === 'image') {
+            context = response;
+            const withImages = parseBriefingJSON(response);
+            if (withImages) {
+                currentDraft = withImages;
+                addLog(agent.name, 'Images generated and embedded.', 'success');
+            } else {
+                addLog(agent.name, 'Image generation completed.', 'success');
+            }
+        }
       }
 
       // Final Save
@@ -666,21 +676,21 @@ export const BackOffice: React.FC = () => {
                 <div className="space-y-3 max-h-80 overflow-y-auto pr-2 custom-scrollbar">
                     {issues.map(issue => (
                         <div key={issue.id} className="relative group">
-                            <button 
+                            <button
                                 onClick={() => { setSelectedIssue(issue); setActiveTab('pipeline'); }}
                                 className={`w-full p-4 text-left border-2 transition-all ${selectedIssue?.id === issue.id ? 'border-brand-600 bg-brand-50 shadow-[4px_4px_0px_0px_rgba(234,88,12,0.1)]' : 'border-slate-50 bg-white'}`}
                             >
-                                <div className="font-black text-sm mb-1 truncate pr-6">{issue.intro?.headline}</div>
+                                <div className="font-black text-sm mb-1 truncate pr-6">{issue.intro?.headline || issue.stories?.[0]?.headline || 'Untitled Issue'}</div>
                                 <div className="flex justify-between items-center text-[8px] uppercase font-black text-slate-400">
                                     <span>{issue.date}</span>
                                     <span className={issue.status === 'published' ? 'text-green-600' : 'text-amber-600'}>{issue.status}</span>
                                 </div>
                             </button>
-                            <button 
+                            <button
                                 type="button"
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    setDeleteTarget({ type: 'issue', id: issue.id, name: issue.intro.headline });
+                                    setDeleteTarget({ type: 'issue', id: issue.id, name: issue.intro?.headline || issue.stories?.[0]?.headline || 'Untitled Issue' });
                                 }}
                                 className="absolute top-2 right-2 z-10 p-2 text-slate-400 hover:text-red-600 bg-white/80 hover:bg-white rounded-full transition-colors border border-transparent hover:border-slate-200"
                             >
@@ -691,7 +701,41 @@ export const BackOffice: React.FC = () => {
                     {issues.length === 0 && <div className="text-xs text-slate-400 italic">No issues found.</div>}
                 </div>
              </div>
-             
+
+             {/* Image Preview Pane */}
+             {selectedIssue && activeTab === 'pipeline' && (
+                <div className="bg-white border-2 border-slate-900 p-6">
+                   <h3 className="font-black text-[10px] uppercase tracking-widest text-slate-400 mb-6 flex items-center gap-2">
+                       <ImageIcon size={14} /> Draft Images
+                   </h3>
+                   <div className="space-y-4 max-h-96 overflow-y-auto pr-2 custom-scrollbar">
+                       {selectedIssue.stories && selectedIssue.stories.length > 0 ? (
+                           selectedIssue.stories.map((story, idx) => (
+                               <div key={idx} className="space-y-2">
+                                   <div className="text-[10px] font-bold uppercase text-slate-500">{story.category}</div>
+                                   {story.image ? (
+                                       <img
+                                           src={story.image}
+                                           alt={story.headline}
+                                           className="w-full aspect-video object-cover border-2 border-slate-200 rounded-sm"
+                                       />
+                                   ) : (
+                                       <div className="w-full aspect-video bg-gradient-to-br from-slate-100 to-slate-200 border-2 border-dashed border-slate-300 flex items-center justify-center rounded-sm">
+                                           <div className="text-center">
+                                               <ImageIcon size={24} className="text-slate-300 mx-auto mb-2" />
+                                               <div className="text-[10px] text-slate-400">Waiting for image</div>
+                                           </div>
+                                       </div>
+                                   )}
+                               </div>
+                           ))
+                       ) : (
+                           <div className="text-xs text-slate-400 italic text-center py-6">No stories to display</div>
+                       )}
+                   </div>
+                </div>
+             )}
+
              {/* Logs */}
              <div className="bg-slate-900 p-6 rounded-sm">
                 <h3 className="font-black text-[10px] uppercase tracking-widest text-slate-400 mb-6 flex items-center gap-2">
