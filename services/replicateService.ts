@@ -1,7 +1,7 @@
 import { Story } from '../types';
 
-// Supabase Edge Function URL - handles Replicate API calls server-side to avoid CORS
-const EDGE_FUNCTION_URL = 'https://xnykibvnkxrzcpkxmxvx.supabase.co/functions/v1/generate-image';
+// Vercel API endpoint - handles Replicate API calls server-side to avoid CORS
+const API_ENDPOINT = '/api/generate-image';
 
 /**
  * Generate a custom prompt based on story content
@@ -80,13 +80,13 @@ export const generateImage = async (
     console.log(`[ImageGenerator] Generating image for: ${category} - ${headline}`);
     console.log(`[ImageGenerator] Custom prompt: ${prompt.substring(0, 150)}...`);
 
-    // Call Edge Function (server-side) to avoid CORS issues
-    console.log(`[ImageGenerator] 📡 Calling Supabase Edge Function...`);
-    console.log(`[ImageGenerator]    URL: ${EDGE_FUNCTION_URL}`);
+    // Call Vercel API (server-side) to avoid CORS issues
+    console.log(`[ImageGenerator] 📡 Calling Vercel API...`);
+    console.log(`[ImageGenerator]    URL: ${API_ENDPOINT}`);
 
-    let edgeFunctionResponse;
+    let apiResponse;
     try {
-      edgeFunctionResponse = await fetch(EDGE_FUNCTION_URL, {
+      apiResponse = await fetch(API_ENDPOINT, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -98,35 +98,35 @@ export const generateImage = async (
         }),
       });
     } catch (fetchError: any) {
-      console.error(`[ImageGenerator] ❌ Network error calling Edge Function: ${fetchError.message}`);
+      console.error(`[ImageGenerator] ❌ Network error calling API: ${fetchError.message}`);
       return null;
     }
 
-    if (!edgeFunctionResponse.ok) {
+    if (!apiResponse.ok) {
       try {
-        const errorData = await edgeFunctionResponse.json();
-        console.error(`[ImageGenerator] ❌ Edge Function failed (HTTP ${edgeFunctionResponse.status}):`, errorData);
+        const errorData = await apiResponse.json();
+        console.error(`[ImageGenerator] ❌ API failed (HTTP ${apiResponse.status}):`, errorData);
       } catch (e) {
-        console.error(`[ImageGenerator] ❌ Edge Function failed (HTTP ${edgeFunctionResponse.status})`);
+        console.error(`[ImageGenerator] ❌ API failed (HTTP ${apiResponse.status})`);
       }
       return null;
     }
 
     let result;
     try {
-      result = await edgeFunctionResponse.json();
+      result = await apiResponse.json();
     } catch (parseError) {
-      console.error(`[ImageGenerator] ❌ Failed to parse Edge Function response:`, parseError);
+      console.error(`[ImageGenerator] ❌ Failed to parse API response:`, parseError);
       return null;
     }
 
     if (!result.success || !result.imageUrl) {
-      console.error(`[ImageGenerator] ❌ Edge Function returned invalid response:`, result);
+      console.error(`[ImageGenerator] ❌ API returned invalid response:`, result);
       return null;
     }
 
     const imageUrl = result.imageUrl;
-    console.log(`[ImageGenerator] ✅ Image generated via Edge Function: ${imageUrl.substring(0, 80)}...`);
+    console.log(`[ImageGenerator] ✅ Image generated via API: ${imageUrl.substring(0, 80)}...`);
 
     return imageUrl;
   } catch (error) {
