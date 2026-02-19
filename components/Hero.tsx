@@ -56,7 +56,7 @@ export const Hero: React.FC = () => {
             {/* Illustration - Mobile optimized */}
             <div className="relative w-full h-full max-w-sm lg:max-w-none flex items-center justify-center px-2 xs:px-0">
               <img
-                src="/avatars/replicate-prediction-ce00rqqqehrmw0cwesmaaknxq8.webp"
+                src="/avatars/replicate-prediction-ce00rqqqehrmw0cwesmaaknxq8-removebg-preview.png"
                 alt="Person reading Bitcoin Intrigue with coffee and phone"
                 className="w-full h-full object-contain drop-shadow-xl rounded-lg"
               />
