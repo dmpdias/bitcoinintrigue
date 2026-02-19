@@ -5,19 +5,19 @@ const replicate = new Replicate({
   auth: process.env.REPLICATE_API_KEY,
 });
 
-// Image prompt templates by article category
+// Image prompt templates by article category - Optimized for FLUX.1 [schnell]
 const promptTemplates: Record<string, string> = {
-  'price-story': `Editorial illustration for business article about Bitcoin price movements. Show a person analyzing financial data on a real device, stock market scene, or traders in focus. Style: FT Weekend magazine. Warm navy (#0d1b2a), orange accents (#f4611e), cream background. Professional, sophisticated. NO charts, graphs, or Bitcoin logos.`,
+  'price-story': `Modern editorial illustration for business article about Bitcoin price movements. Show contemporary scene: person on laptop monitoring markets, or traders in action. Clean lines, contemporary aesthetic. Warm navy and orange accents on cream background. Professional, financial. NO charts, graphs, or Bitcoin logos visible.`,
 
-  'world-story': `Editorial illustration for international news article about Bitcoin adoption and regulation. Show real locations, buildings, people, or cultural elements relevant to the story. NO maps, flags, or logos. Style: FT Weekend. Warm navy and orange palette. Human-centered. Sophisticated magazine aesthetic.`,
+  'world-story': `Contemporary editorial illustration for global Bitcoin story. Show real locations, people in authentic settings, cultural context relevant to the headline. Modern, clean visual style. Warm navy, orange, cream palette. Human-centered. NO maps, flags, or logos.`,
 
-  'curiosity-story': `Editorial illustration for feature article about people in Bitcoin. Show genuine human moments, real people, interesting characters. Human interest style. Warm navy and orange accents. Style: sophisticated magazine feature illustration. Real, authentic, not stock photo vibes.`,
+  'curiosity-story': `Modern editorial portrait for feature article. Real person, authentic moment, contemporary setting. Human interest. Clean, sophisticated aesthetic. Warm colors with good typography potential. Professional magazine quality. Contemporary context.`,
 
-  'education-story': `Conceptual illustration for Bitcoin education article. Show learning in action - hands interacting with devices, open books, people thinking, learning moments. NO price charts or graphs. Warm palette with navy and orange. Educational, inviting. FT Weekend style.`,
+  'education-story': `Contemporary conceptual illustration for Bitcoin learning article. Show people learning - hands on devices, reading, thinking. Modern context. NO price charts or technical graphs. Warm, inviting, educational. Clean, contemporary visual style.`,
 
-  'real-life-story': `Editorial portrait or scene for real-life user story. Show genuine human moment, real people, authentic interaction. Warm, welcoming tone. Editorial photography style. Warm colors (navy, orange, cream). Real-world context. Magazine-quality.`,
+  'real-life-story': `Modern editorial scene for real-life user story. Authentic human moment, genuine emotion, contemporary setting. Warm navy, orange, cream. Professional editorial quality. Clean lines, contemporary aesthetic. Real-world context.`,
 
-  'newsletter-hero': `Beautiful editorial illustration for Bitcoin newsletter header. Modern, professional, financial storytelling without clichés. NO rockets, moons, lambos, or crypto symbols. Warm colors (navy #0d1b2a, orange #f4611e, cream). Human elements optional. FT Weekend aesthetic.`,
+  'newsletter-hero': `Contemporary editorial illustration for Bitcoin newsletter header. Modern, professional, financial storytelling without clichés. Warm navy, orange, cream. Human elements or abstract financial concept. NO rockets, moons, coins, or lambos. Clean, sophisticated.`,
 };
 
 /**
@@ -45,15 +45,13 @@ export const generateImage = async (
 
     console.log(`[ImageGenerator] Generating image for: ${category} - ${headline}`);
 
-    // Call Replicate FLUX model
+    // Call Replicate FLUX.1 [schnell] model - optimized for speed and cost
     const output = await replicate.run(
-      'black-forest-labs/flux-pro',
+      'black-forest-labs/flux-schnell',
       {
         input: {
           prompt: prompt,
           aspect_ratio: '16:9',
-          output_quality: 85,
-          safety_tolerance: 6,
         },
       }
     ) as string[];
