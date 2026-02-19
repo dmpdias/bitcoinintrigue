@@ -41,7 +41,7 @@ const TEAM = [
 
 export const MeetTheTeam: React.FC = () => {
   return (
-    <section className="py-8 sm:py-12 md:py-16 lg:py-24 bg-paper border-t border-slate-900 relative overflow-hidden">
+    <section className="py-8 sm:py-12 md:py-16 lg:py-24 bg-[#fdfbf7] border-t border-slate-900 relative overflow-hidden">
        {/* Background Noise */}
        <div className="absolute inset-0 bg-noise opacity-5 pointer-events-none"></div>
 
@@ -63,40 +63,44 @@ export const MeetTheTeam: React.FC = () => {
             </div>
         </div>
 
-        {/* Mobile Horizontal Scroller */}
-        <div className="block sm:hidden -mx-3 xs:-mx-4 px-3 xs:px-4 mb-8 sm:hidden">
-          <div className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-2 hide-scrollbar">
+        {/* Mobile Horizontal Scroller - Enhanced */}
+        <div className="block sm:hidden -mx-3 xs:-mx-4 px-3 xs:px-4 mb-6 xs:mb-8">
+          <div className="flex gap-3 xs:gap-4 overflow-x-auto snap-x snap-mandatory pb-3 xs:pb-4 hide-scrollbar">
             {TEAM.map((member, index) => (
-                <div key={index} className="flex flex-col items-center text-center group shrink-0 w-[70px] xs:w-[85px]">
-                    {/* Square Image */}
-                    <div className="w-full aspect-square mb-2 relative overflow-hidden border-2 border-slate-900 bg-white transition-all duration-300 shadow-[1.5px_1.5px_0px_0px_rgba(15,23,42,1)]">
+                <div key={index} className="flex flex-col items-center text-center group shrink-0 w-[75px] xs:w-[95px]">
+                    {/* Square Image with enhanced hover */}
+                    <div className="w-full aspect-square mb-2.5 xs:mb-3 relative overflow-hidden border-2 border-slate-900 bg-[#fdfbf7] transition-all duration-300 shadow-[1.5px_1.5px_0px_0px_rgba(15,23,42,0.8)] group-hover:shadow-[2px_2px_0px_0px_rgba(234,88,12,0.6)] group-hover:border-brand-600 group-hover:-translate-y-1 rounded-sm">
                          <img
                             src={member.image}
                             alt={member.name}
                             loading="lazy"
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover transition-all duration-300 group-hover:brightness-110"
                          />
                     </div>
                     {/* Name */}
-                    <h3 className="font-sans font-black text-[9px] xs:text-[10px] text-slate-900 mb-0.5 leading-tight line-clamp-2">
+                    <h3 className="font-sans font-black text-[10px] xs:text-[11px] text-slate-900 mb-1 xs:mb-1.5 leading-tight line-clamp-2">
                         {member.name}
                     </h3>
                     {/* Role */}
-                    <p className="font-bold text-brand-600 text-[6px] xs:text-[7px] uppercase tracking-widest leading-tight line-clamp-2">
+                    <p className="font-bold text-brand-600 text-[7px] xs:text-[8px] uppercase tracking-widest leading-tight line-clamp-2">
                         {member.role}
+                    </p>
+                    {/* Bio - shown on mobile for better engagement */}
+                    <p className="font-serif text-slate-700 text-[7px] xs:text-[8px] leading-tight mt-1 xs:mt-1.5 opacity-75 line-clamp-2 hidden xs:block">
+                        {member.bio}
                     </p>
                 </div>
             ))}
           </div>
         </div>
 
-        {/* Desktop Grid */}
+        {/* Desktop Grid - Enhanced */}
         <div className="hidden sm:grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2 xs:gap-2.5 sm:gap-3 md:gap-4 lg:gap-6">
             {TEAM.map((member, index) => (
                 <div key={index} className="flex flex-col items-center text-center group">
 
-                    {/* Square Image with Brand Border */}
-                    <div className="w-full aspect-square mb-2 xs:mb-2.5 sm:mb-3 md:mb-4 relative overflow-hidden border-2 xs:border-2 sm:border-2 md:border-3 border-slate-900 bg-white transition-all duration-300 group-hover:scale-105 group-hover:shadow-[2px_2px_0px_0px_rgba(234,88,12,0.4)] xs:group-hover:shadow-[3px_3px_0px_0px_rgba(234,88,12,0.5)] shadow-[1px_1px_0px_0px_rgba(15,23,42,1)] xs:shadow-[2px_2px_0px_0px_rgba(15,23,42,1)] sm:shadow-[2.5px_2.5px_0px_0px_rgba(15,23,42,1)] md:shadow-[3px_3px_0px_0px_rgba(15,23,42,1)]">
+                    {/* Square Image with Brand Border - Cream background */}
+                    <div className="w-full aspect-square mb-2 xs:mb-2.5 sm:mb-3 md:mb-4 relative overflow-hidden border-2 xs:border-2 sm:border-2 md:border-3 border-slate-900 bg-[#fdfbf7] transition-all duration-300 group-hover:scale-105 group-hover:shadow-[2px_2px_0px_0px_rgba(234,88,12,0.3)] xs:group-hover:shadow-[3px_3px_0px_0px_rgba(234,88,12,0.4)] group-hover:border-brand-600 shadow-[1px_1px_0px_0px_rgba(15,23,42,0.9)] xs:shadow-[2px_2px_0px_0px_rgba(15,23,42,0.95)] sm:shadow-[2.5px_2.5px_0px_0px_rgba(15,23,42,1)] md:shadow-[3px_3px_0px_0px_rgba(15,23,42,1)] rounded-sm">
                          <img
                             src={member.image}
                             alt={member.name}
@@ -116,7 +120,7 @@ export const MeetTheTeam: React.FC = () => {
                     </p>
 
                     {/* Bio */}
-                    <p className="font-serif text-slate-700 text-[7px] xs:text-[8px] sm:text-xs md:text-sm leading-tight xs:leading-relaxed opacity-90 line-clamp-3 xs:line-clamp-none">
+                    <p className="font-serif text-slate-700 text-[7px] xs:text-[8px] sm:text-xs md:text-sm leading-tight xs:leading-relaxed opacity-85 line-clamp-3 xs:line-clamp-none">
                         {member.bio}
                     </p>
                 </div>

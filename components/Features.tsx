@@ -3,7 +3,7 @@ import { BookOpen, Globe, MessageCircle, ArrowRight } from 'lucide-react';
 
 export const Features: React.FC = () => {
   return (
-    <section className="py-8 sm:py-12 md:py-16 lg:py-24 bg-[#E8E3DB] relative overflow-hidden">
+    <section className="py-8 sm:py-12 md:py-16 lg:py-24 bg-paper relative overflow-hidden">
       {/* Decorative Background Texture - subtle dots pattern */}
       <div className="absolute inset-0 opacity-20 pointer-events-none mix-blend-multiply" style={{backgroundImage: "radial-gradient(#9ca3af 0.8px, transparent 0.8px)", backgroundSize: "14px 14px"}}></div>
       <div className="hidden sm:block absolute top-0 left-0 w-48 h-48 sm:w-64 sm:h-64 bg-brand-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20 -translate-x-1/2 -translate-y-1/2 pointer-events-none"></div>
@@ -34,7 +34,7 @@ export const Features: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 xs:gap-4 sm:gap-5 md:gap-6 lg:gap-10">
 
             {/* Card 1 */}
-            <div className="group bg-white hover:bg-slate-50 p-3 xs:p-4 sm:p-6 md:p-8 border-2 border-slate-200 hover:border-brand-600 shadow-[2px_2px_0px_0px_rgba(15,23,42,0.08)] xs:shadow-[3px_3px_0px_0px_rgba(15,23,42,0.1)] hover:shadow-[4px_4px_0px_0px_rgba(234,88,12,0.6)] md:hover:shadow-[8px_8px_0px_0px_rgba(234,88,12,0.8)] transition-all duration-300 transform hover:-translate-y-0.5 md:hover:-translate-y-1 rounded-sm">
+            <div className="group bg-[#fdfbf7] hover:bg-white p-3 xs:p-4 sm:p-6 md:p-8 border-2 border-slate-200 hover:border-brand-600 shadow-[2px_2px_0px_0px_rgba(15,23,42,0.06)] xs:shadow-[3px_3px_0px_0px_rgba(15,23,42,0.08)] hover:shadow-[4px_4px_0px_0px_rgba(234,88,12,0.5)] md:hover:shadow-[8px_8px_0px_0px_rgba(234,88,12,0.7)] transition-all duration-300 transform hover:-translate-y-0.5 md:hover:-translate-y-1 rounded-sm">
                 <div className="w-9 h-9 xs:w-11 xs:h-11 md:w-16 md:h-16 rounded-full bg-slate-900 text-white flex items-center justify-center mb-2 xs:mb-3 md:mb-6 group-hover:bg-brand-600 transition-colors shrink-0">
                      <MessageCircle size={18} className="xs:w-[20px] xs:h-[20px] md:w-8 md:h-8" strokeWidth={2} />
                 </div>
@@ -50,7 +50,7 @@ export const Features: React.FC = () => {
             </div>
 
             {/* Card 2 */}
-            <div className="group bg-white hover:bg-slate-50 p-3 xs:p-4 sm:p-6 md:p-8 border-2 border-slate-200 hover:border-brand-600 shadow-[2px_2px_0px_0px_rgba(15,23,42,0.08)] xs:shadow-[3px_3px_0px_0px_rgba(15,23,42,0.1)] hover:shadow-[4px_4px_0px_0px_rgba(234,88,12,0.6)] md:hover:shadow-[8px_8px_0px_0px_rgba(234,88,12,0.8)] transition-all duration-300 transform hover:-translate-y-0.5 md:hover:-translate-y-1 rounded-sm">
+            <div className="group bg-[#fdfbf7] hover:bg-white p-3 xs:p-4 sm:p-6 md:p-8 border-2 border-slate-200 hover:border-brand-600 shadow-[2px_2px_0px_0px_rgba(15,23,42,0.06)] xs:shadow-[3px_3px_0px_0px_rgba(15,23,42,0.08)] hover:shadow-[4px_4px_0px_0px_rgba(234,88,12,0.5)] md:hover:shadow-[8px_8px_0px_0px_rgba(234,88,12,0.7)] transition-all duration-300 transform hover:-translate-y-0.5 md:hover:-translate-y-1 rounded-sm">
                 <div className="w-9 h-9 xs:w-11 xs:h-11 md:w-16 md:h-16 rounded-full bg-slate-900 text-white flex items-center justify-center mb-2 xs:mb-3 md:mb-6 group-hover:bg-brand-600 transition-colors shrink-0">
                     <Globe size={18} className="xs:w-[20px] xs:h-[20px] md:w-8 md:h-8" strokeWidth={2} />
                 </div>
@@ -66,7 +66,7 @@ export const Features: React.FC = () => {
             </div>
 
             {/* Card 3 */}
-            <div className="group bg-white hover:bg-slate-50 p-3 xs:p-4 sm:p-6 md:p-8 border-2 border-slate-200 hover:border-brand-600 shadow-[2px_2px_0px_0px_rgba(15,23,42,0.08)] xs:shadow-[3px_3px_0px_0px_rgba(15,23,42,0.1)] hover:shadow-[4px_4px_0px_0px_rgba(234,88,12,0.6)] md:hover:shadow-[8px_8px_0px_0px_rgba(234,88,12,0.8)] transition-all duration-300 transform hover:-translate-y-0.5 md:hover:-translate-y-1 rounded-sm">
+            <div className="group bg-[#fdfbf7] hover:bg-white p-3 xs:p-4 sm:p-6 md:p-8 border-2 border-slate-200 hover:border-brand-600 shadow-[2px_2px_0px_0px_rgba(15,23,42,0.06)] xs:shadow-[3px_3px_0px_0px_rgba(15,23,42,0.08)] hover:shadow-[4px_4px_0px_0px_rgba(234,88,12,0.5)] md:hover:shadow-[8px_8px_0px_0px_rgba(234,88,12,0.7)] transition-all duration-300 transform hover:-translate-y-0.5 md:hover:-translate-y-1 rounded-sm">
                 <div className="w-9 h-9 xs:w-11 xs:h-11 md:w-16 md:h-16 rounded-full bg-slate-900 text-white flex items-center justify-center mb-2 xs:mb-3 md:mb-6 group-hover:bg-brand-600 transition-colors shrink-0">
                     <BookOpen size={18} className="xs:w-[20px] xs:h-[20px] md:w-8 md:h-8" strokeWidth={2} />
                 </div>
