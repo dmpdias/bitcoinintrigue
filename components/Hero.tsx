@@ -52,34 +52,34 @@ export const Hero: React.FC = () => {
 
         <div className="flex flex-col lg:grid lg:grid-cols-12 gap-2 xs:gap-3 sm:gap-5 md:gap-6 lg:gap-8 items-center">
 
-          <div className="hidden sm:flex w-full lg:col-span-6 order-1 lg:order-2 relative h-[180px] sm:h-[280px] md:h-[500px] lg:h-[600px] items-center justify-center lg:justify-end z-0 mt-0 lg:mt-0">
+          <div className="w-full lg:col-span-6 order-1 lg:order-2 relative h-[140px] xs:h-[160px] sm:h-[280px] md:h-[500px] lg:h-[600px] flex items-center justify-center lg:justify-end z-0 mt-0 lg:mt-0">
 
-            <div className="absolute top-1 sm:top-3 md:top-4 left-1 sm:left-3 md:left-4 w-[85%] sm:w-[78%] md:w-[80%] bg-[#f4f1ea] rounded-lg border-2 border-slate-900 shadow-xl overflow-hidden transform -rotate-2 z-0 block lg:block h-[140px] sm:h-[220px] md:h-[380px] lg:h-[450px]">
-                <div className="h-6 sm:h-8 bg-[#e8e4db] border-b border-slate-200 flex items-center px-2 sm:px-4 gap-2">
-                    <div className="flex gap-1.5">
-                        <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-slate-400"></div>
-                        <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-slate-400"></div>
-                        <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-slate-400"></div>
+            <div className="absolute top-0.5 xs:top-1 sm:top-3 md:top-4 left-0.5 xs:left-1 sm:left-3 md:left-4 w-[88%] xs:w-[86%] sm:w-[78%] md:w-[80%] bg-[#f4f1ea] rounded-lg border-2 border-slate-900 shadow-xl overflow-hidden transform -rotate-2 z-0 block lg:block h-[110px] xs:h-[130px] sm:h-[220px] md:h-[380px] lg:h-[450px]">
+                <div className="h-5 xs:h-6 sm:h-8 bg-[#e8e4db] border-b border-slate-200 flex items-center px-1.5 xs:px-2 sm:px-4 gap-1.5 xs:gap-2">
+                    <div className="flex gap-1">
+                        <div className="w-1.5 h-1.5 xs:w-2 xs:h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-slate-400"></div>
+                        <div className="w-1.5 h-1.5 xs:w-2 xs:h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-slate-400"></div>
+                        <div className="w-1.5 h-1.5 xs:w-2 xs:h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-slate-400"></div>
                     </div>
-                    <div className="flex-grow mx-2 sm:mx-4 bg-[#f4f1ea] border border-slate-300 h-4 sm:h-5 rounded-sm text-[8px] sm:text-[10px] text-slate-500 flex items-center px-2 font-mono">
+                    <div className="flex-grow mx-1 xs:mx-2 sm:mx-4 bg-[#f4f1ea] border border-slate-300 h-3.5 xs:h-4 sm:h-5 rounded-sm text-[7px] xs:text-[8px] sm:text-[10px] text-slate-500 flex items-center px-1.5 xs:px-2 font-mono">
                         mail.google.com/inbox
                     </div>
                 </div>
                 
                 <div className="flex flex-grow h-full">
-                    <div className="w-20 sm:w-32 bg-[#e8e4db]/50 border-r border-slate-200 p-2 sm:p-3 hidden xs:block">
-                         <div className="space-y-1 sm:space-y-2">
-                             <div className="flex items-center gap-2 px-2 py-1 bg-brand-100 rounded text-brand-700">
-                                <Inbox size={12} className="sm:w-4 sm:h-4" />
-                                <span className="text-[8px] sm:text-xs font-bold">Inbox</span>
+                    <div className="w-16 xs:w-20 sm:w-32 bg-[#e8e4db]/50 border-r border-slate-200 p-1.5 xs:p-2 sm:p-3 hidden xs:block">
+                         <div className="space-y-0.5 xs:space-y-1 sm:space-y-2">
+                             <div className="flex items-center gap-1.5 px-1.5 xs:px-2 py-0.5 xs:py-1 bg-brand-100 rounded text-brand-700">
+                                <Inbox size={10} className="xs:w-3 xs:h-3 sm:w-4 sm:h-4" />
+                                <span className="text-[7px] xs:text-[8px] sm:text-xs font-bold">Inbox</span>
                              </div>
-                             <div className="flex items-center gap-2 px-2 py-1 text-slate-500">
-                                <Star size={12} className="sm:w-4 sm:h-4" />
-                                <span className="text-[8px] sm:text-xs font-medium">Starred</span>
+                             <div className="flex items-center gap-1.5 px-1.5 xs:px-2 py-0.5 xs:py-1 text-slate-500">
+                                <Star size={10} className="xs:w-3 xs:h-3 sm:w-4 sm:h-4" />
+                                <span className="text-[7px] xs:text-[8px] sm:text-xs font-medium">Starred</span>
                              </div>
-                             <div className="flex items-center gap-2 px-2 py-1 text-slate-500">
-                                <Clock size={12} className="sm:w-4 sm:h-4" />
-                                <span className="text-[8px] sm:text-xs font-medium">Snoozed</span>
+                             <div className="flex items-center gap-1.5 px-1.5 xs:px-2 py-0.5 xs:py-1 text-slate-500">
+                                <Clock size={10} className="xs:w-3 xs:h-3 sm:w-4 sm:h-4" />
+                                <span className="text-[7px] xs:text-[8px] sm:text-xs font-medium">Snoozed</span>
                              </div>
                          </div>
                     </div>
@@ -92,18 +92,18 @@ export const Hero: React.FC = () => {
                             { subject: "Daily Lesson: Lightning Network ⚡", date: "Oct 23", unread: false, snippet: "Imagine a faster highway..." },
                             { subject: "ETF inflows just hit a record 📈", date: "Oct 22", unread: false, snippet: "Wall street is hungry..." },
                         ].map((email, i) => (
-                            <div key={i} className={`flex items-center gap-2 sm:gap-3 py-2 sm:py-3 px-2 sm:px-4 border-b border-slate-200 hover:bg-black/5 ${email.unread ? 'bg-[#f4f1ea]' : 'bg-slate-100/50'}`}>
-                                <div className={`w-3 h-3 sm:w-4 sm:h-4 rounded border flex items-center justify-center shrink-0 ${email.unread ? 'border-slate-400' : 'border-slate-300'}`}>
-                                    {email.unread && <div className="w-1.5 h-1.5 sm:w-2.5 sm:h-2.5 bg-slate-300 rounded-sm"></div>}
+                            <div key={i} className={`flex items-center gap-1.5 xs:gap-2 sm:gap-3 py-1.5 xs:py-2 sm:py-3 px-1.5 xs:px-2 sm:px-4 border-b border-slate-200 hover:bg-black/5 ${email.unread ? 'bg-[#f4f1ea]' : 'bg-slate-100/50'}`}>
+                                <div className={`w-2.5 h-2.5 xs:w-3 xs:h-3 sm:w-4 sm:h-4 rounded border flex items-center justify-center shrink-0 ${email.unread ? 'border-slate-400' : 'border-slate-300'}`}>
+                                    {email.unread && <div className="w-1 h-1 xs:w-1.5 xs:h-1.5 sm:w-2.5 sm:h-2.5 bg-slate-300 rounded-sm"></div>}
                                 </div>
-                                <Star size={12} className={`shrink-0 sm:w-4 sm:h-4 ${email.unread ? 'text-slate-300' : 'text-yellow-400 fill-yellow-400'}`} />
+                                <Star size={10} className={`shrink-0 xs:w-3 xs:h-3 sm:w-4 sm:h-4 ${email.unread ? 'text-slate-300' : 'text-yellow-400 fill-yellow-400'}`} />
                                 <div className="flex-grow min-w-0">
                                      <div className="flex justify-between items-baseline mb-0.5">
-                                         <span className={`text-[9px] sm:text-xs truncate mr-2 ${email.unread ? 'font-black text-slate-900' : 'font-bold text-slate-600'}`}>Bitcoin Intrigue</span>
-                                         <span className="text-[8px] sm:text-[10px] text-slate-400 shrink-0">{email.date}</span>
+                                         <span className={`text-[8px] xs:text-[9px] sm:text-xs truncate mr-1.5 xs:mr-2 ${email.unread ? 'font-black text-slate-900' : 'font-bold text-slate-600'}`}>Bitcoin Intrigue</span>
+                                         <span className="text-[7px] xs:text-[8px] sm:text-[10px] text-slate-400 shrink-0">{email.date}</span>
                                      </div>
                                      <div className="flex items-center gap-1">
-                                        <span className={`text-[9px] sm:text-xs truncate ${email.unread ? 'font-bold text-slate-900' : 'text-slate-600'}`}>
+                                        <span className={`text-[8px] xs:text-[9px] sm:text-xs truncate ${email.unread ? 'font-bold text-slate-900' : 'text-slate-600'}`}>
                                             {email.subject}
                                         </span>
                                         <span className="hidden sm:inline text-[10px] text-slate-400 truncate">- {email.snippet}</span>
@@ -115,12 +115,12 @@ export const Hero: React.FC = () => {
                 </div>
             </div>
 
-            <div className="absolute right-1 sm:right-2 md:right-8 lg:right-auto top-0 lg:static lg:right-auto lg:top-auto w-[90px] sm:w-[140px] md:w-[280px] lg:w-[320px] bg-slate-900 rounded-[1.2rem] sm:rounded-[1.8rem] md:rounded-[2.5rem] lg:rounded-[3rem] border-[2px] sm:border-[3px] md:border-[6px] lg:border-[8px] border-slate-900 shadow-lg md:shadow-2xl z-10 h-[180px] sm:h-[280px] md:h-[500px] lg:h-[580px] overflow-hidden transform rotate-3 hover:rotate-0 transition-transform duration-500">
-                <div className="bg-[#f4f1ea] h-4 sm:h-6 md:h-8 flex justify-between items-end px-3 sm:px-5 pb-1 text-[6px] sm:text-[8px] md:text-xs font-bold text-slate-900 select-none">
+            <div className="absolute right-0.5 xs:right-1 sm:right-2 md:right-8 lg:right-auto top-1 xs:top-1.5 sm:top-2 lg:static lg:right-auto lg:top-auto w-[75px] xs:w-[85px] sm:w-[140px] md:w-[280px] lg:w-[320px] bg-slate-900 rounded-[0.8rem] xs:rounded-[1rem] sm:rounded-[1.8rem] md:rounded-[2.5rem] lg:rounded-[3rem] border-[1.5px] xs:border-[2px] sm:border-[3px] md:border-[6px] lg:border-[8px] border-slate-900 shadow-lg md:shadow-2xl z-10 h-[130px] xs:h-[155px] sm:h-[280px] md:h-[500px] lg:h-[580px] overflow-hidden transform rotate-3 hover:rotate-0 transition-transform duration-500">
+                <div className="bg-[#f4f1ea] h-3 xs:h-3.5 sm:h-6 md:h-8 flex justify-between items-end px-2 xs:px-3 sm:px-5 pb-0.5 text-[5px] xs:text-[6px] sm:text-[8px] md:text-xs font-bold text-slate-900 select-none">
                     <span>9:41</span>
-                    <div className="flex gap-1 items-center">
-                        <Wifi size={10} className="w-2 h-2 sm:w-3 sm:h-3" />
-                        <Battery size={10} className="w-2 h-2 sm:w-3 sm:h-3" />
+                    <div className="flex gap-0.5 xs:gap-1 items-center">
+                        <Wifi size={8} className="xs:w-2 xs:h-2 sm:w-3 sm:h-3" />
+                        <Battery size={8} className="xs:w-2 xs:h-2 sm:w-3 sm:h-3" />
                     </div>
                 </div>
 

@@ -23,9 +23,11 @@ export const Testimonials: React.FC = () => {
   ];
 
   return (
-    <section className="py-8 sm:py-12 md:py-16 lg:py-24 bg-[#EBE8E0] border-t border-slate-900 relative overflow-hidden">
+    <section className="py-8 sm:py-12 md:py-16 lg:py-24 bg-[#E8E3DB] border-t border-slate-900 relative overflow-hidden">
       {/* Background Texture Pattern - subtle dots */}
-      <div className="absolute inset-0 opacity-30 pointer-events-none mix-blend-multiply" style={{backgroundImage: "radial-gradient(#9ca3af 1px, transparent 1px)", backgroundSize: "16px 16px"}}></div>
+      <div className="absolute inset-0 opacity-25 pointer-events-none mix-blend-multiply" style={{backgroundImage: "radial-gradient(#9ca3af 0.8px, transparent 0.8px)", backgroundSize: "14px 14px"}}></div>
+      <div className="hidden sm:block absolute top-10 -left-20 w-80 h-80 bg-brand-100 rounded-full mix-blend-multiply filter blur-3xl opacity-15 pointer-events-none"></div>
+      <div className="hidden md:block absolute bottom-20 -right-32 w-96 h-96 bg-slate-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 pointer-events-none"></div>
 
       <div className="max-w-[1400px] mx-auto px-3 xs:px-4 sm:px-6 lg:px-8 relative z-10">
 
@@ -48,21 +50,21 @@ export const Testimonials: React.FC = () => {
         {/* Horizontal Scroll Container - Optimized for mobile */}
         <div className="flex overflow-x-auto snap-x snap-mandatory gap-3 xs:gap-4 sm:gap-5 md:gap-6 pb-4 xs:pb-6 -mx-3 px-3 xs:-mx-4 xs:px-4 sm:mx-0 sm:px-0 md:justify-center hide-scrollbar">
             {testimonials.map((t, i) => (
-                <div key={i} className="snap-center shrink-0 w-[80vw] xs:w-[85vw] sm:w-[340px] md:w-[380px] bg-white flex flex-col p-3 xs:p-4 sm:p-6 md:p-8 relative shadow-md border-2 border-slate-200 hover:border-brand-600 hover:shadow-lg transition-all rounded-sm">
+                <div key={i} className="snap-center shrink-0 w-[80vw] xs:w-[85vw] sm:w-[340px] md:w-[380px] bg-white flex flex-col p-3 xs:p-4 sm:p-6 md:p-8 relative shadow-[2px_2px_0px_0px_rgba(15,23,42,0.08)] xs:shadow-[3px_3px_0px_0px_rgba(15,23,42,0.1)] hover:shadow-[4px_4px_0px_0px_rgba(234,88,12,0.5)] md:hover:shadow-[6px_6px_0px_0px_rgba(234,88,12,0.6)] border-2 border-slate-200 hover:border-brand-600 transition-all duration-300 rounded-sm">
 
-                    {/* Quote Mark - Smaller on mobile */}
-                    <div className="text-3xl xs:text-5xl sm:text-6xl font-serif text-slate-200 leading-none absolute top-1 xs:top-2 left-2 xs:left-3 sm:left-6 select-none font-bold opacity-60">
+                    {/* Quote Mark - Elegant and subtle */}
+                    <div className="text-2xl xs:text-4xl sm:text-5xl font-serif text-slate-300 leading-none absolute top-2 xs:top-3 left-2 xs:left-3 sm:left-6 select-none font-bold opacity-40">
                         "
                     </div>
 
-                    <div className="relative z-10 mt-3 xs:mt-4 sm:mt-6 mb-2 xs:mb-3 sm:mb-4 flex-grow flex flex-col justify-center">
-                        <p className="font-sans text-slate-900 text-[12px] xs:text-sm sm:text-base md:text-lg leading-snug xs:leading-relaxed font-medium line-clamp-4 xs:line-clamp-5">
+                    <div className="relative z-10 mt-2 xs:mt-3 sm:mt-4 mb-3 xs:mb-4 sm:mb-5 flex-grow flex flex-col justify-center">
+                        <p className="font-sans text-slate-800 text-[12px] xs:text-sm sm:text-base md:text-lg leading-snug xs:leading-relaxed font-medium line-clamp-4 xs:line-clamp-5">
                             {t.quote}
                         </p>
                     </div>
 
-                    <div className="flex items-center gap-2 xs:gap-3 sm:gap-4 mt-auto pt-2 xs:pt-3 relative z-10 border-t border-slate-100">
-                        <div className="w-9 h-9 xs:w-11 xs:h-11 sm:w-14 sm:h-14 rounded-full overflow-hidden grayscale hover:grayscale-0 transition-all border-2 border-slate-200 shrink-0 mt-2 xs:mt-3">
+                    <div className="flex items-center gap-2 xs:gap-3 sm:gap-4 mt-auto pt-3 xs:pt-4 relative z-10 border-t border-slate-150">
+                        <div className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 rounded-full overflow-hidden grayscale hover:grayscale-0 transition-all border-2 border-slate-200 shrink-0 mt-2 xs:mt-3 sm:mt-4">
                             <img
                                 src={t.img}
                                 alt={t.name}
@@ -71,8 +73,8 @@ export const Testimonials: React.FC = () => {
                             />
                         </div>
                         <div className="text-left min-w-0 flex-1">
-                            <div className="font-black text-slate-900 text-[11px] xs:text-sm sm:text-base md:text-lg leading-tight mb-0 xs:mb-0.5 line-clamp-1">{t.name}</div>
-                            <div className="text-[9px] xs:text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-tight leading-tight line-clamp-2">{t.role}</div>
+                            <div className="font-black text-slate-900 text-[12px] xs:text-sm sm:text-base md:text-lg leading-tight mb-0.5 xs:mb-1 line-clamp-1">{t.name}</div>
+                            <div className="text-[10px] xs:text-[11px] sm:text-xs font-bold text-slate-600 uppercase tracking-tight leading-tight line-clamp-1">{t.role}</div>
                         </div>
                     </div>
                 </div>
