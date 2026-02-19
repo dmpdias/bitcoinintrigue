@@ -1,10 +1,8 @@
-import Replicate from 'replicate';
 import { Story } from '../types';
 
-// Initialize Replicate client
-const replicate = new Replicate({
-  auth: process.env.REPLICATE_API_KEY,
-});
+// Replicate API configuration
+const REPLICATE_API_TOKEN = process.env.REPLICATE_API_KEY;
+const REPLICATE_API_URL = 'https://api.replicate.com/v1';
 
 /**
  * Generate a custom prompt based on story content
@@ -83,59 +81,86 @@ export const generateImage = async (
     console.log(`[ImageGenerator] Generating image for: ${category} - ${headline}`);
     console.log(`[ImageGenerator] Custom prompt: ${prompt.substring(0, 150)}...`);
 
-    // Call Replicate FLUX.1 [schnell] model - optimized for speed and cost
-    const output = await replicate.run(
-      'black-forest-labs/flux-schnell',
-      {
+    // Validate API token
+    if (!REPLICATE_API_TOKEN) {
+      console.error(`[ImageGenerator] Replicate API token not configured`);
+      return null;
+    }
+
+    // Step 1: Create prediction
+    console.log(`[ImageGenerator] Creating prediction with Replicate API...`);
+
+    const predictionResponse = await fetch(`${REPLICATE_API_URL}/predictions`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${REPLICATE_API_TOKEN}`,
+      },
+      body: JSON.stringify({
+        version: '8faf1d2d24375a1707455fda7ec57f4d15d9f4db9b4b04f0a87c2e799e40b89e', // FLUX.1 [schnell] model version ID
         input: {
           prompt: prompt,
           aspect_ratio: '16:9',
+          num_outputs: 1,
         },
-      }
-    ) as any[];
+      }),
+    });
 
-    if (!output || output.length === 0) {
+    if (!predictionResponse.ok) {
+      const errorData = await predictionResponse.json();
+      console.error(`[ImageGenerator] Prediction creation failed for ${category}:`, errorData);
+      return null;
+    }
+
+    const prediction = await predictionResponse.json();
+    console.log(`[ImageGenerator] Prediction created: ${prediction.id}`);
+
+    // Step 2: Poll for completion
+    let completed = false;
+    let attempts = 0;
+    const maxAttempts = 120; // 2 minutes with 1-second polls
+    let finalPrediction = prediction;
+
+    while (!completed && attempts < maxAttempts) {
+      attempts++;
+
+      const statusResponse = await fetch(`${REPLICATE_API_URL}/predictions/${prediction.id}`, {
+        headers: {
+          'Authorization': `Bearer ${REPLICATE_API_TOKEN}`,
+        },
+      });
+
+      if (!statusResponse.ok) {
+        console.error(`[ImageGenerator] Failed to check prediction status for ${category}`);
+        return null;
+      }
+
+      finalPrediction = await statusResponse.json();
+
+      if (finalPrediction.status === 'succeeded') {
+        completed = true;
+        console.log(`[ImageGenerator] Prediction succeeded after ${attempts} checks for ${category}`);
+      } else if (finalPrediction.status === 'failed') {
+        console.error(`[ImageGenerator] Prediction failed for ${category}:`, finalPrediction.error);
+        return null;
+      } else {
+        // Wait 1 second before polling again
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      }
+    }
+
+    if (!completed) {
+      console.error(`[ImageGenerator] Prediction timed out for ${category}`);
+      return null;
+    }
+
+    // Step 3: Extract image URL from output
+    if (!finalPrediction.output || finalPrediction.output.length === 0) {
       console.error(`[ImageGenerator] No output from Replicate for ${category}`);
       return null;
     }
 
-    // Handle Replicate SDK response - output contains FileOutput objects
-    let imageUrl: string | null = null;
-    const firstOutput = output[0];
-
-    // FileOutput objects have a .url() method to get the HTTP URL
-    if (firstOutput && typeof firstOutput.url === 'function') {
-      try {
-        imageUrl = firstOutput.url();
-        console.log(`[ImageGenerator] Extracted URL from FileOutput for ${category}`);
-      } catch (urlError) {
-        console.error(`[ImageGenerator] Failed to get URL from FileOutput: ${urlError}`);
-        return null;
-      }
-    }
-    // Check if it's already a string URL
-    else if (typeof firstOutput === 'string') {
-      imageUrl = firstOutput;
-      console.log(`[ImageGenerator] Got direct URL string for ${category}`);
-    }
-    // Fallback: try toString()
-    else if (firstOutput && typeof firstOutput === 'object') {
-      try {
-        const urlStr = firstOutput.toString();
-        if (urlStr && urlStr.includes('http')) {
-          imageUrl = urlStr;
-          console.log(`[ImageGenerator] Extracted URL via toString() for ${category}`);
-        }
-      } catch (e) {
-        console.error(`[ImageGenerator] Could not extract URL for ${category}`);
-      }
-    }
-
-    if (!imageUrl) {
-      console.error(`[ImageGenerator] Could not extract URL from output for ${category}`);
-      return null;
-    }
-
+    const imageUrl = finalPrediction.output[0];
     console.log(`[ImageGenerator] Successfully generated image: ${imageUrl}`);
 
     return imageUrl;
