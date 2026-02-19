@@ -105,7 +105,7 @@ export const SchedulesTab: React.FC<SchedulesTabProps> = ({ workflows, onLoadDat
   };
 
   return (
-    <div className="md:col-span-12 h-full flex flex-col gap-4">
+    <div className="col-span-12 h-full flex flex-col gap-4 w-full">
       {error && (
         <div className="bg-red-50 border-2 border-red-200 p-4 rounded flex items-start gap-3">
           <AlertCircle size={20} className="text-red-600 flex-shrink-0 mt-0.5" />
