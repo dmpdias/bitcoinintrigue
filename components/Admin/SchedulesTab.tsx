@@ -99,7 +99,14 @@ export const SchedulesTab: React.FC<SchedulesTabProps> = ({ workflows, onLoadDat
 
     setIsLoading(true);
     try {
-      const saved = await storageService.saveSchedule(editingSchedule as any);
+      // Prepare schedule for saving - add ID and timestamps if new
+      const scheduleToSave = {
+        ...editingSchedule,
+        id: editingSchedule.id || `schedule-${Date.now()}`,
+        createdAt: editingSchedule.createdAt || new Date().toISOString()
+      };
+
+      const saved = await storageService.saveSchedule(scheduleToSave as any);
       setSchedules(prev =>
         editingSchedule.id
           ? prev.map(s => s.id === editingSchedule.id ? saved : s)

@@ -286,6 +286,19 @@ export const storageService = {
       updated_at: new Date().toISOString()
     });
     if (error) throw error;
+
+    // Return the saved schedule in app format
+    return {
+      id: schedule.id,
+      workflowId: schedule.workflowId,
+      name: schedule.name,
+      description: schedule.description,
+      cronExpression: schedule.cronExpression,
+      timezone: schedule.timezone,
+      isActive: schedule.isActive,
+      createdBy: schedule.createdBy,
+      createdAt: schedule.createdAt
+    };
   },
 
   deleteSchedule: async (id: string) => {
