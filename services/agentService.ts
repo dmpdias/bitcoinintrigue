@@ -110,6 +110,169 @@ export const agentService = {
       console.error(`Agent ${agent.name} failed during step execution:`, error);
       throw error;
     }
+  },
+
+  /**
+   * Execute a complete workflow with optional approval gate
+   * Returns an ExecutionRecord with the generated issue and execution logs
+   */
+  runWorkflow: async (
+    workflowId: string,
+    steps: string[],
+    agentsMap: Map<string, AgentDefinition>,
+    requiresApproval: boolean = true
+  ): Promise<{
+    success: boolean;
+    issue: BriefingData | null;
+    executionLogs: Array<{agent: string; status: string; error?: string}>;
+    halted?: boolean;
+  }> => {
+    const executionLogs: Array<{agent: string; status: string; error?: string}> = [];
+    let context = "";
+    let currentDraft: BriefingData | null = null;
+
+    try {
+      // Execute each agent in sequence
+      for (const agentId of steps) {
+        const agent = agentsMap.get(agentId);
+        if (!agent || !agent.isActive) continue;
+
+        try {
+          console.log(`[Workflow] Executing agent: ${agent.name} (${agent.role})`);
+
+          // Run the agent step
+          const response = await agentService.runStep(agent, context);
+
+          // Handle context piping based on role
+          if (agent.role === 'researcher' || agent.role === 'planner') {
+            context = response;
+            executionLogs.push({agent: agent.name, status: 'success'});
+          }
+          else if (agent.role === 'writer') {
+            context = response;
+            try {
+              const parsed = JSON.parse(response.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim());
+              currentDraft = parsed;
+              executionLogs.push({agent: agent.name, status: 'success'});
+            } catch (parseError) {
+              executionLogs.push({agent: agent.name, status: 'warning', error: 'Failed to parse JSON'});
+            }
+          }
+          else if (agent.role === 'reviewer') {
+            context = response;
+            try {
+              const parsed = JSON.parse(response.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim());
+              currentDraft = parsed;
+              executionLogs.push({agent: agent.name, status: 'success'});
+            } catch (parseError) {
+              executionLogs.push({agent: agent.name, status: 'warning', error: 'Failed to parse JSON'});
+            }
+          }
+          else if (agent.role === 'seo') {
+            context = response;
+            try {
+              const parsed = JSON.parse(response.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim());
+              currentDraft = parsed;
+              executionLogs.push({agent: agent.name, status: 'success'});
+            } catch (parseError) {
+              executionLogs.push({agent: agent.name, status: 'warning', error: 'Failed to parse JSON'});
+            }
+          }
+          else if (agent.role === 'image') {
+            context = response;
+            try {
+              const parsed = JSON.parse(response.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim());
+              currentDraft = parsed;
+              executionLogs.push({agent: agent.name, status: 'success'});
+            } catch (parseError) {
+              executionLogs.push({agent: agent.name, status: 'success'}); // Image generation is allowed to fail
+            }
+          }
+          else if (agent.role === 'content_review') {
+            context = response;
+            executionLogs.push({agent: agent.name, status: 'success'});
+          }
+          else if (agent.role === 'x_posting') {
+            context = response;
+            try {
+              const parsed = JSON.parse(response.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim());
+              if (parsed.posts) {
+                executionLogs.push({agent: agent.name, status: 'success'});
+              }
+            } catch (parseError) {
+              executionLogs.push({agent: agent.name, status: 'warning', error: 'Failed to parse tweets JSON'});
+            }
+          }
+        } catch (stepError: any) {
+          executionLogs.push({
+            agent: agent.name,
+            status: 'error',
+            error: stepError.message
+          });
+          // Continue with next agent instead of failing entire workflow
+        }
+      }
+
+      // Check approval gate
+      if (requiresApproval && currentDraft) {
+        // Save issue with pending_review status and halt
+        const issue: BriefingData = {
+          ...currentDraft,
+          id: `issue-${Date.now()}`,
+          approvalStatus: 'pending_review',
+          status: 'review',
+          date: new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }),
+          lastUpdated: new Date().toISOString()
+        };
+
+        return {
+          success: true,
+          issue,
+          executionLogs,
+          halted: true // Workflow halted at approval gate
+        };
+      }
+
+      // No approval required or already approved - return issue with approved status
+      if (currentDraft) {
+        const issue: BriefingData = {
+          ...currentDraft,
+          id: `issue-${Date.now()}`,
+          approvalStatus: 'approved',
+          status: 'review',
+          date: new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }),
+          lastUpdated: new Date().toISOString()
+        };
+
+        return {
+          success: true,
+          issue,
+          executionLogs,
+          halted: false
+        };
+      }
+
+      // No draft generated
+      return {
+        success: false,
+        issue: null,
+        executionLogs,
+        halted: false
+      };
+
+    } catch (error: any) {
+      console.error(`[Workflow] Execution failed:`, error);
+      return {
+        success: false,
+        issue: null,
+        executionLogs: [...executionLogs, {
+          agent: 'System',
+          status: 'error',
+          error: error.message
+        }],
+        halted: false
+      };
+    }
   }
 };
 

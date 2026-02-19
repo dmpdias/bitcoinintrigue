@@ -483,5 +483,77 @@ export const storageService = {
       .update(dbUpdates)
       .eq('id', id);
     if (error) throw error;
+  },
+
+  // --- AUTHOR AGENTS ---
+
+  getAuthorAgent: async (agentId: string) => {
+    const { data, error } = await supabase
+      .from('author_agents')
+      .select('*')
+      .eq('id', agentId)
+      .single();
+
+    if (error || !data) return null;
+
+    return {
+      id: data.id,
+      name: data.name,
+      bio: data.bio,
+      xHandle: data.x_handle,
+      xCredentials: data.x_credentials,
+      isActive: data.is_active,
+      createdAt: data.created_at
+    };
+  },
+
+  saveAuthorAgent: async (agent: any) => {
+    const { data, error } = await supabase
+      .from('author_agents')
+      .upsert({
+        id: agent.id,
+        name: agent.name,
+        bio: agent.bio || null,
+        x_handle: agent.xHandle || null,
+        x_credentials: agent.xCredentials || null,
+        is_active: agent.isActive !== false,
+        created_at: agent.createdAt || new Date().toISOString()
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    return {
+      id: data.id,
+      name: data.name,
+      bio: data.bio,
+      xHandle: data.x_handle,
+      xCredentials: data.x_credentials,
+      isActive: data.is_active,
+      createdAt: data.created_at
+    };
+  },
+
+  // --- WORKFLOWS (Single) ---
+
+  getWorkflow: async (workflowId: string) => {
+    const { data, error } = await supabase
+      .from('workflows')
+      .select('*')
+      .eq('id', workflowId)
+      .single();
+
+    if (error || !data) return null;
+
+    return {
+      id: data.id,
+      name: data.name,
+      description: data.description,
+      steps: data.steps,
+      isActive: data.is_active,
+      requiresApproval: data.requires_approval !== false,
+      approvalMessage: data.approval_message
+    } as WorkflowDefinition;
   }
 };
