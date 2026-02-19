@@ -47,46 +47,28 @@ export const Hero: React.FC = () => {
   const marqueeList = [...companies, ...companies];
 
   return (
-    <section className="relative pt-3 xs:pt-4 sm:pt-8 md:pt-16 lg:pt-20 pb-6 md:pb-8 lg:pb-12 overflow-hidden bg-paper">
+    <section className="relative pt-3 xs:pt-4 sm:pt-6 md:pt-8 lg:pt-20 pb-6 md:pb-8 lg:pb-12 overflow-hidden bg-paper">
       <div className="max-w-[1400px] mx-auto px-3 xs:px-4 sm:px-6 lg:px-8">
 
-        <div className="flex flex-col lg:grid lg:grid-cols-12 gap-2 xs:gap-3 sm:gap-5 md:gap-6 lg:gap-8 items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 xs:gap-4 sm:gap-5 md:gap-6 lg:gap-8 items-start sm:items-center">
 
-          <div className="w-full lg:col-span-6 order-1 lg:order-2 relative h-[220px] xs:h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] flex items-center justify-center lg:justify-end z-0 mt-4 xs:mt-2 sm:mt-0 lg:mt-0">
-            {/* Illustration - Mobile optimized */}
-            <div className="relative w-full h-full max-w-sm lg:max-w-none flex items-center justify-center px-2 xs:px-0">
-              <img
-                src="/avatars/replicate-prediction-ce00rqqqehrmw0cwesmaaknxq8-removebg-preview.png"
-                alt="Person reading Bitcoin Intrigue with coffee and phone"
-                className="w-full h-full object-contain drop-shadow-xl rounded-lg"
-              />
-            </div>
-
-            {/* Zero Jargon Badge - Mobile optimized position */}
-            <div className="absolute bottom-6 right-4 xs:bottom-8 xs:right-6 sm:bottom-10 sm:right-8 md:bottom-12 md:right-10 lg:bottom-auto lg:top-1/3 lg:right-[-40px] lg:transform lg:-translate-y-1/2 bg-white border-2 border-slate-900 rounded-full w-12 h-12 xs:w-14 xs:h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-28 lg:h-28 flex items-center justify-center z-30 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] xs:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] lg:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] animate-float">
-                <div className="text-center">
-                    <Award size={12} className="mx-auto mb-0.5 text-slate-900 xs:w-3 xs:h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-6 lg:h-6" />
-                    <div className="font-black text-[6px] xs:text-[7px] sm:text-[8px] md:text-[10px] lg:text-xs leading-none uppercase">Zero<br/>Jargon</div>
-                </div>
-            </div>
-          </div>
-          
-          <div className="w-full lg:col-span-6 flex flex-col items-start text-left z-10 order-2 lg:order-1 mt-0 lg:mt-0">
+          {/* Content Column - Always First */}
+          <div className="flex flex-col items-start text-left z-10 order-1 sm:order-1 pt-0">
             <div className="mb-2 md:mb-4 lg:mb-6 inline-block">
-                <span className="font-bold text-slate-900 text-[11px] sm:text-sm md:text-base lg:text-lg tracking-tight border-b-2 border-dotted border-slate-400 pb-0.5">
+                <span className="font-bold text-slate-900 text-[10px] xs:text-[11px] sm:text-xs md:text-sm lg:text-lg tracking-tight border-b-2 border-dotted border-slate-400 pb-0.5">
                     FOR ANYONE WHO BOUGHT BITCOIN AND ISN'T SURE WHAT HAPPENS NEXT
                 </span>
             </div>
 
-            <h1 className="font-sans font-black text-[1.75rem] xs:text-3xl sm:text-5xl md:text-6xl xl:text-7xl text-slate-900 mb-2 xs:mb-3 sm:mb-5 md:mb-6 lg:mb-8 leading-[0.95] xs:leading-[0.9] tracking-tighter uppercase animate-slide-up">
+            <h1 className="font-sans font-black text-[1.5rem] xs:text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl text-slate-900 mb-2 xs:mb-2 sm:mb-3 md:mb-4 lg:mb-6 leading-[0.95] xs:leading-[0.9] tracking-tighter uppercase animate-slide-up">
               Bitcoin. <br className="hidden xs:block"/> Translated <br className="hidden xs:block"/> for humans.
             </h1>
 
-            <p className="text-[13px] xs:text-sm sm:text-base md:text-lg lg:text-xl text-slate-800 font-medium mb-3 xs:mb-4 sm:mb-6 lg:mb-8 max-w-xl leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s', opacity: 0, animationFillMode: 'forwards' }}>
+            <p className="text-[12px] xs:text-[13px] sm:text-sm md:text-base lg:text-lg text-slate-800 font-medium mb-2 xs:mb-3 sm:mb-4 md:mb-6 lg:mb-8 max-w-xl leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s', opacity: 0, animationFillMode: 'forwards' }}>
               You bought some. Now what? Every day, we tell you exactly what's happening — in plain English, no charts, no jargon.
             </p>
 
-            <div className="w-full animate-fade-in z-20" style={{ animationDelay: '0.4s', opacity: 0, animationFillMode: 'forwards' }}>
+            <div className="w-full sm:max-w-sm animate-fade-in z-20" style={{ animationDelay: '0.4s', opacity: 0, animationFillMode: 'forwards' }}>
                 {status === 'success' ? (
                     <div className="flex h-10 sm:h-12 md:h-14 items-center px-4 sm:px-6 bg-brand-50 border border-slate-900 shadow-[2px_2px_0px_0px_rgba(15,23,42,1)] sm:shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] rounded-sm max-w-lg animate-fade-in">
                         <Check className="text-brand-600 mr-2 sm:mr-3 shrink-0" size={20} />
@@ -126,6 +108,26 @@ export const Hero: React.FC = () => {
                     <span>No Spam. No Noise. Unsubscribe Any Time.</span>
                     </p>
                 )}
+            </div>
+          </div>
+
+          {/* Image Column - Responsive sizing */}
+          <div className="relative w-full h-[180px] xs:h-[240px] sm:h-[280px] md:h-[350px] lg:h-[500px] xl:h-[600px] flex items-center justify-center lg:justify-end z-0 order-2 sm:order-2">
+            {/* Illustration - Responsive */}
+            <div className="relative w-full h-full flex items-center justify-center px-2 xs:px-0">
+              <img
+                src="/avatars/replicate-prediction-ce00rqqqehrmw0cwesmaaknxq8-removebg-preview.png"
+                alt="Person reading Bitcoin Intrigue with coffee and phone"
+                className="w-full h-full object-contain drop-shadow-xl rounded-lg"
+              />
+            </div>
+
+            {/* Zero Jargon Badge - Responsive positioning */}
+            <div className="absolute bottom-2 right-1 xs:bottom-4 xs:right-2 sm:bottom-6 sm:right-3 md:bottom-8 md:right-4 lg:bottom-auto lg:top-1/3 lg:right-[-40px] lg:transform lg:-translate-y-1/2 bg-white border-2 border-slate-900 rounded-full w-8 h-8 xs:w-10 xs:h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 lg:w-28 lg:h-28 flex items-center justify-center z-30 shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] xs:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] md:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] lg:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] animate-float">
+                <div className="text-center">
+                    <Award size={10} className="mx-auto mb-0.5 text-slate-900 xs:w-2 xs:h-2 sm:w-3 sm:h-3 md:w-4 md:h-4 lg:w-6 lg:h-6" />
+                    <div className="font-black text-[4px] xs:text-[5px] sm:text-[6px] md:text-[8px] lg:text-xs leading-none uppercase">Zero<br/>Jargon</div>
+                </div>
             </div>
           </div>
         </div>
