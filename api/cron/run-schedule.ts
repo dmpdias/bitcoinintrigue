@@ -14,28 +14,12 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { schedulerService } from '../../services/schedulerService';
+import { agentService } from '../../services/agentService';
+import { storageService } from '../../services/storageService';
 
 export const config = {
   maxDuration: 60,
-};
-
-// Mock implementations for demo (replace with actual service imports)
-const mockSchedulerService = {
-  getActiveSchedules: async () => [],
-  getNextExecutionTime: () => ({time: new Date()}),
-  createExecutionRecord: async () => 'exec-123',
-  updateExecutionRecord: async () => {},
-  appendExecutionLog: async () => {},
-};
-
-const mockAgentService = {
-  runWorkflow: async () => ({success: true, issue: {id: 'issue-123'}}),
-};
-
-const mockStorageService = {
-  getSchedule: async () => null,
-  createExecutionRecord: async () => 'exec-123',
-  updateExecutionRecord: async () => {},
 };
 
 export default async function handler(req: NextRequest) {
@@ -50,17 +34,22 @@ export default async function handler(req: NextRequest) {
   const errors: string[] = [];
 
   try {
-    // Get all active schedules
-    // NOTE: In production, import and use actual schedulerService
-    const schedules = await mockSchedulerService.getActiveSchedules();
+    // Get all active schedules from storage
+    const schedules = await storageService.getSchedules();
+    const activeSchedules = schedules.filter(s => s.isActive);
 
-    for (const schedule of schedules) {
+    for (const schedule of activeSchedules) {
       try {
         const now = new Date();
-        const next = mockSchedulerService.getNextExecutionTime(schedule.cronExpression, schedule.timezone);
+
+        // Get next execution time using scheduler service
+        const nextExecution = schedulerService.getNextExecutionTime(
+          schedule.cronExpression,
+          schedule.timezone
+        );
 
         // Check if schedule is due (within 5 minute window)
-        const timeDiff = Math.abs(next.time.getTime() - now.getTime());
+        const timeDiff = Math.abs(nextExecution.getTime() - now.getTime());
         if (timeDiff > 5 * 60 * 1000) {
           // Not due yet
           continue;
@@ -68,39 +57,64 @@ export default async function handler(req: NextRequest) {
 
         processed++;
 
-        // Create execution record
-        const executionId = await mockStorageService.createExecutionRecord(schedule.id);
+        // Get workflow definition to check requiresApproval flag
+        const workflow = await storageService.getWorkflow(schedule.workflowId);
+        if (!workflow) {
+          failed++;
+          errors.push(`Schedule ${schedule.id}: Workflow not found`);
+          continue;
+        }
+
+        // Create execution record to track this run
+        const executionRecord = {
+          id: `exec-${Date.now()}`,
+          scheduleId: schedule.id,
+          status: 'in_progress' as const,
+          startedAt: new Date().toISOString(),
+          executionLogs: []
+        };
 
         try {
-          // Get workflow and run it
-          // NOTE: In production, import and use actual agentService
-          const result = await mockAgentService.runWorkflow(schedule.workflowId);
+          // Get all agents for this workflow
+          const allAgents = await storageService.getAgents();
+          const agentsMap = new Map(allAgents.map(a => [a.id, a]));
 
-          // Check if workflow requires approval
-          // TODO: Implement approval gate logic here
-          // If schedule.workflow.requiresApproval:
-          //   - Save issue with approvalStatus='pending_review'
-          //   - Return success
-          // Else:
-          //   - Continue to remaining agents (x_posting, etc.)
-          //   - Save issue with approvalStatus='approved'
+          // Run workflow with approval gate
+          const result = await agentService.runWorkflow(
+            schedule.workflowId,
+            workflow.steps,
+            agentsMap,
+            workflow.requiresApproval ?? true  // Default to requiring approval
+          );
 
-          // Update execution record with success
-          await mockStorageService.updateExecutionRecord(executionId, {
-            status: 'completed',
-            issueId: result.issue?.id,
-          });
+          if (result.success && result.issue) {
+            // Update execution record with success
+            executionRecord.status = 'completed';
+            executionRecord.executionLogs = result.executionLogs || [];
 
-          succeeded++;
-        } catch (err: any) {
+            // Save execution record
+            await storageService.createExecutionRecord({
+              ...executionRecord,
+              issueId: result.issue.id,
+              completedAt: new Date().toISOString()
+            });
+
+            succeeded++;
+          } else {
+            failed++;
+            errors.push(`Schedule ${schedule.id}: Workflow execution failed`);
+          }
+        } catch (workflowErr: any) {
           // Update execution record with error
-          await mockStorageService.updateExecutionRecord(executionId, {
+          await storageService.createExecutionRecord({
+            ...executionRecord,
             status: 'failed',
-            errorMessage: err.message,
+            completedAt: new Date().toISOString(),
+            errorMessage: workflowErr.message
           });
 
           failed++;
-          errors.push(`Schedule ${schedule.id}: ${err.message}`);
+          errors.push(`Schedule ${schedule.id}: ${workflowErr.message}`);
         }
       } catch (scheduleError: any) {
         failed++;
