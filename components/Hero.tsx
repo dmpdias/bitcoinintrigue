@@ -47,35 +47,35 @@ export const Hero: React.FC = () => {
   const marqueeList = [...companies, ...companies];
 
   return (
-    <section className="relative min-h-screen flex flex-col justify-between pt-4 xs:pt-6 sm:pt-8 md:pt-16 lg:pt-20 pb-6 xs:pb-8 sm:pb-10 md:pb-12 lg:pb-16 overflow-hidden bg-paper">
-      <div className="max-w-[1400px] mx-auto w-full px-2 xs:px-3 sm:px-6 lg:px-8 flex flex-col flex-grow">
+    <section className="relative min-h-screen flex flex-col pt-6 xs:pt-8 sm:pt-12 md:pt-16 lg:pt-20 pb-8 xs:pb-10 sm:pb-12 md:pb-16 lg:pb-20 overflow-hidden bg-paper">
+      <div className="max-w-[1400px] mx-auto w-full px-3 xs:px-4 sm:px-6 lg:px-8 flex flex-col flex-grow">
 
-        <div className="grid grid-cols-2 gap-2 xs:gap-3 sm:gap-5 md:gap-6 lg:gap-8 items-start lg:items-center flex-grow">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 xs:gap-8 sm:gap-10 md:gap-12 lg:gap-16 items-stretch lg:items-center flex-grow">
 
           {/* Content Column - Always First */}
-          <div className="flex flex-col items-start text-left z-10 order-1 pt-0 min-w-0 justify-center">
+          <div className="flex flex-col items-start text-left z-10 order-1 lg:order-1 pt-0 min-w-0 justify-start lg:justify-center">
 
-            <h1 className="font-sans font-black text-[1.5rem] xs:text-2xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-slate-900 mb-3 xs:mb-4 sm:mb-6 md:mb-8 lg:mb-10 leading-[0.8] tracking-tighter uppercase animate-slide-up">
-              Bitcoin.<br/> Translated.<br className="hidden xs:block"/> For Humans.
+            <h1 className="font-sans font-black text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-slate-900 mb-4 xs:mb-5 sm:mb-6 md:mb-8 lg:mb-10 leading-[0.85] xs:leading-[0.85] tracking-tighter uppercase animate-slide-up">
+              Bitcoin.<br/> Translated.<br/> For Humans.
             </h1>
 
-            <p className="text-[12px] xs:text-sm sm:text-base md:text-lg lg:text-xl text-slate-800 font-medium mb-1.5 xs:mb-2 sm:mb-3 leading-snug sm:leading-relaxed animate-fade-in" style={{ animationDelay: '0.2s', opacity: 0, animationFillMode: 'forwards' }}>
+            <p className="text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl text-slate-900 font-bold mb-3 xs:mb-4 sm:mb-5 leading-snug sm:leading-relaxed animate-fade-in" style={{ animationDelay: '0.1s', opacity: 0, animationFillMode: 'forwards' }}>
               No jargon. No hype. Just clarity.
             </p>
 
-            <p className="text-[11px] xs:text-xs sm:text-sm md:text-base lg:text-lg text-slate-700 font-normal mb-4 xs:mb-5 sm:mb-8 md:mb-10 lg:mb-12 leading-relaxed animate-fade-in" style={{ animationDelay: '0.3s', opacity: 0, animationFillMode: 'forwards' }}>
-              Every day, we explain exactly what's happening in crypto. Plain English. No charts. No jargon.
+            <p className="text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl text-slate-700 font-normal mb-6 xs:mb-7 sm:mb-8 md:mb-10 lg:mb-12 leading-relaxed max-w-2xl animate-fade-in" style={{ animationDelay: '0.2s', opacity: 0, animationFillMode: 'forwards' }}>
+              Every day, we explain exactly what's happening in crypto — in plain English, with no jargon. Perfect for your morning coffee.
             </p>
 
-            <div className="w-full animate-fade-in z-20 flex-shrink-0" style={{ animationDelay: '0.5s', opacity: 0, animationFillMode: 'forwards' }}>
+            <div className="w-full max-w-md animate-fade-in z-20 flex-shrink-0" style={{ animationDelay: '0.3s', opacity: 0, animationFillMode: 'forwards' }}>
                 {status === 'success' ? (
-                    <div className="flex h-10 xs:h-11 sm:h-13 md:h-14 lg:h-16 items-center px-3 xs:px-4 sm:px-6 md:px-8 bg-brand-50 border-2 border-slate-900 shadow-[3px_3px_0px_0px_rgba(15,23,42,1)] xs:shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] sm:shadow-[5px_5px_0px_0px_rgba(15,23,42,1)] rounded-sm w-full animate-fade-in">
-                        <Check className="text-brand-600 mr-2 xs:mr-3 sm:mr-4 shrink-0" size={22} />
-                        <span className="font-black text-slate-900 text-[10px] xs:text-xs sm:text-sm md:text-base lg:text-lg uppercase tracking-wide line-clamp-1">Thanks for subscribing! Check your inbox.</span>
+                    <div className="flex h-12 xs:h-14 sm:h-16 md:h-18 lg:h-20 items-center px-4 xs:px-5 sm:px-7 md:px-8 bg-brand-50 border-2 border-slate-900 rounded-md shadow-lg w-full animate-fade-in gap-3">
+                        <Check className="text-brand-600 shrink-0 flex-none" size={24} />
+                        <span className="font-black text-slate-900 text-xs xs:text-sm sm:text-base md:text-lg uppercase tracking-wide">Thanks! Check your inbox.</span>
                     </div>
                 ) : (
-                    <form onSubmit={handleSubmit} className="flex flex-col gap-2 xs:gap-2.5 sm:gap-3 w-full">
-                        <div className={`flex h-10 xs:h-11 sm:h-13 md:h-14 lg:h-16 border-2 bg-white shadow-[3px_3px_0px_0px_rgba(15,23,42,1)] xs:shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] sm:shadow-[5px_5px_0px_0px_rgba(15,23,42,1)] hover:shadow-[4px_4px_0px_0px_rgba(234,88,12,1)] xs:hover:shadow-[5px_5px_0px_0px_rgba(234,88,12,1)] sm:hover:shadow-[7px_7px_0px_0px_rgba(234,88,12,1)] focus-within:ring-2 focus-within:ring-brand-400 focus-within:ring-offset-2 transition-all duration-200 rounded-sm overflow-hidden ${status === 'error' ? 'border-red-500' : 'border-slate-900'}`}>
+                    <form onSubmit={handleSubmit} className="flex flex-col gap-3 xs:gap-3.5 sm:gap-4 w-full">
+                        <div className={`flex h-12 xs:h-14 sm:h-16 md:h-18 lg:h-20 border-2 bg-white rounded-md overflow-hidden shadow-lg hover:shadow-xl hover:border-brand-400 focus-within:shadow-xl focus-within:border-brand-600 transition-all duration-300 ${status === 'error' ? 'border-red-500' : 'border-slate-900'}`}>
                             <input
                                 type="email"
                                 value={email}
@@ -85,24 +85,22 @@ export const Hero: React.FC = () => {
                                 }}
                                 disabled={status === 'loading'}
                                 placeholder="your@email.com"
-                                className="flex-grow px-3 xs:px-4 sm:px-5 md:px-6 h-full bg-transparent focus:outline-none text-slate-900 placeholder:text-slate-400 text-[11px] xs:text-xs sm:text-sm md:text-base lg:text-lg font-medium min-w-0"
+                                className="flex-grow px-4 xs:px-5 sm:px-6 h-full bg-transparent focus:outline-none text-slate-900 placeholder:text-slate-400 text-xs xs:text-sm sm:text-base md:text-lg font-medium min-w-0"
                             />
-                            <button type="submit" disabled={status === 'loading'} className="bg-brand-600 hover:bg-brand-700 active:bg-brand-800 text-white font-black uppercase text-[10px] xs:text-xs sm:text-sm md:text-base lg:text-lg px-4 xs:px-5 sm:px-7 md:px-10 h-full transition-all whitespace-nowrap flex items-center justify-center shrink-0 gap-1.5 sm:gap-2">
+                            <button type="submit" disabled={status === 'loading'} className="bg-brand-600 hover:bg-brand-700 active:bg-brand-800 text-white font-black uppercase text-xs xs:text-sm sm:text-base md:text-lg px-6 xs:px-7 sm:px-8 md:px-10 h-full transition-all whitespace-nowrap flex items-center justify-center shrink-0">
                                 {status === 'loading' ? (
-                                    <div className="w-4 h-4 xs:w-5 xs:h-5 sm:w-6 sm:h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                    <div className="w-5 h-5 xs:w-6 xs:h-6 sm:w-7 sm:h-7 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                                 ) : (
-                                    <>
-                                        <span className="hidden xs:inline">Get Today's</span>
+                                    <span>
+                                        <span className="hidden xs:inline">Try It Out</span>
                                         <span className="xs:hidden">Start</span>
-                                        <span className="hidden sm:inline">Story</span>
-                                        <span className="hidden xs:inline">→</span>
-                                    </>
+                                    </span>
                                 )}
                             </button>
                         </div>
                         {status === 'error' && (
-                            <p className="text-red-600 text-[9px] xs:text-[10px] sm:text-xs md:text-sm font-bold flex items-center gap-1.5 animate-fade-in leading-tight">
-                                <AlertCircle size={14} className="shrink-0 flex-none" />
+                            <p className="text-red-600 text-xs xs:text-sm font-bold flex items-center gap-2 animate-fade-in leading-tight">
+                                <AlertCircle size={16} className="shrink-0 flex-none" />
                                 <span>Check your email and try again.</span>
                             </p>
                         )}
@@ -110,25 +108,43 @@ export const Hero: React.FC = () => {
                 )}
 
                 {status !== 'success' && (
-                    <p className="text-[9px] xs:text-[10px] sm:text-xs md:text-sm font-semibold text-slate-600 tracking-tight mt-2.5 xs:mt-3 sm:mt-4 flex items-center gap-1.5 leading-tight">
-                    <span className="w-2 h-2 xs:w-2 xs:h-2 bg-green-500 rounded-full animate-pulse shrink-0 flex-none"></span>
-                    <span>No spam. Unsubscribe anytime.</span>
+                    <p className="text-xs xs:text-sm font-semibold text-slate-600 mt-3 xs:mt-4 sm:mt-5 flex items-center gap-2 leading-tight">
+                    <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse shrink-0 flex-none"></span>
+                    <span>100% FREE. NO SPAM. UNSUBSCRIBE ANYTIME.</span>
                     </p>
                 )}
             </div>
           </div>
 
           {/* Image Column - Responsive sizing */}
-          <div className="relative w-full h-[200px] xs:h-[240px] sm:h-[320px] md:h-[400px] lg:h-[500px] xl:h-[600px] flex items-center justify-center lg:justify-end z-0 order-2 justify-self-center">
-            {/* Illustration - Responsive */}
-            <div className="relative w-full h-full flex items-center justify-center px-1 xs:px-1.5 sm:px-0">
-              <img
-                src="/avatars/replicate-prediction-ce00rqqqehrmw0cwesmaaknxq8-removebg-preview.png"
-                alt="Person reading Bitcoin Intrigue with coffee and phone"
-                className="w-full h-full object-contain drop-shadow-lg sm:drop-shadow-xl rounded-sm sm:rounded-lg"
-              />
+          <div className="relative w-full h-[280px] xs:h-[320px] sm:h-[400px] md:h-[450px] lg:h-[500px] xl:h-[600px] flex items-center justify-center lg:justify-end z-0 order-2 lg:order-2 mt-4 xs:mt-6 sm:mt-8 lg:mt-0">
+            {/* Email/Mobile Mockup - Clean aesthetic */}
+            <div className="relative w-full h-full flex items-center justify-center px-2 xs:px-3 sm:px-4 lg:px-0">
+              {/* Browser/Phone Frame */}
+              <div className="w-full max-w-sm h-full bg-white border-2 border-slate-900 rounded-lg shadow-2xl overflow-hidden flex flex-col">
+                {/* Header */}
+                <div className="px-4 py-3 border-b border-slate-200 bg-slate-50">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full bg-slate-900"></div>
+                    <span className="text-xs font-bold text-slate-600">BITCOIN INTRIGUE</span>
+                  </div>
+                </div>
+                {/* Content */}
+                <div className="flex-1 p-4 overflow-hidden flex flex-col justify-between">
+                  <div className="space-y-3">
+                    <div className="w-3/4 h-3 bg-slate-900 rounded"></div>
+                    <div className="w-full h-32 bg-gradient-to-b from-brand-400 to-brand-200 rounded"></div>
+                    <div className="space-y-2">
+                      <div className="w-full h-2 bg-slate-300 rounded"></div>
+                      <div className="w-5/6 h-2 bg-slate-300 rounded"></div>
+                    </div>
+                  </div>
+                  <div className="pt-2 border-t border-slate-200">
+                    <div className="text-[9px] font-bold text-slate-600">5 MIN READ</div>
+                  </div>
+                </div>
+              </div>
             </div>
-
           </div>
         </div>
 
