@@ -5,6 +5,7 @@ import { agentService } from '../../services/agentService';
 import { ProductionChecklist } from './ProductionChecklist';
 import { SchedulesTab } from './SchedulesTab';
 import { AuthorTab } from './AuthorTab';
+import { DebugSchedulesTest } from './DebugSchedulesTest';
 import {
   BriefingData,
   AgentLog,
@@ -24,7 +25,7 @@ import {
 } from 'lucide-react';
 
 export const BackOffice: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'pipeline' | 'agents' | 'workflows' | 'schedules' | 'author' | 'audience' | 'analytics' | 'distribution' | 'system'>('pipeline');
+  const [activeTab, setActiveTab] = useState<'pipeline' | 'agents' | 'workflows' | 'schedules' | 'author' | 'audience' | 'analytics' | 'distribution' | 'system' | 'debug-schedules'>('pipeline');
   
   // Data State
   const [issues, setIssues] = useState<BriefingData[]>([]);
@@ -366,7 +367,8 @@ export const BackOffice: React.FC = () => {
                 { id: 'distribution', label: 'Distro', icon: Share2 },
                 { id: 'audience', label: 'Audience', icon: Users },
                 { id: 'analytics', label: 'Stats', icon: BarChart3 },
-                { id: 'system', label: 'System', icon: Cloud }
+                { id: 'system', label: 'System', icon: Cloud },
+                { id: 'debug-schedules', label: '🧪 Debug', icon: AlertCircle }
               ].map(tab => (
                 <button 
                   key={tab.id}
@@ -922,6 +924,11 @@ export const BackOffice: React.FC = () => {
           <AuthorTab
             onAddLog={addLog}
           />
+        )}
+
+        {/* DEBUG SCHEDULES TAB */}
+        {activeTab === 'debug-schedules' && (
+          <DebugSchedulesTest />
         )}
 
       </div>
