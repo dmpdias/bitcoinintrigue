@@ -35,10 +35,24 @@ export const AuthorTab: React.FC<AuthorTabProps> = ({ onAddLog }) => {
     setIsLoading(true);
     try {
       // Load author_agents table (hardcoded to bitcoin intrigue agent for now)
-      const author = await storageService.getAuthorAgent('agent-bitcoinintrigue');
+      let author = await storageService.getAuthorAgent('agent-bitcoinintrigue');
+
+      // If author doesn't exist, create default one
+      if (!author) {
+        const defaultAuthor = {
+          id: 'agent-bitcoinintrigue',
+          name: 'Bitcoin Intrigue',
+          bio: 'Daily Bitcoin newsletter explaining crypto like you\'re human',
+          x_handle: '@bitcoinintrigue',
+          is_active: true,
+        };
+        author = await storageService.saveAuthorAgent(defaultAuthor as any);
+        onAddLog('System', 'Created default author profile', 'info');
+      }
+
       if (author) {
         setAuthor(author);
-        setCredentialsConnected(!!author.x_credentials?.bearer_token);
+        setCredentialsConnected(!!author.xCredentials?.bearer_token);
       }
     } catch (err: any) {
       onAddLog('System', `Failed to load author: ${err.message}`, 'error');
@@ -118,7 +132,7 @@ export const AuthorTab: React.FC<AuthorTabProps> = ({ onAddLog }) => {
   };
 
   const handleVerifyCredentials = async () => {
-    if (!author?.x_credentials?.bearer_token) {
+    if (!author?.xCredentials?.bearer_token) {
       onAddLog('System', 'No credentials to verify', 'error');
       return;
     }
@@ -161,7 +175,7 @@ export const AuthorTab: React.FC<AuthorTabProps> = ({ onAddLog }) => {
               </div>
               <div>
                 <label className="text-[10px] font-black uppercase text-slate-400 mb-2 block">X Handle</label>
-                <div className="text-lg font-bold text-brand-600">{author?.x_handle || '@bitcoinintrigue'}</div>
+                <div className="text-lg font-bold text-brand-600">{author?.xHandle || '@bitcoinintrigue'}</div>
               </div>
             </div>
 
@@ -292,7 +306,7 @@ export const AuthorTab: React.FC<AuthorTabProps> = ({ onAddLog }) => {
               <div className="flex items-center gap-2">
                 <input
                   type={showToken ? 'text' : 'password'}
-                  value={author?.x_credentials?.bearer_token || ''}
+                  value={author?.xCredentials?.bearer_token || ''}
                   readOnly
                   className="flex-grow bg-white border border-slate-300 p-2 text-xs font-mono text-slate-600"
                 />
@@ -305,7 +319,7 @@ export const AuthorTab: React.FC<AuthorTabProps> = ({ onAddLog }) => {
                 </button>
                 <button
                   onClick={() => {
-                    navigator.clipboard.writeText(author?.x_credentials?.bearer_token || '');
+                    navigator.clipboard.writeText(author?.xCredentials?.bearer_token || '');
                     onAddLog('System', 'Token copied to clipboard', 'success');
                   }}
                   className="p-2 text-slate-400 hover:text-slate-600"

@@ -181,9 +181,11 @@ export const SchedulesTab: React.FC<SchedulesTabProps> = ({ workflows, onLoadDat
           </h3>
           <button
             onClick={handleNewSchedule}
-            className="bg-slate-900 text-white p-1 hover:bg-brand-600"
+            className="bg-slate-900 text-white px-3 py-2 hover:bg-brand-600 font-black uppercase text-xs flex items-center gap-1 border-2 border-slate-900"
+            title="Create new schedule"
           >
-            <Plus size={16} />
+            <Plus size={18} />
+            New
           </button>
         </div>
         <div className="overflow-y-auto flex-grow space-y-2 pr-2 custom-scrollbar">
