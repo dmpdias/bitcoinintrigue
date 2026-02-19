@@ -1,8 +1,7 @@
 import { Story } from '../types';
 
-// Replicate API configuration
-const REPLICATE_API_TOKEN = process.env.REPLICATE_API_KEY;
-const REPLICATE_API_URL = 'https://api.replicate.com/v1';
+// Supabase Edge Function URL - handles Replicate API calls server-side to avoid CORS
+const EDGE_FUNCTION_URL = 'https://xnykibvnkxrzcpkxmxvx.supabase.co/functions/v1/generate-image';
 
 /**
  * Generate a custom prompt based on story content
@@ -81,140 +80,53 @@ export const generateImage = async (
     console.log(`[ImageGenerator] Generating image for: ${category} - ${headline}`);
     console.log(`[ImageGenerator] Custom prompt: ${prompt.substring(0, 150)}...`);
 
-    // Validate API token
-    if (!REPLICATE_API_TOKEN) {
-      console.error(`[ImageGenerator] ❌ Replicate API token not configured`);
-      return null;
-    }
+    // Call Edge Function (server-side) to avoid CORS issues
+    console.log(`[ImageGenerator] 📡 Calling Supabase Edge Function...`);
+    console.log(`[ImageGenerator]    URL: ${EDGE_FUNCTION_URL}`);
 
-    console.log(`[ImageGenerator] ✅ API Token loaded`);
-
-    // Step 1: Create prediction
-    console.log(`[ImageGenerator] 📡 Creating prediction with Replicate API...`);
-    console.log(`[ImageGenerator]    URL: ${REPLICATE_API_URL}/predictions`);
-    console.log(`[ImageGenerator]    Model: black-forest-labs/flux-schnell`);
-
-    let predictionResponse;
+    let edgeFunctionResponse;
     try {
-      console.log(`[ImageGenerator]    Headers: Content-Type: application/json, Authorization: Bearer [token]`);
-
-      const requestBody = {
-        version: 'black-forest-labs/flux-schnell', // FLUX.1 [schnell] model identifier
-        input: {
-          prompt: prompt,
-          aspect_ratio: '16:9',
-          num_outputs: 1,
-        },
-      };
-
-      console.log(`[ImageGenerator]    Request body size: ${JSON.stringify(requestBody).length} bytes`);
-
-      predictionResponse = await fetch(`${REPLICATE_API_URL}/predictions`, {
+      edgeFunctionResponse = await fetch(EDGE_FUNCTION_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${REPLICATE_API_TOKEN}`,
         },
-        body: JSON.stringify(requestBody),
+        body: JSON.stringify({
+          headline: headline,
+          category: category,
+          prompt: prompt,
+        }),
       });
     } catch (fetchError: any) {
-      // Detect CORS errors
-      if (fetchError.message.includes('CORS') || fetchError.message.includes('cross-origin')) {
-        console.error(`[ImageGenerator] ❌ CORS ERROR - Browser blocked request`);
-        console.error(`[ImageGenerator]    This happens when making API calls from browser to external API`);
-        console.error(`[ImageGenerator]    Solution: Image generation must run on backend/server`);
-      } else {
-        console.error(`[ImageGenerator] ❌ Network error: ${fetchError.message}`);
-      }
+      console.error(`[ImageGenerator] ❌ Network error calling Edge Function: ${fetchError.message}`);
       return null;
     }
 
-    if (!predictionResponse.ok) {
+    if (!edgeFunctionResponse.ok) {
       try {
-        const errorData = await predictionResponse.json();
-        console.error(`[ImageGenerator] ❌ Prediction creation failed (HTTP ${predictionResponse.status}):`, errorData);
+        const errorData = await edgeFunctionResponse.json();
+        console.error(`[ImageGenerator] ❌ Edge Function failed (HTTP ${edgeFunctionResponse.status}):`, errorData);
       } catch (e) {
-        console.error(`[ImageGenerator] ❌ Prediction creation failed (HTTP ${predictionResponse.status}), couldn't parse error`);
+        console.error(`[ImageGenerator] ❌ Edge Function failed (HTTP ${edgeFunctionResponse.status})`);
       }
       return null;
     }
 
-    let prediction;
+    let result;
     try {
-      prediction = await predictionResponse.json();
+      result = await edgeFunctionResponse.json();
     } catch (parseError) {
-      console.error(`[ImageGenerator] ❌ Failed to parse prediction response:`, parseError);
+      console.error(`[ImageGenerator] ❌ Failed to parse Edge Function response:`, parseError);
       return null;
     }
 
-    console.log(`[ImageGenerator] ✅ Prediction created: ${prediction.id}`);
-    console.log(`[ImageGenerator]    Status: ${prediction.status}`);
-
-    // Step 2: Poll for completion
-    console.log(`[ImageGenerator] ⏳ Polling for completion (max ${120} seconds)...`);
-    let completed = false;
-    let attempts = 0;
-    const maxAttempts = 120; // 2 minutes with 1-second polls
-    let finalPrediction = prediction;
-
-    while (!completed && attempts < maxAttempts) {
-      attempts++;
-
-      let statusResponse;
-      try {
-        statusResponse = await fetch(`${REPLICATE_API_URL}/predictions/${prediction.id}`, {
-          headers: {
-            'Authorization': `Bearer ${REPLICATE_API_TOKEN}`,
-          },
-        });
-      } catch (fetchError) {
-        console.error(`[ImageGenerator] ❌ Fetch error checking status (attempt ${attempts}):`, fetchError);
-        return null;
-      }
-
-      if (!statusResponse.ok) {
-        console.error(`[ImageGenerator] ❌ Failed to check prediction status (HTTP ${statusResponse.status})`);
-        return null;
-      }
-
-      try {
-        finalPrediction = await statusResponse.json();
-      } catch (parseError) {
-        console.error(`[ImageGenerator] ❌ Failed to parse status response:`, parseError);
-        return null;
-      }
-
-      // Only log every 5 attempts to reduce noise
-      if (attempts % 5 === 0 || finalPrediction.status !== 'processing') {
-        console.log(`[ImageGenerator]    Attempt ${attempts}: ${finalPrediction.status}`);
-      }
-
-      if (finalPrediction.status === 'succeeded') {
-        completed = true;
-        console.log(`[ImageGenerator] ✅ Prediction succeeded after ${attempts} checks`);
-      } else if (finalPrediction.status === 'failed') {
-        console.error(`[ImageGenerator] ❌ Prediction failed:`, finalPrediction.error);
-        return null;
-      } else {
-        // Wait 1 second before polling again
-        await new Promise(resolve => setTimeout(resolve, 1000));
-      }
-    }
-
-    if (!completed) {
-      console.error(`[ImageGenerator] ❌ Prediction timed out after ${attempts} attempts`);
+    if (!result.success || !result.imageUrl) {
+      console.error(`[ImageGenerator] ❌ Edge Function returned invalid response:`, result);
       return null;
     }
 
-    // Step 3: Extract image URL from output
-    if (!finalPrediction.output || finalPrediction.output.length === 0) {
-      console.error(`[ImageGenerator] ❌ No output from Replicate`);
-      console.error(`[ImageGenerator]    Final prediction state:`, finalPrediction);
-      return null;
-    }
-
-    const imageUrl = finalPrediction.output[0];
-    console.log(`[ImageGenerator] ✅ Image URL extracted: ${imageUrl.substring(0, 80)}...`);
+    const imageUrl = result.imageUrl;
+    console.log(`[ImageGenerator] ✅ Image generated via Edge Function: ${imageUrl.substring(0, 80)}...`);
 
     return imageUrl;
   } catch (error) {
