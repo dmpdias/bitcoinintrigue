@@ -208,7 +208,7 @@ export const storageService = {
 
   getAnalytics: async (): Promise<AnalyticsData> => {
     const { count } = await supabase.from('subscribers').select('*', { count: 'exact', head: true }).eq('status', 'active');
-    
+
     return {
       totalSubscribers: count || 0,
       openRate: 48.2,
@@ -216,5 +216,272 @@ export const storageService = {
       webViews: 12450,
       dailyGrowth: [4, 12, 8, 15, 22, 19, 31]
     };
+  },
+
+  // --- SCHEDULES (Automation & Scheduling System) ---
+
+  getSchedules: async (): Promise<any[]> => {
+    const { data, error } = await supabase
+      .from('schedules')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching schedules:', error);
+      return [];
+    }
+
+    return (data || []).map((s: any) => ({
+      id: s.id,
+      name: s.name,
+      description: s.description,
+      workflowId: s.workflow_id,
+      cronExpression: s.cron_expression,
+      timezone: s.timezone,
+      isActive: s.is_active,
+      createdBy: s.created_by,
+      createdAt: s.created_at,
+      updatedAt: s.updated_at
+    }));
+  },
+
+  getSchedule: async (id: string): Promise<any | null> => {
+    const { data, error } = await supabase
+      .from('schedules')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error || !data) return null;
+
+    return {
+      id: data.id,
+      name: data.name,
+      description: data.description,
+      workflowId: data.workflow_id,
+      cronExpression: data.cron_expression,
+      timezone: data.timezone,
+      isActive: data.is_active,
+      createdBy: data.created_by,
+      createdAt: data.created_at,
+      updatedAt: data.updated_at
+    };
+  },
+
+  saveSchedule: async (schedule: any) => {
+    const { error } = await supabase.from('schedules').upsert({
+      id: schedule.id,
+      name: schedule.name,
+      description: schedule.description,
+      workflow_id: schedule.workflowId,
+      cron_expression: schedule.cronExpression,
+      timezone: schedule.timezone,
+      is_active: schedule.isActive,
+      created_by: schedule.createdBy,
+      created_at: schedule.createdAt,
+      updated_at: new Date().toISOString()
+    });
+    if (error) throw error;
+  },
+
+  deleteSchedule: async (id: string) => {
+    const { error } = await supabase.from('schedules').delete().eq('id', id);
+    if (error) throw error;
+  },
+
+  // --- SCHEDULED DISTRIBUTIONS ---
+
+  getScheduledDistributions: async (scheduleId: string): Promise<any[]> => {
+    const { data, error } = await supabase
+      .from('scheduled_distributions')
+      .select('*')
+      .eq('schedule_id', scheduleId);
+
+    if (error) {
+      console.error('Error fetching scheduled distributions:', error);
+      return [];
+    }
+
+    return (data || []).map((d: any) => ({
+      id: d.id,
+      scheduleId: d.schedule_id,
+      channel: d.channel,
+      recipientFilter: d.recipient_filter,
+      postTemplate: d.post_template,
+      isEnabled: d.is_enabled,
+      createdAt: d.created_at,
+      updatedAt: d.updated_at
+    }));
+  },
+
+  saveScheduledDistribution: async (distribution: any) => {
+    const { error } = await supabase.from('scheduled_distributions').upsert({
+      id: distribution.id,
+      schedule_id: distribution.scheduleId,
+      channel: distribution.channel,
+      recipient_filter: distribution.recipientFilter,
+      post_template: distribution.postTemplate,
+      is_enabled: distribution.isEnabled,
+      created_at: distribution.createdAt,
+      updated_at: new Date().toISOString()
+    });
+    if (error) throw error;
+  },
+
+  deleteScheduledDistribution: async (id: string) => {
+    const { error } = await supabase.from('scheduled_distributions').delete().eq('id', id);
+    if (error) throw error;
+  },
+
+  // --- X POSTING SCHEDULE ---
+
+  getXPostingScheduleEntries: async (filters?: {status?: string; issueId?: string}): Promise<any[]> => {
+    let query = supabase.from('x_posting_schedule').select('*');
+
+    if (filters?.status) {
+      query = query.eq('status', filters.status);
+    }
+    if (filters?.issueId) {
+      query = query.eq('issue_id', filters.issueId);
+    }
+
+    const { data, error } = await query.order('scheduled_time', { ascending: true });
+
+    if (error) {
+      console.error('Error fetching X posting schedule entries:', error);
+      return [];
+    }
+
+    return (data || []).map((e: any) => ({
+      id: e.id,
+      distributionId: e.distribution_id,
+      issueId: e.issue_id,
+      storyIndex: e.story_index,
+      postText: e.post_text,
+      scheduledTime: e.scheduled_time,
+      postedTime: e.posted_time,
+      postUrl: e.post_url,
+      status: e.status,
+      errorMessage: e.error_message,
+      createdAt: e.created_at
+    }));
+  },
+
+  getXPostingScheduleEntriesDue: async (): Promise<any[]> => {
+    const now = new Date().toISOString();
+    const { data, error } = await supabase
+      .from('x_posting_schedule')
+      .select('*')
+      .eq('status', 'scheduled')
+      .lte('scheduled_time', now)
+      .order('scheduled_time', { ascending: true });
+
+    if (error) {
+      console.error('Error fetching due X posting entries:', error);
+      return [];
+    }
+
+    return (data || []).map((e: any) => ({
+      id: e.id,
+      distributionId: e.distribution_id,
+      issueId: e.issue_id,
+      storyIndex: e.story_index,
+      postText: e.post_text,
+      scheduledTime: e.scheduled_time,
+      postedTime: e.posted_time,
+      postUrl: e.post_url,
+      status: e.status,
+      errorMessage: e.error_message,
+      createdAt: e.created_at
+    }));
+  },
+
+  saveXPostingScheduleEntry: async (entry: any) => {
+    const { error } = await supabase.from('x_posting_schedule').insert({
+      id: entry.id,
+      distribution_id: entry.distributionId,
+      issue_id: entry.issueId,
+      story_index: entry.storyIndex,
+      post_text: entry.postText,
+      scheduled_time: entry.scheduledTime,
+      status: entry.status || 'scheduled',
+      created_at: new Date().toISOString()
+    });
+    if (error) throw error;
+  },
+
+  updateXPostingScheduleEntry: async (id: string, updates: any) => {
+    const dbUpdates: any = {};
+    if (updates.postedTime !== undefined) dbUpdates.posted_time = updates.postedTime;
+    if (updates.postUrl !== undefined) dbUpdates.post_url = updates.postUrl;
+    if (updates.status !== undefined) dbUpdates.status = updates.status;
+    if (updates.errorMessage !== undefined) dbUpdates.error_message = updates.errorMessage;
+
+    const { error } = await supabase
+      .from('x_posting_schedule')
+      .update(dbUpdates)
+      .eq('id', id);
+    if (error) throw error;
+  },
+
+  // --- EXECUTION HISTORY ---
+
+  getExecutionHistory: async (scheduleId: string, limit: number = 50): Promise<any[]> => {
+    const { data, error } = await supabase
+      .from('execution_history')
+      .select('*')
+      .eq('schedule_id', scheduleId)
+      .order('created_at', { ascending: false })
+      .limit(limit);
+
+    if (error) {
+      console.error('Error fetching execution history:', error);
+      return [];
+    }
+
+    return (data || []).map((e: any) => ({
+      id: e.id,
+      scheduleId: e.schedule_id,
+      issueId: e.issue_id,
+      status: e.status,
+      startedAt: e.started_at,
+      completedAt: e.completed_at,
+      errorMessage: e.error_message,
+      executionLogs: e.execution_logs,
+      createdAt: e.created_at
+    }));
+  },
+
+  createExecutionRecord: async (scheduleId: string, issueId?: string): Promise<string> => {
+    const { data, error } = await supabase
+      .from('execution_history')
+      .insert({
+        schedule_id: scheduleId,
+        issue_id: issueId,
+        status: 'in_progress',
+        started_at: new Date().toISOString(),
+        execution_logs: [],
+        created_at: new Date().toISOString()
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data.id;
+  },
+
+  updateExecutionRecord: async (id: string, updates: any) => {
+    const dbUpdates: any = {};
+    if (updates.status !== undefined) dbUpdates.status = updates.status;
+    if (updates.issueId !== undefined) dbUpdates.issue_id = updates.issueId;
+    if (updates.errorMessage !== undefined) dbUpdates.error_message = updates.errorMessage;
+    if (updates.executionLogs !== undefined) dbUpdates.execution_logs = updates.executionLogs;
+    if (updates.completedAt !== undefined) dbUpdates.completed_at = updates.completedAt;
+
+    const { error } = await supabase
+      .from('execution_history')
+      .update(dbUpdates)
+      .eq('id', id);
+    if (error) throw error;
   }
 };
