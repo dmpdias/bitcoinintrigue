@@ -52,7 +52,7 @@ export const Hero: React.FC = () => {
 
         <div className="flex flex-col lg:grid lg:grid-cols-12 gap-2 xs:gap-3 sm:gap-5 md:gap-6 lg:gap-8 items-center">
 
-          <div className="hidden xs:flex w-full lg:col-span-6 order-1 lg:order-2 relative h-[140px] xs:h-[160px] sm:h-[280px] md:h-[500px] lg:h-[600px] items-center justify-center lg:justify-end z-0 mt-0 lg:mt-0">
+          <div className="w-full lg:col-span-6 order-1 lg:order-2 relative h-[100px] xs:h-[140px] sm:h-[280px] md:h-[500px] lg:h-[600px] flex items-center justify-center lg:justify-end z-0 mt-0 lg:mt-0">
 
             <div className="absolute top-0.5 xs:top-1 sm:top-3 md:top-4 left-0.5 xs:left-1 sm:left-3 md:left-4 w-[88%] xs:w-[86%] sm:w-[78%] md:w-[80%] bg-[#f4f1ea] rounded-lg border-2 border-slate-900 shadow-xl overflow-hidden transform -rotate-2 z-0 block lg:block h-[110px] xs:h-[130px] sm:h-[220px] md:h-[380px] lg:h-[450px]">
                 <div className="h-5 xs:h-6 sm:h-8 bg-[#e8e4db] border-b border-slate-200 flex items-center px-1.5 xs:px-2 sm:px-4 gap-1.5 xs:gap-2">
