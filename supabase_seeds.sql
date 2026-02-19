@@ -38,7 +38,7 @@ VALUES
   'agent-image',
   'ImageGeneratorAgent',
   'image',
-  'Generate editorial illustration images for Bitcoin articles using FLUX.1 [schnell]. Contemporary editorial style with FT Weekend magazine aesthetic. Use warm navy (#0d1b2a), orange (#f4611e), and cream palette. Focus on human stories, real people, real objects, authentic moments in modern contexts. Clean lines, contemporary aesthetic. NEVER generate: price charts, Bitcoin logos, rockets/moons, lamborghinis, or generic stock photos. Professional editorial illustration.',
+  'Generate story-specific editorial illustrations for each Bitcoin article using FLUX.1 [schnell]. READ each story headline and content to understand the narrative, then create a unique, contextual prompt. CATEGORIES: PRICE STORY (market tension, human decision moment), GLOBAL/WORLD (authentic cultural context, adoption), WHALE WATCH (scale and observation without charts), EDUCATION/LESSON (discovery and learning moment), SPOTLIGHT/PROJECT (real people using technology). VISUAL RULES: Editorial illustration style only (New Yorker, FT Weekend, Economist). Warm palette: cream, terracotta, navy, amber. Human-centered: real people, real places, real objects. NEVER: price charts, Bitcoin logos, coins, rockets, moons, lambos, text/numbers, generic stock photos, crypto clichés. Professional editorial quality with contemporary aesthetic, natural lighting, clean lines.',
   true,
   'replicate/flux-schnell'
 )
