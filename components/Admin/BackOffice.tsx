@@ -43,6 +43,10 @@ export const BackOffice: React.FC = () => {
   // Delete Confirmation State
   const [deleteTarget, setDeleteTarget] = useState<{ type: 'agent' | 'workflow' | 'issue', id: string, name?: string } | null>(null);
 
+  // Approval Workflow State
+  const [rejectingIssueId, setRejectingIssueId] = useState<string | null>(null);
+  const [rejectionReason, setRejectionReason] = useState('');
+
   // System State
   const [logs, setLogs] = useState<AgentLog[]>([]);
   const [isRunning, setIsRunning] = useState(false);
@@ -275,6 +279,41 @@ export const BackOffice: React.FC = () => {
           loadData(true);
       } catch (e: any) {
           alert(e.message);
+      }
+  };
+
+  const handleApproveIssue = async (issue: BriefingData) => {
+      try {
+          const updated = {
+              ...issue,
+              approvalStatus: 'approved' as const,
+              approvedAt: new Date().toISOString(),
+              approvedBy: 'user' // In real app, would be current user
+          };
+          await storageService.saveIssue(updated);
+          setSelectedIssue(updated);
+          setIssues(prev => prev.map(i => i.id === updated.id ? updated : i));
+          addLog('System', `Issue "${issue.intro?.headline || 'Untitled'}" approved for publishing.`, 'success');
+      } catch (e: any) {
+          addLog('System', `Failed to approve issue: ${e.message}`, 'error');
+      }
+  };
+
+  const handleRejectIssue = async (issue: BriefingData, reason: string) => {
+      try {
+          const updated = {
+              ...issue,
+              approvalStatus: 'rejected' as const,
+              rejectionReason: reason
+          };
+          await storageService.saveIssue(updated);
+          setSelectedIssue(updated);
+          setIssues(prev => prev.map(i => i.id === updated.id ? updated : i));
+          addLog('System', `Issue "${issue.intro?.headline || 'Untitled'}" rejected.`, 'warning');
+          setRejectingIssueId(null);
+          setRejectionReason('');
+      } catch (e: any) {
+          addLog('System', `Failed to reject issue: ${e.message}`, 'error');
       }
   };
 
@@ -628,6 +667,89 @@ export const BackOffice: React.FC = () => {
                                  </button>
                              </div>
                         </div>
+
+                        {/* Approval Review Panel - Show when approval is pending */}
+                        {selectedIssue.approvalStatus === 'pending_review' && (
+                            <div className="bg-blue-50 border-2 border-blue-300 p-6">
+                                <div className="flex items-start gap-4">
+                                    <div className="flex-grow">
+                                        <h3 className="text-sm font-black uppercase text-blue-900 mb-2 flex items-center gap-2">
+                                            <AlertCircle size={18} />
+                                            Awaiting Your Approval
+                                        </h3>
+                                        <p className="text-sm text-blue-800 mb-4">
+                                            This briefing is ready for review. Please check the content below and approve for publishing or reject with notes.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {!rejectingIssueId ? (
+                                    <div className="flex gap-3">
+                                        <button
+                                            onClick={() => handleApproveIssue(selectedIssue)}
+                                            className="flex-grow bg-green-600 text-white px-6 py-3 font-black uppercase text-xs hover:bg-green-700 shadow-[2px_2px_0px_0px_rgba(15,23,42,1)] active:shadow-none active:translate-x-[1px] active:translate-y-[1px] flex items-center justify-center gap-2"
+                                        >
+                                            ✓ Approve & Publish
+                                        </button>
+                                        <button
+                                            onClick={() => setRejectingIssueId(selectedIssue.id)}
+                                            className="flex-grow bg-red-100 text-red-900 px-6 py-3 font-black uppercase text-xs hover:bg-red-200 border border-red-300"
+                                        >
+                                            ✕ Reject
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <div className="space-y-3">
+                                        <label className="text-[10px] font-black uppercase text-slate-400 block">Rejection Reason (optional)</label>
+                                        <textarea
+                                            value={rejectionReason}
+                                            onChange={e => setRejectionReason(e.target.value)}
+                                            placeholder="Explain why this briefing needs revision..."
+                                            className="w-full h-20 bg-white border-2 border-slate-200 p-3 text-xs text-slate-600 focus:border-red-400 outline-none resize-none"
+                                        />
+                                        <div className="flex gap-3">
+                                            <button
+                                                onClick={() => handleRejectIssue(selectedIssue, rejectionReason)}
+                                                className="flex-grow bg-red-600 text-white px-4 py-2 font-black uppercase text-xs hover:bg-red-700"
+                                            >
+                                                Confirm Rejection
+                                            </button>
+                                            <button
+                                                onClick={() => {setRejectingIssueId(null); setRejectionReason('');}}
+                                                className="flex-grow bg-slate-100 text-slate-900 px-4 py-2 font-black uppercase text-xs hover:bg-slate-200"
+                                            >
+                                                Cancel
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
+                        {/* Approval Status Badges - Show when approved or rejected */}
+                        {selectedIssue.approvalStatus === 'approved' && (
+                            <div className="bg-green-50 border-2 border-green-300 p-4 rounded flex items-center gap-3">
+                                <CheckCircle2 size={20} className="text-green-600" />
+                                <div>
+                                    <strong className="text-green-900">✓ Approved</strong>
+                                    <div className="text-xs text-green-800">Approved {selectedIssue.approvedAt ? new Date(selectedIssue.approvedAt).toLocaleDateString() : 'on unknown date'}</div>
+                                </div>
+                            </div>
+                        )}
+
+                        {selectedIssue.approvalStatus === 'rejected' && (
+                            <div className="bg-red-50 border-2 border-red-300 p-4 rounded">
+                                <div className="flex items-start gap-3">
+                                    <AlertCircle size={20} className="text-red-600 mt-0.5" />
+                                    <div>
+                                        <strong className="text-red-900">✕ Rejected</strong>
+                                        {selectedIssue.rejectionReason && (
+                                            <p className="text-xs text-red-800 mt-1">{selectedIssue.rejectionReason}</p>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
 
                         {/* Story Editor (Simplified for brevity, logic remains same) */}
                         <div className="bg-white border-2 border-slate-900 p-6">
