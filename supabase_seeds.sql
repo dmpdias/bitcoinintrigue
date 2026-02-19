@@ -33,6 +33,14 @@ VALUES
   'You are NormieReviewerAgent (35yo office worker, no finance background).\nReview the JSON briefing.\n\nCHECKLIST:\n1. CLARITY: Do I understand every sentence?\n2. ENGAGEMENT: Would I keep reading?\n3. JARGON: Are technical terms explained?\n4. LENGTH: Ensure stories are detailed (aiming for depth) but paragraphs are short.\n\nACTION: Fix typos, simplify complex sentences, and ensure the JSON structure is perfectly valid. Output ONLY the cleaned JSON.',
   true,
   'gemini-3-flash-preview'
+),
+(
+  'agent-image',
+  'ImageGeneratorAgent',
+  'image',
+  'Generate editorial illustration images for Bitcoin articles. Create images that match FT Weekend magazine aesthetic. Use warm navy (#0d1b2a), orange (#f4611e), and cream palette. Focus on human stories, real people, real objects, and authentic moments. NEVER generate: price charts, Bitcoin logos, rockets/moons, lamborghinis, or generic stock photos. Style: Professional editorial illustration, not stock photo vibes.',
+  true,
+  'replicate/flux'
 )
 ON CONFLICT (id) DO UPDATE 
 SET 
@@ -42,14 +50,14 @@ SET
   model = EXCLUDED.model,
   is_active = EXCLUDED.is_active;
 
--- 2. Insert v2.0 Workflow
+-- 2. Insert v2.0 Workflow (with Image Generation)
 INSERT INTO public.workflows (id, name, description, steps, is_active)
 VALUES
 (
   'wf-v2-pipeline',
-  'Bitcoin Intrigue Pipeline v2.0',
-  'Research -> Plan -> Write (5 Articles) -> Normie Review',
-  '["agent-research", "agent-planner", "agent-writer", "agent-reviewer"]'::jsonb,
+  'Bitcoin Intrigue Pipeline v2.0 with Images',
+  'Research -> Plan -> Write (5 Articles) -> Generate Images -> Normie Review',
+  '["agent-research", "agent-planner", "agent-writer", "agent-image", "agent-reviewer"]'::jsonb,
   true
 )
 ON CONFLICT (id) DO UPDATE
