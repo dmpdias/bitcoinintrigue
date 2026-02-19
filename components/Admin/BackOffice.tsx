@@ -3,26 +3,28 @@ import React, { useState, useEffect } from 'react';
 import { storageService } from '../../services/storageService';
 import { agentService } from '../../services/agentService';
 import { ProductionChecklist } from './ProductionChecklist';
-import { 
-  BriefingData, 
-  AgentLog, 
-  AgentDefinition, 
-  WorkflowDefinition, 
-  Subscriber, 
-  AnalyticsData, 
+import { SchedulesTab } from './SchedulesTab';
+import { AuthorTab } from './AuthorTab';
+import {
+  BriefingData,
+  AgentLog,
+  AgentDefinition,
+  WorkflowDefinition,
+  Subscriber,
+  AnalyticsData,
   DistributionEvent,
   Story
 } from '../../types';
-import { 
-  Settings, Play, Trash2, Terminal, Layers, Bot, Code, Users, BarChart3, 
-  Share2, Mail, Twitter, UserPlus, ToggleRight, ToggleLeft, ArrowRight, 
-  CheckCircle2, Cloud, Loader2, RefreshCw, Database, AlertCircle, Plus, 
+import {
+  Settings, Play, Trash2, Terminal, Layers, Bot, Code, Users, BarChart3,
+  Share2, Mail, Twitter, UserPlus, ToggleRight, ToggleLeft, ArrowRight,
+  CheckCircle2, Cloud, Loader2, RefreshCw, Database, AlertCircle, Plus,
   Save, ArrowUp, ArrowDown, ChevronRight, Eye, Clock, Image as ImageIcon,
-  Edit3, X
+  Edit3, X, Calendar, User
 } from 'lucide-react';
 
 export const BackOffice: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'pipeline' | 'agents' | 'workflows' | 'audience' | 'analytics' | 'distribution' | 'system'>('pipeline');
+  const [activeTab, setActiveTab] = useState<'pipeline' | 'agents' | 'workflows' | 'schedules' | 'author' | 'audience' | 'analytics' | 'distribution' | 'system'>('pipeline');
   
   // Data State
   const [issues, setIssues] = useState<BriefingData[]>([]);
@@ -320,6 +322,8 @@ export const BackOffice: React.FC = () => {
                 { id: 'pipeline', label: 'Pipeline', icon: Layers },
                 { id: 'agents', label: 'Agents', icon: Bot },
                 { id: 'workflows', label: 'Workflows', icon: Code },
+                { id: 'schedules', label: 'Schedules', icon: Calendar },
+                { id: 'author', label: 'Author', icon: User },
                 { id: 'distribution', label: 'Distro', icon: Share2 },
                 { id: 'audience', label: 'Audience', icon: Users },
                 { id: 'analytics', label: 'Stats', icon: BarChart3 },
@@ -753,6 +757,23 @@ export const BackOffice: React.FC = () => {
           </div>
 
         </div>
+
+        {/* SCHEDULES TAB */}
+        {activeTab === 'schedules' && (
+          <SchedulesTab
+            workflows={workflows}
+            onLoadData={() => loadData(true)}
+            onAddLog={addLog}
+          />
+        )}
+
+        {/* AUTHOR TAB */}
+        {activeTab === 'author' && (
+          <AuthorTab
+            onAddLog={addLog}
+          />
+        )}
+
       </div>
     </div>
   );
