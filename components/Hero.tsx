@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Bitcoin, Check, AlertCircle } from 'lucide-react';
+import { Check, AlertCircle } from 'lucide-react';
 import { storageService } from '../services/storageService';
 
 export const Hero: React.FC = () => {
@@ -31,46 +31,25 @@ export const Hero: React.FC = () => {
     }
   };
 
-  const companies = [
-    { name: "Apple", style: "font-semibold" },
-    { name: "Google", style: "font-bold" },
-    { name: "Whole Foods", style: "font-serif italic" },
-    { name: "AIRBNB", style: "font-black tracking-widest uppercase" },
-    { name: "Tesla", style: "font-bold tracking-wider" },
-    { name: "Coinbase", style: "font-sans font-black text-brand-700" },
-    { name: "Amazon", style: "font-bold" },
-    { name: "Microsoft", style: "font-semibold" },
-    { name: "Nvidia", style: "font-black uppercase" },
-    { name: "Meta", style: "font-bold tracking-tight" },
-  ];
-
-  const marqueeList = [...companies, ...companies];
 
   return (
     <section className="relative pt-6 xs:pt-8 sm:pt-12 md:pt-16 lg:pt-20 pb-4 xs:pb-6 sm:pb-8 md:pb-10 lg:pb-12 overflow-hidden bg-paper">
       <div className="max-w-[1400px] mx-auto w-full px-3 xs:px-4 sm:px-6 lg:px-8">
 
         <div className="max-w-3xl mx-auto">
-          {/* Badge Label */}
-          <div className="mb-4 xs:mb-5 sm:mb-6 md:mb-8 animate-fade-in" style={{ animationDelay: '0.05s', opacity: 0, animationFillMode: 'forwards' }}>
-            <span className="inline-block bg-slate-900 text-white text-[10px] font-sans font-black uppercase px-3 py-1.5 tracking-widest rounded-sm">
-              Bitcoin News
-            </span>
-          </div>
-
           {/* Headline with one word in orange */}
           <h1 className="font-sans font-black text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-slate-900 mb-3 xs:mb-4 sm:mb-5 md:mb-6 lg:mb-8 leading-[0.85] tracking-tighter uppercase animate-slide-up">
-            Bitcoin.<br /> Translated.<br /> For <span className="text-brand-600">INTRIGUE.</span>
+            Bitcoin.<br /> Translated For<br /> <span className="text-brand-600">HUMANS.</span>
           </h1>
 
           {/* Benefit statement */}
           <p className="text-base xs:text-lg sm:text-xl md:text-2xl text-slate-900 font-bold mb-3 xs:mb-4 sm:mb-5 md:mb-6 leading-snug animate-fade-in" style={{ animationDelay: '0.1s', opacity: 0, animationFillMode: 'forwards' }}>
-            No jargon. No hype. Just clarity.
+            The daily 5-minute read that makes Bitcoin make sense.
           </p>
 
           {/* Description */}
           <p className="text-sm xs:text-base sm:text-lg md:text-xl text-slate-700 font-normal mb-6 xs:mb-7 sm:mb-8 md:mb-10 lg:mb-12 leading-relaxed max-w-2xl animate-fade-in" style={{ animationDelay: '0.15s', opacity: 0, animationFillMode: 'forwards' }}>
-            Every day, we explain exactly what's happening in crypto — in plain English, with no jargon.
+            Every day, one clear story about what happened in Bitcoin and why it matters to you. Five minutes. Plain English. Done.
           </p>
 
           {/* CTA Form */}
@@ -98,10 +77,7 @@ export const Hero: React.FC = () => {
                               {status === 'loading' ? (
                                   <div className="w-5 h-5 xs:w-6 xs:h-6 sm:w-7 sm:h-7 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                               ) : (
-                                  <span>
-                                      <span className="hidden xs:inline">Try It Out</span>
-                                      <span className="xs:hidden">Start</span>
-                                  </span>
+                                  <span>Join Free</span>
                               )}
                           </button>
                       </div>
@@ -122,30 +98,9 @@ export const Hero: React.FC = () => {
               )}
           </div>
 
-          {/* Bitcoin Icon Badge */}
-          <div className="relative mb-8 xs:mb-10 sm:mb-12 md:mb-16 animate-fade-in" style={{ animationDelay: '0.25s', opacity: 0, animationFillMode: 'forwards' }}>
-            <div className="w-16 h-16 xs:w-20 xs:h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 rounded-full bg-slate-900 flex items-center justify-center shadow-lg hover:shadow-xl hover:bg-brand-600 transition-all duration-300">
-              <Bitcoin className="text-white w-8 h-8 xs:w-10 xs:h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16" />
-            </div>
-          </div>
         </div>
 
-        <div className="mt-4 xs:mt-6 sm:mt-10 md:mt-14 lg:mt-16 pt-6 xs:pt-8 sm:pt-10 md:pt-12 lg:pt-16 border-t-2 border-slate-200">
-            <div className="flex flex-col items-center md:flex-row md:items-center gap-2 md:gap-12 lg:gap-16 overflow-hidden">
-                <span className="font-bold text-slate-900 text-[10px] xs:text-xs sm:text-sm md:text-base lg:text-lg whitespace-nowrap z-10 bg-paper md:pr-4 text-center md:text-left">
-                    Read by 1,000+ people who just wanted to understand what they bought.
-                </span>
-                <div className="flex-grow overflow-hidden relative w-full mask-gradient">
-                    <div className="flex animate-scroll whitespace-nowrap gap-8 md:gap-12 items-center opacity-60 grayscale w-max">
-                        {marqueeList.map((company, index) => (
-                            <div key={index} className={`text-xs sm:text-sm md:text-base lg:text-xl text-slate-700 ${company.style}`}>
-                                {company.name}
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div className="mt-8 xs:mt-10 sm:mt-12 md:mt-16 lg:mt-20 pt-8 xs:pt-10 sm:pt-12 md:pt-16 lg:pt-20 border-t-4 border-slate-900"></div>
       </div>
     </section>
   );
