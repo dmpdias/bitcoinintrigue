@@ -23,7 +23,7 @@ export const Briefing: React.FC<BriefingProps> = ({ data }) => {
   if (!data) return null;
   
   const featuredStory = data.stories[0];
-  const sideStories = data.stories.slice(1, 4);
+  const sideStories = data.stories.slice(1, 5);
 
   return (
     <section id="latest" className="py-8 md:py-12 lg:py-24 bg-paper">

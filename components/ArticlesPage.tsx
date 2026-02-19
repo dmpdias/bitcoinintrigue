@@ -92,8 +92,8 @@ export const ArticlesPage: React.FC = () => {
 
   const isDefaultView = selectedCategory === 'All' && !searchQuery;
   const heroStory = filteredStories[0];
-  const sidebarStories = filteredStories.slice(1, 4);
-  const gridStories = isDefaultView ? filteredStories.slice(4) : filteredStories;
+  const sidebarStories = filteredStories.slice(1, 5);
+  const gridStories = isDefaultView ? filteredStories.slice(5) : filteredStories;
 
   return (
     <div className="min-h-screen bg-paper relative font-sans text-slate-900 pt-10 pb-20">
