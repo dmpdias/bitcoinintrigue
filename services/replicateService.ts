@@ -54,14 +54,50 @@ export const generateImage = async (
           aspect_ratio: '16:9',
         },
       }
-    ) as string[];
+    ) as any[];
 
     if (!output || output.length === 0) {
       console.error(`[ImageGenerator] No output from Replicate for ${category}`);
       return null;
     }
 
-    const imageUrl = output[0];
+    // Handle Replicate SDK response - output contains FileOutput objects
+    let imageUrl: string | null = null;
+    const firstOutput = output[0];
+
+    // FileOutput objects have a .url() method to get the HTTP URL
+    if (firstOutput && typeof firstOutput.url === 'function') {
+      try {
+        imageUrl = firstOutput.url();
+        console.log(`[ImageGenerator] Extracted URL from FileOutput for ${category}`);
+      } catch (urlError) {
+        console.error(`[ImageGenerator] Failed to get URL from FileOutput: ${urlError}`);
+        return null;
+      }
+    }
+    // Check if it's already a string URL
+    else if (typeof firstOutput === 'string') {
+      imageUrl = firstOutput;
+      console.log(`[ImageGenerator] Got direct URL string for ${category}`);
+    }
+    // Fallback: try toString()
+    else if (firstOutput && typeof firstOutput === 'object') {
+      try {
+        const urlStr = firstOutput.toString();
+        if (urlStr && urlStr.includes('http')) {
+          imageUrl = urlStr;
+          console.log(`[ImageGenerator] Extracted URL via toString() for ${category}`);
+        }
+      } catch (e) {
+        console.error(`[ImageGenerator] Could not extract URL for ${category}`);
+      }
+    }
+
+    if (!imageUrl) {
+      console.error(`[ImageGenerator] Could not extract URL from output for ${category}`);
+      return null;
+    }
+
     console.log(`[ImageGenerator] Successfully generated image: ${imageUrl}`);
 
     return imageUrl;
