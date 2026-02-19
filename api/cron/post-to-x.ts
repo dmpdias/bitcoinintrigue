@@ -14,30 +14,12 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { storageService } from '../../services/storageService';
+import { xService } from '../../services/xService';
 
 export const config = {
   maxDuration: 30,
 };
-
-// Mock implementations for demo (replace with actual service imports)
-const mockStorageService = {
-  getXPostingScheduleEntriesDue: async () => [],
-  updateXPostingScheduleEntry: async () => {},
-  trackDistribution: async () => {},
-};
-
-const mockXService = {
-  postTweet: async (text: string, token: string) => ({
-    id: 'tweet-123',
-    url: 'https://twitter.com/i/web/status/123',
-    text,
-  }),
-};
-
-// Mock author agents (replace with actual DB query)
-const getAuthorCredentials = async (authorId: string) => ({
-  bearerToken: process.env.X_BEARER_TOKEN,
-});
 
 export default async function handler(req: NextRequest) {
   // Verify this is called by Vercel cron
@@ -51,9 +33,8 @@ export default async function handler(req: NextRequest) {
   const errors: string[] = [];
 
   try {
-    // Get all due posts
-    // NOTE: In production, import and use actual storageService
-    const duePostings = await mockStorageService.getXPostingScheduleEntriesDue();
+    // Get all posts due to be posted (scheduled_time <= now, status='scheduled')
+    const duePostings = await storageService.getXPostingScheduleEntriesDue();
 
     if (duePostings.length === 0) {
       return NextResponse.json({
@@ -65,68 +46,71 @@ export default async function handler(req: NextRequest) {
       });
     }
 
+    // Get author credentials (Bitcoin Intrigue agent)
+    const authorId = 'agent-bitcoinintrigue';
+    const author = await storageService.getAuthorAgent(authorId);
+
+    if (!author || !author.xCredentials?.bearerToken) {
+      return NextResponse.json({
+        success: false,
+        error: 'X API credentials not configured for author agent',
+        posted: 0,
+        failed: 0,
+        skipped: duePostings.length,
+        timestamp: new Date().toISOString(),
+      });
+    }
+
     for (const posting of duePostings) {
       try {
-        // Get X credentials from author_agents table
-        // TODO: In production, fetch from DB based on posting distribution config
-        const authorId = 'agent-bitcoinintrigue';
-        const credentials = await getAuthorCredentials(authorId);
-
-        if (!credentials || !credentials.bearerToken) {
-          errors.push(`Posting ${posting.id}: X credentials not found`);
-          skipped++;
-          continue;
-        }
-
-        // Post tweet to X
+        // Post tweet to X API
         try {
-          // NOTE: In production, use actual xService.postTweet
-          const result = await mockXService.postTweet(posting.postText, credentials.bearerToken);
+          const result = await xService.postTweet(posting.postText, author.xCredentials.bearerToken);
 
-          // Update posting record with success
-          await mockStorageService.updateXPostingScheduleEntry(posting.id, {
-            postedTime: new Date().toISOString(),
-            postUrl: result.url,
-            status: 'posted',
-          });
+          if (result && result.id && result.url) {
+            // Update posting record with success
+            await storageService.updateXPostingScheduleEntry(posting.id, {
+              postedTime: new Date().toISOString(),
+              postUrl: result.url,
+              status: 'posted',
+            });
 
-          // Track distribution event
-          await mockStorageService.trackDistribution({
-            id: `dist-${posting.id}`,
-            issueId: posting.issueId,
-            channel: 'x',
-            timestamp: new Date().toISOString(),
-            status: 'sent',
-            scheduledTime: posting.scheduledTime,
-            authorAgentId: authorId,
-          });
-
-          posted++;
+            posted++;
+          } else {
+            // Unexpected response format
+            errors.push(`Posting ${posting.id}: Invalid X API response`);
+            await storageService.updateXPostingScheduleEntry(posting.id, {
+              status: 'failed',
+              errorMessage: 'Invalid X API response',
+            });
+            failed++;
+          }
         } catch (postError: any) {
           // Handle specific error cases
-          if (postError.message.includes('Rate limited')) {
-            // Stop processing on rate limit - resume next cycle
+          if (postError.message.includes('429') || postError.message.includes('Rate limited')) {
+            // Rate limited - stop processing and resume next cycle
             console.warn('Rate limited by X API - resuming next cycle');
             break;
           }
 
           if (postError.message.includes('401') || postError.message.includes('Unauthorized')) {
-            // Credentials invalid - skip this posting
-            errors.push(`Posting ${posting.id}: Invalid credentials`);
-            await mockStorageService.updateXPostingScheduleEntry(posting.id, {
+            // Credentials invalid - mark all as failed and stop
+            errors.push(`X API authentication failed: ${postError.message}`);
+            await storageService.updateXPostingScheduleEntry(posting.id, {
               status: 'failed',
               errorMessage: 'Invalid X API credentials',
             });
+            failed++;
+            break;
           } else {
             // Other errors - mark as failed but continue
             errors.push(`Posting ${posting.id}: ${postError.message}`);
-            await mockStorageService.updateXPostingScheduleEntry(posting.id, {
+            await storageService.updateXPostingScheduleEntry(posting.id, {
               status: 'failed',
               errorMessage: postError.message,
             });
+            failed++;
           }
-
-          failed++;
         }
       } catch (err: any) {
         failed++;
