@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitcoin Intrigue - Issue #189</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #1a1a1a;
+        }
+
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            line-height: 1.6;
+        }
+
+        /* HEADER */
+        .header {
+            background-color: #0d1b2a;
+            color: #ffffff;
+            padding: 32px 24px;
+            text-align: center;
+            border-bottom: 4px solid #f4611e;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .logo-intrigue {
+            color: #f4611e;
+        }
+
+        .issue-date {
+            font-size: 12px;
+            color: #b0c4de;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .toc {
+            font-size: 13px;
+            line-height: 1.8;
+            color: #e0e6ed;
+        }
+
+        .toc-line {
+            margin: 4px 0;
+        }
+
+        /* OPENING */
+        .opening {
+            padding: 28px 24px;
+            font-size: 15px;
+            color: #333;
+            line-height: 1.7;
+        }
+
+        /* STORY BLOCKS */
+        .story {
+            padding: 0 24px 28px 24px;
+            border-top: 1px solid #e5e5e5;
+            padding-top: 28px;
+        }
+
+        .story:first-of-type {
+            border-top: none;
+            padding-top: 0;
+        }
+
+        .label {
+            font-size: 10px;
+            font-weight: 700;
+            color: #f4611e;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .story-headline {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0d1b2a;
+            margin-bottom: 16px;
+            line-height: 1.3;
+        }
+
+        .story-body {
+            font-size: 15px;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        .story-paragraph {
+            margin-bottom: 12px;
+        }
+
+        .stats-strip {
+            background-color: #f5f5f5;
+            padding: 16px 12px;
+            margin: 20px 0;
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            font-size: 13px;
+            border-left: 4px solid #f4611e;
+        }
+
+        .stat {
+            flex: 1;
+        }
+
+        .stat-label {
+            font-size: 10px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #0d1b2a;
+        }
+
+        .intrigue-take {
+            background-color: #0d1b2a;
+            color: #ffffff;
+            padding: 20px 16px;
+            margin: 20px 0;
+            font-size: 14px;
+            line-height: 1.7;
+            font-style: italic;
+            border-left: 4px solid #f4611e;
+        }
+
+        .cta-link {
+            color: #f4611e;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            display: inline-block;
+            margin-top: 8px;
+        }
+
+        .cta-link:hover {
+            text-decoration: underline;
+        }
+
+        /* SPONSOR */
+        .sponsor {
+            background-color: #f9f4ef;
+            padding: 28px 24px;
+            border-left: 4px solid #f4611e;
+            margin: 28px 0;
+        }
+
+        .sponsor-label {
+            font-size: 11px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .sponsor-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0d1b2a;
+            margin-bottom: 12px;
+        }
+
+        .sponsor-copy {
+            font-size: 14px;
+            color: #1a1a1a;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        /* POLL */
+        .poll {
+            padding: 28px 24px;
+            background-color: #fafafa;
+            border: 1px solid #e5e5e5;
+            margin: 28px 0;
+        }
+
+        .poll-label {
+            font-size: 11px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+
+        .poll-question {
+            font-size: 16px;
+            font-weight: 700;
+            color: #0d1b2a;
+            margin-bottom: 16px;
+        }
+
+        .poll-option {
+            font-size: 14px;
+            color: #1a1a1a;
+            padding: 12px;
+            margin-bottom: 8px;
+            border: 2px solid #e5e5e5;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .poll-option:hover {
+            border-color: #f4611e;
+            background-color: #fff9f5;
+        }
+
+        .poll-note {
+            font-size: 12px;
+            color: #888;
+            margin-top: 12px;
+            font-style: italic;
+        }
+
+        /* FOOTER */
+        .footer {
+            background-color: #0d1b2a;
+            color: #b0c4de;
+            padding: 32px 24px;
+            text-align: center;
+            font-size: 13px;
+            line-height: 1.8;
+            border-top: 4px solid #f4611e;
+        }
+
+        .footer-logo {
+            font-size: 16px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 16px;
+        }
+
+        .footer-logo-intrigue {
+            color: #f4611e;
+        }
+
+        .footer-links {
+            margin: 16px 0;
+            font-size: 12px;
+        }
+
+        .footer-links a {
+            color: #f4611e;
+            text-decoration: none;
+            margin: 0 8px;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-tagline {
+            margin-top: 16px;
+            font-size: 12px;
+            color: #888;
+            font-style: italic;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 640px) {
+            .email-container {
+                max-width: 100%;
+            }
+
+            .header {
+                padding: 24px 16px;
+            }
+
+            .story {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+
+            .sponsor {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+
+            .poll {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+
+            .story-headline {
+                font-size: 18px;
+            }
+
+            .stats-strip {
+                flex-direction: column;
+            }
+
+            .stat {
+                margin-bottom: 12px;
+            }
+
+            .stat:last-child {
+                margin-bottom: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+
+        <!-- HEADER -->
+        <div class="header">
+            <div class="logo">Bitcoin <span class="logo-intrigue">Intrigue</span></div>
+            <div class="issue-date">Issue #189 · Thursday, February 19, 2026</div>
+            <div class="toc">
+                <div class="toc-line">→ Bitcoin dips but the quiet matters more</div>
+                <div class="toc-line">→ Thailand's Bitcoin move explained</div>
+                <div class="toc-line">→ The person who owns most Bitcoin</div>
+                <div class="toc-line">→ What wallets actually do (it's not what you think)</div>
+                <div class="toc-line">→ We tested Coinbase. Here's what we found.</div>
+            </div>
+        </div>
+
+        <!-- OPENING -->
+        <div class="opening">
+            <p>Today we're looking at Bitcoin's quiet moments, a country that just made a bold move, and the person sitting on the world's largest private Bitcoin stash. Plus: what actually happens inside a wallet, and whether Coinbase is beginner-friendly.</p>
+            <p>No charts. No jargon. Just the story.</p>
+        </div>
+
+        <!-- STORY 1: PRICE STORY -->
+        <div class="story">
+            <span class="label">Price Story · 4 Min Read</span>
+            <h2 class="story-headline">Bitcoin Dips 0.78% – Here's Why the Quiet Matters More Than the Drop</h2>
+
+            <div class="story-body">
+                <div class="story-paragraph">Bitcoin dropped from $62,100 to $61,500 overnight. On the surface: not much. But the volume of trades fell too, which tells a different story. When price moves on low volume, it means fewer people are pushing the button. That's a sign of uncertainty.</div>
+
+                <div class="story-paragraph">Usually when Bitcoin sells off hard, the news is dramatic. A regulation threat. A hack. A celebrity meltdown. This time? No single story explains it. A few traders took profits. Some bots rebalanced. A small amount of liquidations rippled through.</div>
+
+                <div class="story-paragraph">Here's the thing: stability in crypto is still unusual. Bitcoin spent years being wildly volatile. Now when it moves 0.78%, people notice. That's actually progress. It means we're treating it less like a lottery ticket and more like an asset that people hold long-term.</div>
+            </div>
+
+            <div class="stats-strip">
+                <div class="stat">
+                    <div class="stat-label">BTC Price</div>
+                    <div class="stat-value">$61,500</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">24h Change</div>
+                    <div class="stat-value">−0.78%</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Fear/Greed</div>
+                    <div class="stat-value">42/100</div>
+                </div>
+            </div>
+
+            <div class="intrigue-take">
+                To me, the small drop on light volume is actually reassuring. It means the market isn't panicking. No one's screaming. No exchange is crashing. It's just people making small adjustments. A few years ago, a 0.78% move would trigger headlines about "market volatility." Now it's barely a ripple. What does that shift tell us about how Bitcoin is being treated by the wider financial world?
+            </div>
+
+            <a href="#" class="cta-link">READ FULL STORY →</a>
+        </div>
+
+        <!-- STORY 2: WORLD STORY -->
+        <div class="story">
+            <span class="label">World Story · 4 Min Read</span>
+            <h2 class="story-headline">Thailand Just Made Bitcoin Official. Here's What That Actually Means.</h2>
+
+            <div class="story-body">
+                <div class="story-paragraph">Thailand's central bank published new guidance this week. Bitcoin and crypto now have an official regulatory framework. They're not banning it. They're not promoting it. They're acknowledging it exists and writing rules around it. This is surprisingly rare for Southeast Asia.</div>
+
+                <div class="story-paragraph">What does "framework" mean in practice? Banks can now legally serve crypto customers. Exchanges need licenses. Users who trade crypto have to verify their identity (know-your-customer rules). It's basically the same playbook El Salvador used, but more cautious. Thailand is saying: we'll allow this, but we're watching.</div>
+
+                <div class="story-paragraph">Why does this matter beyond Thailand? Because Southeast Asia is young, growing, and still deciding how to treat crypto. When a major economy like Thailand moves, others watch. If Thailand's framework works—if crime doesn't spike, if people don't lose their life savings to scams—other countries will copy it. If it goes wrong, they'll reject it entirely.</div>
+            </div>
+
+            <div class="stats-strip">
+                <div class="stat">
+                    <div class="stat-label">Population</div>
+                    <div class="stat-value">71.8M</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Crypto Users</div>
+                    <div class="stat-value">3.2M+</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Status</div>
+                    <div class="stat-value">Legal</div>
+                </div>
+            </div>
+
+            <div class="intrigue-take">
+                What strikes me is the caution in Thailand's approach. They're not going full El Salvador. No one's making it legal tender. They're just creating rules and saying: go ahead, but register. It's the boring version of adoption, which might actually be smarter. Does having rules make crypto safer or does it slow down the whole thing? I genuinely don't know.
+            </div>
+
+            <a href="#" class="cta-link">READ FULL STORY →</a>
+        </div>
+
+        <!-- SPONSOR -->
+        <div class="sponsor">
+            <div class="sponsor-label">Today's Issue Is Supported By</div>
+            <div class="sponsor-name">Ledger</div>
+            <div class="sponsor-copy">If you own Bitcoin, storing it on an exchange is like keeping cash under your bed. Ledger's hardware wallet holds your Bitcoin offline, where it's actually secure. Used by millions. No affiliation. Just honest.</div>
+            <a href="#" class="cta-link">CHECK IT OUT →</a>
+        </div>
+
+        <!-- STORY 3: CURIOSITY -->
+        <div class="story">
+            <span class="label">Curiosity · 3 Min Read</span>
+            <h2 class="story-headline">The Man Who Owns More Bitcoin Than Most Countries. Yes, Really.</h2>
+
+            <div class="story-body">
+                <div class="story-paragraph">Mike Novogratz is a hedge fund manager who owns approximately 145,000 Bitcoin. At today's price, that's roughly $8.9 billion worth. To put that in perspective: fewer than 2 million people on Earth own any Bitcoin at all. This one person owns enough to rank in the top 0.0001%.</div>
+
+                <div class="story-paragraph">He didn't inherit it. He built a crypto hedge fund in 2018 when Bitcoin was crashing. He bought when everyone else was selling. He's been clear about this: he thinks Bitcoin is going higher, possibly much higher. So he holds. In finance, that's called conviction. In reality, it's a bet.</div>
+
+                <div class="story-paragraph">Here's what's interesting: a single person now controls a meaningful amount of the world's Bitcoin supply. Not enough to crash the market alone, but enough to matter. When he speaks, markets move. When he buys, volume spikes. Does that bother you? It bothers some people. Others see it as proof that Bitcoin works—if you believed early and stuck with it, you get rewarded.</div>
+            </div>
+
+            <div class="stats-strip">
+                <div class="stat">
+                    <div class="stat-label">BTC Owned</div>
+                    <div class="stat-value">~145K</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Percentage</div>
+                    <div class="stat-value">0.69%</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Est. Value</div>
+                    <div class="stat-value">$8.9B</div>
+                </div>
+            </div>
+
+            <div class="intrigue-take">
+                To me, this raises a real question: is Bitcoin decentralized if a handful of people own a huge percentage? Technically, decentralization means no single authority controls the network. And that's true—even if Novogratz sold all his Bitcoin tomorrow, the network wouldn't miss a beat. But wealth concentration is wealth concentration. Does it matter differently when the asset is Bitcoin?
+            </div>
+
+            <a href="#" class="cta-link">READ FULL STORY →</a>
+        </div>
+
+        <!-- POLL -->
+        <div class="poll">
+            <div class="poll-label">Today's Question</div>
+            <div class="poll-question">Did you check your Bitcoin balance today?</div>
+
+            <div class="poll-option">○ Yes, twice</div>
+            <div class="poll-option">○ No, I trust the process</div>
+            <div class="poll-option">○ I forgot I owned Bitcoin</div>
+
+            <div class="poll-note">(Results in tomorrow's edition)</div>
+        </div>
+
+        <!-- STORY 4: EDUCATION -->
+        <div class="story">
+            <span class="label">Education · 5 Min Read</span>
+            <h2 class="story-headline">What Is a Bitcoin Wallet? (And Why the Name Is Slightly Misleading)</h2>
+
+            <div class="story-body">
+                <div class="story-paragraph">Here's the trap: a Bitcoin wallet doesn't actually hold Bitcoin. It holds keys. Specifically, it holds a "private key"—a long string of characters that proves you own your Bitcoin. The Bitcoin itself lives on the blockchain (a public ledger). Your wallet is just the thing that unlocks it, like a password.</div>
+
+                <div class="story-paragraph">Think of it this way. A Bitcoin address is your account number. Anyone can send Bitcoin to your address. Your private key is your password. Never share it. If someone gets your private key, they own your Bitcoin. Not because they know where it is—because they can prove they're you.</div>
+
+                <div class="story-paragraph">There are different types of wallets: apps on your phone (hot wallets), hardware devices like USB sticks (cold wallets), or even just written down on paper (paper wallets). Hot wallets are convenient but less secure. Cold wallets are secure but less convenient. Most people use both: small amounts in apps, large amounts in cold storage.</div>
+            </div>
+
+            <div class="stats-strip">
+                <div class="stat">
+                    <div class="stat-label">Types</div>
+                    <div class="stat-value">3 Main</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Key Length</div>
+                    <div class="stat-value">256 Bits</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Risk</div>
+                    <div class="stat-value">Human Error</div>
+                </div>
+            </div>
+
+            <div class="intrigue-take">
+                What strikes me is how much responsibility falls on the user. A bank manages your password. If you forget it, they can reset it. With Bitcoin, if you lose your private key, your Bitcoin is gone forever. There's no customer service department. There's no way to recover it. That's freedom, I guess. But it's also terrifying. Does that feel like a feature or a bug?
+            </div>
+
+            <a href="#" class="cta-link">READ FULL STORY →</a>
+        </div>
+
+        <!-- STORY 5: REAL LIFE -->
+        <div class="story">
+            <span class="label">Real Life · 4 Min Read</span>
+            <h2 class="story-headline">We Tested Coinbase for Beginners. Here Is the Honest Version.</h2>
+
+            <div class="story-body">
+                <div class="story-paragraph">Our team signed up for Coinbase as complete newbies. No crypto experience. Just three questions: Is it obvious what to do? Is it actually secure? Will you charge me to death? Verdict: two out of three, which is better than most financial apps.</div>
+
+                <div class="story-paragraph">The good: verification takes 5 minutes. Buying Bitcoin is straightforward—pick an amount, confirm, done. The interface is clean. You can see your Bitcoin in real-time. The security features are solid (two-factor authentication, email confirmations). Coinbase has been around since 2012 and it hasn't been hacked.</div>
+
+                <div class="story-paragraph">The bad: their fees are higher than other exchanges. If you buy $100 of Bitcoin, Coinbase takes about $1.49 in fees. Smaller exchanges charge less. Also, you can't export your Bitcoin to a private wallet without jumping through hoops. They want to keep you on their platform.</div>
+            </div>
+
+            <div class="stats-strip">
+                <div class="stat">
+                    <div class="stat-label">Setup Time</div>
+                    <div class="stat-value">5 Min</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Fees</div>
+                    <div class="stat-value">1.49%</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-label">Security</div>
+                    <div class="stat-value">Strong</div>
+                </div>
+            </div>
+
+            <div class="intrigue-take">
+                To me, Coinbase is the training wheels version of crypto. It's safe. It's obvious. But you're trusting them to hold your Bitcoin. There's a reason crypto people say "not your keys, not your coins." Coinbase has your coins. They say they won't touch them, and they probably mean it. But they do have them. Does the convenience outweigh that trade-off for you?
+            </div>
+
+            <a href="#" class="cta-link">READ FULL STORY →</a>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <div class="footer-logo">Bitcoin <span class="footer-logo-intrigue">Intrigue</span></div>
+            <p>You're receiving this because you signed up at bitcoinintrigue.com</p>
+            <div class="footer-links">
+                <a href="#">Manage Preferences</a> ·
+                <a href="#">Unsubscribe</a> ·
+                <a href="#">Read on Web</a>
+            </div>
+            <p>© 2026 Bitcoin Intrigue. Made for everyday people.</p>
+            <p class="footer-tagline">No jargon. No hype. Just the story.</p>
+        </div>
+
+    </div>
+</body>
+</html>
