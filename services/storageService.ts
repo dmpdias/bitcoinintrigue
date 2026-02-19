@@ -225,28 +225,41 @@ export const storageService = {
   // --- SCHEDULES (Automation & Scheduling System) ---
 
   getSchedules: async (): Promise<any[]> => {
-    const { data, error } = await supabase
-      .from('schedules')
-      .select('*')
-      .order('created_at', { ascending: false });
+    try {
+      console.log('[storageService] getSchedules: Starting query...');
+      const { data, error } = await supabase
+        .from('schedules')
+        .select('*')
+        .order('created_at', { ascending: false });
 
-    if (error) {
-      console.error('Error fetching schedules:', error);
-      return [];
+      console.log('[storageService] getSchedules: Query complete');
+      console.log('[storageService] getSchedules: data =', data);
+      console.log('[storageService] getSchedules: error =', error);
+
+      if (error) {
+        console.error('[storageService] getSchedules: Supabase error:', error);
+        throw error;
+      }
+
+      const schedules = (data || []).map((s: any) => ({
+        id: s.id,
+        name: s.name,
+        description: s.description,
+        workflowId: s.workflow_id,
+        cronExpression: s.cron_expression,
+        timezone: s.timezone,
+        isActive: s.is_active,
+        createdBy: s.created_by,
+        createdAt: s.created_at,
+        updatedAt: s.updated_at
+      }));
+
+      console.log('[storageService] getSchedules: Returning', schedules.length, 'schedules:', schedules);
+      return schedules;
+    } catch (err: any) {
+      console.error('[storageService] getSchedules: Exception:', err);
+      throw err;
     }
-
-    return (data || []).map((s: any) => ({
-      id: s.id,
-      name: s.name,
-      description: s.description,
-      workflowId: s.workflow_id,
-      cronExpression: s.cron_expression,
-      timezone: s.timezone,
-      isActive: s.is_active,
-      createdBy: s.created_by,
-      createdAt: s.created_at,
-      updatedAt: s.updated_at
-    }));
   },
 
   getSchedule: async (id: string): Promise<any | null> => {
