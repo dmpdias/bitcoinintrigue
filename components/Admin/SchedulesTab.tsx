@@ -25,6 +25,7 @@ export const SchedulesTab: React.FC<SchedulesTabProps> = ({ workflows, onLoadDat
   const [editingSchedule, setEditingSchedule] = useState<Partial<Schedule> | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [expandedHistoryId, setExpandedHistoryId] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   // Cron Presets
   const cronPresets = [
@@ -45,12 +46,28 @@ export const SchedulesTab: React.FC<SchedulesTabProps> = ({ workflows, onLoadDat
 
   const loadSchedules = async () => {
     setIsLoading(true);
+    setError(null);
     try {
+      console.log('[SchedulesTab] Loading schedules...');
       const loaded = await storageService.getSchedules();
+      console.log('[SchedulesTab] Loaded schedules:', loaded);
+      console.log('[SchedulesTab] Schedule count:', loaded.length);
+
+      if (!Array.isArray(loaded)) {
+        throw new Error(`Expected array, got ${typeof loaded}`);
+      }
+
       setSchedules(loaded);
-      onAddLog('System', `Loaded ${loaded.length} schedules`, 'info');
+      if (loaded.length > 0) {
+        onAddLog('System', `Loaded ${loaded.length} schedules`, 'success');
+      } else {
+        onAddLog('System', 'No schedules found in database', 'info');
+      }
     } catch (err: any) {
-      onAddLog('System', `Failed to load schedules: ${err.message}`, 'error');
+      console.error('[SchedulesTab] Error loading schedules:', err);
+      const errorMsg = err.message || 'Unknown error';
+      setError(errorMsg);
+      onAddLog('System', `Failed to load schedules: ${errorMsg}`, 'error');
     } finally {
       setIsLoading(false);
     }
@@ -172,6 +189,35 @@ export const SchedulesTab: React.FC<SchedulesTabProps> = ({ workflows, onLoadDat
   };
 
   return (
+    <div className="space-y-4">
+      {/* Error Display */}
+      {error && (
+        <div className="bg-red-50 border-2 border-red-200 p-4 rounded">
+          <div className="flex items-start gap-3">
+            <AlertCircle size={20} className="text-red-600 flex-shrink-0 mt-0.5" />
+            <div className="flex-grow">
+              <h3 className="font-black uppercase text-sm text-red-900">Error Loading Schedules</h3>
+              <p className="text-sm text-red-700 mt-1">{error}</p>
+              <button
+                onClick={loadSchedules}
+                className="mt-2 px-3 py-1 bg-red-600 text-white text-xs font-bold rounded hover:bg-red-700"
+              >
+                Retry
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Debug Info */}
+      {process.env.NODE_ENV === 'development' && (
+        <div className="bg-blue-50 border border-blue-200 p-2 rounded text-[10px] font-mono text-blue-700">
+          <div>Schedules Count: {schedules.length}</div>
+          <div>Is Loading: {isLoading ? 'true' : 'false'}</div>
+          <div>Workflows Available: {workflows.length}</div>
+        </div>
+      )}
+
     <div className="grid md:grid-cols-12 gap-6 h-[600px]">
       {/* Left: Schedule List */}
       <div className="md:col-span-3 bg-white border-2 border-slate-900 p-4 flex flex-col h-full shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
@@ -455,6 +501,7 @@ export const SchedulesTab: React.FC<SchedulesTabProps> = ({ workflows, onLoadDat
           )}
         </div>
       </div>
+    </div>
     </div>
   );
 };
