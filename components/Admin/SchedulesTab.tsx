@@ -105,7 +105,7 @@ export const SchedulesTab: React.FC<SchedulesTabProps> = ({ workflows, onLoadDat
   };
 
   return (
-    <div className="space-y-4 w-full">
+    <div className="md:col-span-12 h-full flex flex-col gap-4">
       {error && (
         <div className="bg-red-50 border-2 border-red-200 p-4 rounded flex items-start gap-3">
           <AlertCircle size={20} className="text-red-600 flex-shrink-0 mt-0.5" />
@@ -119,7 +119,7 @@ export const SchedulesTab: React.FC<SchedulesTabProps> = ({ workflows, onLoadDat
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 flex-1 min-h-0">
         {/* LEFT: Schedule List */}
         <div className="bg-white border-2 border-slate-900 p-4 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
           <div className="flex justify-between items-center mb-4">

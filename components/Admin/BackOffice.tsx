@@ -912,11 +912,13 @@ export const BackOffice: React.FC = () => {
 
         {/* SCHEDULES TAB */}
         {activeTab === 'schedules' && (
-          <SchedulesTab
-            workflows={workflows}
-            onLoadData={() => loadData(true)}
-            onAddLog={addLog}
-          />
+          <div className="grid md:grid-cols-12 gap-6 h-[600px]">
+            <SchedulesTab
+              workflows={workflows}
+              onLoadData={() => loadData(true)}
+              onAddLog={addLog}
+            />
+          </div>
         )}
 
         {/* AUTHOR TAB */}
