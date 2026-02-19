@@ -1,6 +1,7 @@
 
 import { GoogleGenAI } from "@google/genai";
 import { BriefingData, AgentDefinition } from "../types";
+import * as replicateService from "./replicateService";
 
 export const agentService = {
   /**
@@ -8,6 +9,12 @@ export const agentService = {
    */
   runStep: async (agent: AgentDefinition, context: string): Promise<string> => {
     if (!agent.isActive) return context;
+
+    // Handle image generation separately (doesn't need Gemini API)
+    if (agent.role === 'image') {
+      return await handleImageGeneration(context);
+    }
+
     if (!process.env.API_KEY) throw new Error("API Key missing");
 
     // Initialize the SDK right before use
@@ -105,3 +112,67 @@ export const agentService = {
     }
   }
 };
+
+/**
+ * Handle image generation for stories
+ * Parses the briefing JSON, generates images for each story, and returns updated JSON
+ */
+async function handleImageGeneration(context: string): Promise<string> {
+  try {
+    console.log('[ImageGenerationAgent] Starting image generation...');
+
+    // Parse the incoming briefing data
+    let briefing: BriefingData;
+    try {
+      // Remove markdown code blocks if present
+      const cleanedContext = context
+        .replace(/```json\n?/g, '')
+        .replace(/```\n?/g, '')
+        .trim();
+      briefing = JSON.parse(cleanedContext);
+    } catch (parseError) {
+      console.error('[ImageGenerationAgent] Failed to parse briefing JSON:', parseError);
+      return context; // Return original context if parsing fails
+    }
+
+    if (!briefing.stories || briefing.stories.length === 0) {
+      console.warn('[ImageGenerationAgent] No stories found in briefing');
+      return context;
+    }
+
+    // Generate images for stories that don't have them yet
+    console.log(`[ImageGenerationAgent] Generating images for ${briefing.stories.length} stories...`);
+
+    const storiesToProcess = briefing.stories.map((story) => ({
+      headline: story.headline,
+      category: story.category,
+    }));
+
+    // Generate all images in parallel
+    const imageUrls = await replicateService.generateImages(storiesToProcess);
+
+    // Update stories with generated image URLs
+    briefing.stories = briefing.stories.map((story, index) => {
+      if (imageUrls[index]) {
+        return {
+          ...story,
+          image: imageUrls[index],
+        };
+      }
+      return story;
+    });
+
+    // Log summary
+    const successCount = imageUrls.filter((url) => url !== null).length;
+    console.log(
+      `[ImageGenerationAgent] Successfully generated ${successCount}/${briefing.stories.length} images`
+    );
+
+    // Return updated briefing as JSON string
+    return JSON.stringify(briefing, null, 2);
+  } catch (error) {
+    console.error('[ImageGenerationAgent] Error during image generation:', error);
+    // Return original context on error to allow workflow to continue
+    return context;
+  }
+}

@@ -39,7 +39,7 @@ export interface AgentLog {
   type: 'info' | 'success' | 'warning' | 'error';
 }
 
-export type AgentRole = 'scout' | 'journalist' | 'reviewer' | 'social' | 'researcher' | 'planner' | 'writer' | 'seo';
+export type AgentRole = 'scout' | 'journalist' | 'reviewer' | 'social' | 'researcher' | 'planner' | 'writer' | 'seo' | 'image';
 
 export interface AgentDefinition {
   id: string;
