@@ -141,15 +141,10 @@ async function handleImageGeneration(context: string): Promise<string> {
     }
 
     // Generate images for stories that don't have them yet
-    console.log(`[ImageGenerationAgent] Generating images for ${briefing.stories.length} stories...`);
+    console.log(`[ImageGenerationAgent] Generating images for ${briefing.stories.length} stories with story-specific prompts...`);
 
-    const storiesToProcess = briefing.stories.map((story) => ({
-      headline: story.headline,
-      category: story.category,
-    }));
-
-    // Generate all images in parallel
-    const imageUrls = await replicateService.generateImages(storiesToProcess);
+    // Pass full Story objects to image generation service so it can read content
+    const imageUrls = await replicateService.generateImages(briefing.stories);
 
     // Update stories with generated image URLs
     briefing.stories = briefing.stories.map((story, index) => {

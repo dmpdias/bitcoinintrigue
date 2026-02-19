@@ -1,35 +1,75 @@
 import Replicate from 'replicate';
+import { Story } from '../types';
 
 // Initialize Replicate client
 const replicate = new Replicate({
   auth: process.env.REPLICATE_API_KEY,
 });
 
-// Image prompt templates by article category - Optimized for FLUX.1 [schnell]
-const promptTemplates: Record<string, string> = {
-  'price-story': `Modern editorial illustration for business article about Bitcoin price movements. Show contemporary scene: person on laptop monitoring markets, or traders in action. Clean lines, contemporary aesthetic. Warm navy and orange accents on cream background. Professional, financial. NO charts, graphs, or Bitcoin logos visible.`,
+/**
+ * Generate a custom prompt based on story content
+ * Reads the story headline and content to create a specific, editorial prompt
+ */
+function generateCustomPrompt(story: Story): string {
+  const { headline, content, category } = story;
 
-  'world-story': `Contemporary editorial illustration for global Bitcoin story. Show real locations, people in authentic settings, cultural context relevant to the headline. Modern, clean visual style. Warm navy, orange, cream palette. Human-centered. NO maps, flags, or logos.`,
+  // Extract key themes from content (first 2 paragraphs)
+  const contentPreview = content.slice(0, 2).join(' ').substring(0, 200);
 
-  'curiosity-story': `Modern editorial portrait for feature article. Real person, authentic moment, contemporary setting. Human interest. Clean, sophisticated aesthetic. Warm colors with good typography potential. Professional magazine quality. Contemporary context.`,
+  // Build editorial prompt that captures the specific story
+  let prompt = 'Editorial illustration for Bitcoin article. ';
 
-  'education-story': `Contemporary conceptual illustration for Bitcoin learning article. Show people learning - hands on devices, reading, thinking. Modern context. NO price charts or technical graphs. Warm, inviting, educational. Clean, contemporary visual style.`,
+  // Category-specific nuance
+  if (category.toUpperCase().includes('PRICE')) {
+    prompt += `Story: "${headline}". Show a single human moment in the moment of market tension - someone reacting to news, checking a device, moment of decision. `;
+    prompt += `Setting: contemporary office or home, real object (laptop, phone, notebook). `;
+    prompt += `Mood: contemplative, focused, realistic. `;
+  } else if (category.toUpperCase().includes('GLOBAL') || category.toUpperCase().includes('WORLD')) {
+    prompt += `Story: "${headline}". Show a real place and real people in authentic global context. `;
+    prompt += `Focus on the human element - a genuine moment of adoption, exchange, or cultural intersection. `;
+    prompt += `Setting: recognizable location, local detail, real object. `;
+    prompt += `Mood: hopeful, authentic, grounded. `;
+  } else if (category.toUpperCase().includes('WHALE')) {
+    prompt += `Story: "${headline}". Show the metaphorical weight of large-scale action - a human figure observing something significant. `;
+    prompt += `Setting: surveillance room, trading floor, computer screen perspective, real objects. `;
+    prompt += `Mood: watchful, analytical, calm focus. `;
+    prompt += `Suggest scale and importance without showing charts or data. `;
+  } else if (category.toUpperCase().includes('LESSON') || category.toUpperCase().includes('EDUCATION')) {
+    prompt += `Story: "${headline}". Show the moment of learning - a person discovering something. `;
+    prompt += `Setting: everyday setting with a book, device, or teaching moment. `;
+    prompt += `Mood: clarity, discovery, understanding, welcoming. `;
+    prompt += `Contemporary, approachable, non-intimidating visual. `;
+  } else if (category.toUpperCase().includes('SPOTLIGHT') || category.toUpperCase().includes('PROJECT')) {
+    prompt += `Story: "${headline}". Show real people using or interacting with technology. `;
+    prompt += `Setting: authentic everyday context - home, cafe, workspace. `;
+    prompt += `Mood: practical, human-centered, hopeful about technology. `;
+    prompt += `Focus on the relationship between person and tool. `;
+  } else {
+    prompt += `Story: "${headline}". Show a real human moment connected to the narrative. `;
+    prompt += `Authentic setting, genuine emotion, contemporary context. `;
+    prompt += `Mood: editorial, sophisticated, human-focused. `;
+  }
 
-  'real-life-story': `Modern editorial scene for real-life user story. Authentic human moment, genuine emotion, contemporary setting. Warm navy, orange, cream. Professional editorial quality. Clean lines, contemporary aesthetic. Real-world context.`,
+  // Visual rules always applied
+  prompt += `Visual style: editorial illustration (New Yorker, FT Weekend, Economist). `;
+  prompt += `Warm palette: cream, terracotta, navy, amber only. `;
+  prompt += `Clean lines, sophisticated, contemporary aesthetic. `;
+  prompt += `Lighting: natural, warm, editorial quality. `;
+  prompt += `No text, no charts, no logos, no coins, no rockets, no clichés. No Bitcoin symbols visible.`;
 
-  'newsletter-hero': `Contemporary editorial illustration for Bitcoin newsletter header. Modern, professional, financial storytelling without clichés. Warm navy, orange, cream. Human elements or abstract financial concept. NO rockets, moons, coins, or lambos. Clean, sophisticated.`,
-};
+  return prompt;
+}
 
 /**
  * Generate an editorial illustration image using Replicate's FLUX model
- * @param headline - Article headline
- * @param category - Article category (price-story, world-story, etc.)
+ * @param story - Story object with headline, content, and category
  * @returns Image URL or null if generation fails
  */
 export const generateImage = async (
-  headline: string,
-  category: string
+  story: Story
 ): Promise<string | null> => {
+  const headline = story.headline;
+  const category = story.category;
   try {
     // Validate inputs
     if (!headline || !category) {
@@ -37,13 +77,11 @@ export const generateImage = async (
       return null;
     }
 
-    // Get template prompt for this category
-    const template = promptTemplates[category] || promptTemplates['price-story'];
-
-    // Combine template with specific headline
-    const prompt = `${template}\n\nArticle topic: "${headline}"`;
+    // Generate custom prompt based on story content
+    const prompt = generateCustomPrompt(story);
 
     console.log(`[ImageGenerator] Generating image for: ${category} - ${headline}`);
+    console.log(`[ImageGenerator] Custom prompt: ${prompt.substring(0, 150)}...`);
 
     // Call Replicate FLUX.1 [schnell] model - optimized for speed and cost
     const output = await replicate.run(
@@ -113,18 +151,18 @@ export const generateImage = async (
 
 /**
  * Generate multiple images in parallel for stories
- * @param stories - Array of story headlines and categories
+ * @param stories - Array of Story objects with full content
  * @returns Array of image URLs (null for failed generations)
  */
 export const generateImages = async (
-  stories: Array<{ headline: string; category: string }>
+  stories: Story[]
 ): Promise<(string | null)[]> => {
   try {
-    console.log(`[ImageGenerator] Generating ${stories.length} images...`);
+    console.log(`[ImageGenerator] Generating ${stories.length} images with story-specific prompts...`);
 
     // Generate all images in parallel
     const promises = stories.map((story) =>
-      generateImage(story.headline, story.category)
+      generateImage(story)
     );
 
     const results = await Promise.all(promises);
