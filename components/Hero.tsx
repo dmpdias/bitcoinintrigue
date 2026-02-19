@@ -122,13 +122,6 @@ export const Hero: React.FC = () => {
               />
             </div>
 
-            {/* Zero Jargon Badge - Responsive positioning */}
-            <div className="absolute bottom-1 right-0.5 xs:bottom-2 xs:right-1 sm:bottom-6 sm:right-3 md:bottom-8 md:right-4 lg:bottom-auto lg:top-1/3 lg:right-[-40px] lg:transform lg:-translate-y-1/2 bg-white border-2 border-slate-900 rounded-full w-6 h-6 xs:w-7 xs:h-7 sm:w-12 sm:h-12 md:w-16 md:h-16 lg:w-28 lg:h-28 flex items-center justify-center z-30 shadow-[0.5px_0.5px_0px_0px_rgba(0,0,0,1)] xs:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] sm:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] md:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] lg:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] animate-float">
-                <div className="text-center">
-                    <Award size={8} className="mx-auto mb-0 text-slate-900 xs:w-1.5 xs:h-1.5 sm:w-3 sm:h-3 md:w-4 md:h-4 lg:w-6 lg:h-6" />
-                    <div className="font-black text-[3px] xs:text-[3.5px] sm:text-[6px] md:text-[8px] lg:text-xs leading-none uppercase">Zero<br/>Jargon</div>
-                </div>
-            </div>
           </div>
         </div>
 
