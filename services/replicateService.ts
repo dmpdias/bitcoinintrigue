@@ -96,23 +96,36 @@ export const generateImage = async (
 
     let predictionResponse;
     try {
+      console.log(`[ImageGenerator]    Headers: Content-Type: application/json, Authorization: Bearer [token]`);
+
+      const requestBody = {
+        version: 'black-forest-labs/flux-schnell', // FLUX.1 [schnell] model identifier
+        input: {
+          prompt: prompt,
+          aspect_ratio: '16:9',
+          num_outputs: 1,
+        },
+      };
+
+      console.log(`[ImageGenerator]    Request body size: ${JSON.stringify(requestBody).length} bytes`);
+
       predictionResponse = await fetch(`${REPLICATE_API_URL}/predictions`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${REPLICATE_API_TOKEN}`,
         },
-        body: JSON.stringify({
-          version: 'black-forest-labs/flux-schnell', // FLUX.1 [schnell] model identifier
-          input: {
-            prompt: prompt,
-            aspect_ratio: '16:9',
-            num_outputs: 1,
-          },
-        }),
+        body: JSON.stringify(requestBody),
       });
-    } catch (fetchError) {
-      console.error(`[ImageGenerator] ❌ Fetch error creating prediction:`, fetchError);
+    } catch (fetchError: any) {
+      // Detect CORS errors
+      if (fetchError.message.includes('CORS') || fetchError.message.includes('cross-origin')) {
+        console.error(`[ImageGenerator] ❌ CORS ERROR - Browser blocked request`);
+        console.error(`[ImageGenerator]    This happens when making API calls from browser to external API`);
+        console.error(`[ImageGenerator]    Solution: Image generation must run on backend/server`);
+      } else {
+        console.error(`[ImageGenerator] ❌ Network error: ${fetchError.message}`);
+      }
       return null;
     }
 
