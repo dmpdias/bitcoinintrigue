@@ -518,6 +518,34 @@ export const BackOffice: React.FC = () => {
                                      <input value={editingWorkflow.description} onChange={e => setEditingWorkflow({...editingWorkflow, description: e.target.value})} className="w-full bg-slate-50 border-2 border-slate-200 p-2 text-xs text-slate-600 focus:border-brand-600 outline-none" />
                                  </div>
 
+                                 {/* Approval Configuration */}
+                                 <div className="border-2 border-slate-100 p-4 bg-slate-50 rounded">
+                                     <div className="flex items-center gap-3 mb-3">
+                                         <input
+                                             type="checkbox"
+                                             checked={editingWorkflow.requiresApproval ?? true}
+                                             onChange={e => setEditingWorkflow({...editingWorkflow, requiresApproval: e.target.checked})}
+                                             className="w-4 h-4 cursor-pointer accent-brand-600"
+                                             id="requires-approval"
+                                         />
+                                         <label htmlFor="requires-approval" className="text-[10px] font-black uppercase text-slate-400 cursor-pointer">
+                                             Require Approval Before Publishing
+                                         </label>
+                                     </div>
+
+                                     {editingWorkflow.requiresApproval && (
+                                         <div>
+                                             <label className="text-[10px] font-black uppercase text-slate-400 mb-1 block">Approval Message (Optional)</label>
+                                             <textarea
+                                                 value={editingWorkflow.approvalMessage ?? ''}
+                                                 onChange={e => setEditingWorkflow({...editingWorkflow, approvalMessage: e.target.value})}
+                                                 placeholder="e.g., 'Please review for clarity and accuracy before publishing to X'"
+                                                 className="w-full h-16 bg-white border-2 border-slate-200 p-2 text-xs text-slate-600 focus:border-brand-600 outline-none resize-none"
+                                             />
+                                         </div>
+                                     )}
+                                 </div>
+
                                  {/* Steps Editor */}
                                  <div className="flex-grow flex flex-col border-2 border-slate-100 bg-slate-50 p-4 overflow-hidden">
                                      <label className="text-[10px] font-black uppercase text-slate-400 mb-3 block">Sequence</label>

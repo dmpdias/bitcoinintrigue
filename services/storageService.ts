@@ -113,7 +113,9 @@ export const storageService = {
         name: w.name,
         description: w.description,
         steps: w.steps,
-        isActive: w.is_active
+        isActive: w.is_active,
+        requiresApproval: w.requires_approval ?? true,
+        approvalMessage: w.approval_message
     }));
   },
   
@@ -123,7 +125,9 @@ export const storageService = {
       name: workflow.name,
       description: workflow.description,
       steps: workflow.steps,
-      is_active: workflow.isActive
+      is_active: workflow.isActive,
+      requires_approval: workflow.requiresApproval ?? true,
+      approval_message: workflow.approvalMessage
     });
     if (error) throw error;
   },
