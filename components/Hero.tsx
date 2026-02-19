@@ -52,146 +52,21 @@ export const Hero: React.FC = () => {
 
         <div className="flex flex-col lg:grid lg:grid-cols-12 gap-2 xs:gap-3 sm:gap-5 md:gap-6 lg:gap-8 items-center">
 
-          <div className="w-full lg:col-span-6 order-1 lg:order-2 relative h-[100px] xs:h-[140px] sm:h-[280px] md:h-[500px] lg:h-[600px] flex items-center justify-center lg:justify-end z-0 mt-0 lg:mt-0">
-
-            <div className="absolute top-0.5 xs:top-1 sm:top-3 md:top-4 left-0.5 xs:left-1 sm:left-3 md:left-4 w-[88%] xs:w-[86%] sm:w-[78%] md:w-[80%] bg-[#f4f1ea] rounded-lg border-2 border-slate-900 shadow-xl overflow-hidden transform -rotate-2 z-0 block lg:block h-[110px] xs:h-[130px] sm:h-[220px] md:h-[380px] lg:h-[450px]">
-                <div className="h-5 xs:h-6 sm:h-8 bg-[#e8e4db] border-b border-slate-200 flex items-center px-1.5 xs:px-2 sm:px-4 gap-1.5 xs:gap-2">
-                    <div className="flex gap-1">
-                        <div className="w-1.5 h-1.5 xs:w-2 xs:h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-slate-400"></div>
-                        <div className="w-1.5 h-1.5 xs:w-2 xs:h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-slate-400"></div>
-                        <div className="w-1.5 h-1.5 xs:w-2 xs:h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-slate-400"></div>
-                    </div>
-                    <div className="flex-grow mx-1 xs:mx-2 sm:mx-4 bg-[#f4f1ea] border border-slate-300 h-3.5 xs:h-4 sm:h-5 rounded-sm text-[7px] xs:text-[8px] sm:text-[10px] text-slate-500 flex items-center px-1.5 xs:px-2 font-mono">
-                        mail.google.com/inbox
-                    </div>
-                </div>
-                
-                <div className="flex flex-grow h-full">
-                    <div className="w-16 xs:w-20 sm:w-32 bg-[#e8e4db]/50 border-r border-slate-200 p-1.5 xs:p-2 sm:p-3 hidden xs:block">
-                         <div className="space-y-0.5 xs:space-y-1 sm:space-y-2">
-                             <div className="flex items-center gap-1.5 px-1.5 xs:px-2 py-0.5 xs:py-1 bg-brand-100 rounded text-brand-700">
-                                <Inbox size={10} className="xs:w-3 xs:h-3 sm:w-4 sm:h-4" />
-                                <span className="text-[7px] xs:text-[8px] sm:text-xs font-bold">Inbox</span>
-                             </div>
-                             <div className="flex items-center gap-1.5 px-1.5 xs:px-2 py-0.5 xs:py-1 text-slate-500">
-                                <Star size={10} className="xs:w-3 xs:h-3 sm:w-4 sm:h-4" />
-                                <span className="text-[7px] xs:text-[8px] sm:text-xs font-medium">Starred</span>
-                             </div>
-                             <div className="flex items-center gap-1.5 px-1.5 xs:px-2 py-0.5 xs:py-1 text-slate-500">
-                                <Clock size={10} className="xs:w-3 xs:h-3 sm:w-4 sm:h-4" />
-                                <span className="text-[7px] xs:text-[8px] sm:text-xs font-medium">Snoozed</span>
-                             </div>
-                         </div>
-                    </div>
-                    
-                    <div className="flex-grow flex flex-col bg-[#f4f1ea]">
-                        {[
-                            { subject: "Bitcoin hits $70k: What now? 🚀", date: "9:00 AM", unread: true, snippet: "The market just woke up..." },
-                            { subject: "The Whales are watching you 🐋", date: "Yesterday", unread: false, snippet: "Smart money is moving..." },
-                            { subject: "Why Texas loves mining 🤠", date: "Oct 24", unread: false, snippet: "It's not just about oil..." },
-                            { subject: "Daily Lesson: Lightning Network ⚡", date: "Oct 23", unread: false, snippet: "Imagine a faster highway..." },
-                            { subject: "ETF inflows just hit a record 📈", date: "Oct 22", unread: false, snippet: "Wall street is hungry..." },
-                        ].map((email, i) => (
-                            <div key={i} className={`flex items-center gap-1.5 xs:gap-2 sm:gap-3 py-1.5 xs:py-2 sm:py-3 px-1.5 xs:px-2 sm:px-4 border-b border-slate-200 hover:bg-black/5 ${email.unread ? 'bg-[#f4f1ea]' : 'bg-slate-100/50'}`}>
-                                <div className={`w-2.5 h-2.5 xs:w-3 xs:h-3 sm:w-4 sm:h-4 rounded border flex items-center justify-center shrink-0 ${email.unread ? 'border-slate-400' : 'border-slate-300'}`}>
-                                    {email.unread && <div className="w-1 h-1 xs:w-1.5 xs:h-1.5 sm:w-2.5 sm:h-2.5 bg-slate-300 rounded-sm"></div>}
-                                </div>
-                                <Star size={10} className={`shrink-0 xs:w-3 xs:h-3 sm:w-4 sm:h-4 ${email.unread ? 'text-slate-300' : 'text-yellow-400 fill-yellow-400'}`} />
-                                <div className="flex-grow min-w-0">
-                                     <div className="flex justify-between items-baseline mb-0.5">
-                                         <span className={`text-[8px] xs:text-[9px] sm:text-xs truncate mr-1.5 xs:mr-2 ${email.unread ? 'font-black text-slate-900' : 'font-bold text-slate-600'}`}>Bitcoin Intrigue</span>
-                                         <span className="text-[7px] xs:text-[8px] sm:text-[10px] text-slate-400 shrink-0">{email.date}</span>
-                                     </div>
-                                     <div className="flex items-center gap-1">
-                                        <span className={`text-[8px] xs:text-[9px] sm:text-xs truncate ${email.unread ? 'font-bold text-slate-900' : 'text-slate-600'}`}>
-                                            {email.subject}
-                                        </span>
-                                        <span className="hidden sm:inline text-[10px] text-slate-400 truncate">- {email.snippet}</span>
-                                     </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
+          <div className="w-full lg:col-span-6 order-1 lg:order-2 relative h-[220px] xs:h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] flex items-center justify-center lg:justify-end z-0 mt-4 xs:mt-2 sm:mt-0 lg:mt-0">
+            {/* Illustration - Mobile optimized */}
+            <div className="relative w-full h-full max-w-sm lg:max-w-none flex items-center justify-center px-2 xs:px-0">
+              <img
+                src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1200&auto=format&fit=crop"
+                alt="Person reading Bitcoin Intrigue with coffee and phone"
+                className="w-full h-full object-contain drop-shadow-xl rounded-lg"
+              />
             </div>
 
-            <div className="absolute right-0.5 xs:right-1 sm:right-2 md:right-8 lg:right-auto top-1 xs:top-1.5 sm:top-2 lg:static lg:right-auto lg:top-auto w-[75px] xs:w-[85px] sm:w-[140px] md:w-[280px] lg:w-[320px] bg-slate-900 rounded-[0.8rem] xs:rounded-[1rem] sm:rounded-[1.8rem] md:rounded-[2.5rem] lg:rounded-[3rem] border-[1.5px] xs:border-[2px] sm:border-[3px] md:border-[6px] lg:border-[8px] border-slate-900 shadow-lg md:shadow-2xl z-10 h-[130px] xs:h-[155px] sm:h-[280px] md:h-[500px] lg:h-[580px] overflow-hidden transform rotate-3 hover:rotate-0 transition-transform duration-500">
-                <div className="bg-[#f4f1ea] h-3 xs:h-3.5 sm:h-6 md:h-8 flex justify-between items-end px-2 xs:px-3 sm:px-5 pb-0.5 text-[5px] xs:text-[6px] sm:text-[8px] md:text-xs font-bold text-slate-900 select-none">
-                    <span>9:41</span>
-                    <div className="flex gap-0.5 xs:gap-1 items-center">
-                        <Wifi size={8} className="xs:w-2 xs:h-2 sm:w-3 sm:h-3" />
-                        <Battery size={8} className="xs:w-2 xs:h-2 sm:w-3 sm:h-3" />
-                    </div>
-                </div>
-
-                <div className="h-full w-full bg-[#f4f1ea] flex flex-col relative overflow-hidden">
-                    <div className="px-3 sm:px-4 py-2 sm:py-3 flex justify-between items-center border-b border-slate-900 bg-[#f4f1ea] sticky top-0 z-20">
-                         <div className="flex items-center gap-1.5">
-                            <div className="w-5 h-5 sm:w-6 sm:h-6 bg-brand-600 rounded-full flex items-center justify-center text-white shrink-0">
-                                <Bitcoin size={12} strokeWidth={2.5} className="sm:w-4 sm:h-4" />
-                            </div>
-                            <span className="font-sans font-black text-[10px] sm:text-xs md:text-sm text-brand-600 tracking-tight lowercase">
-                                intrigue
-                            </span>
-                         </div>
-                         <Menu size={16} className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-slate-900" />
-                    </div>
-
-                    <div className="overflow-y-auto flex-grow no-scrollbar pb-10">
-                        <div className="h-20 xs:h-24 sm:h-32 md:h-48 w-full bg-slate-200 relative">
-                             <img 
-                                src="https://images.unsplash.com/photo-1621416894569-0f39ed31d247?q=80&w=1000&auto=format&fit=crop" 
-                                className="w-full h-full object-cover" 
-                                alt="Bitcoin Coin" 
-                             />
-                             <div className="absolute inset-0 bg-gradient-to-t from-slate-900/50 to-transparent"></div>
-                             <span className="absolute bottom-2 left-2 sm:bottom-3 sm:left-3 bg-brand-600 text-white text-[6px] sm:text-[8px] md:text-[10px] font-bold uppercase px-1.5 py-0.5">
-                                Price Story
-                             </span>
-                        </div>
-                        
-                        <div className="p-3 sm:p-4 md:p-6 bg-[#f4f1ea]">
-                             <h3 className="font-serif font-black text-[10px] xs:text-xs sm:text-sm md:text-xl leading-tight text-slate-900 mb-2 sm:mb-3">
-                                 Bitcoin just pulled off a massive comeback to $70k
-                             </h3>
-                             
-                             <div className="flex items-center gap-1.5 sm:gap-2 mb-3 sm:mb-4 border-b border-slate-200 pb-2 sm:pb-3">
-                                 <div className="w-3 h-3 sm:w-4 sm:h-4 md:w-6 md:h-6 rounded-full bg-slate-300 overflow-hidden">
-                                     <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=intrigue" alt="avatar" />
-                                 </div>
-                                 <div className="text-[6px] sm:text-[8px] md:text-[10px] text-slate-500 font-bold uppercase">
-                                    By The Team • 4 min read
-                                 </div>
-                             </div>
-
-                             <div className="space-y-2 sm:space-y-3">
-                                 <div className="h-1.5 sm:h-2 bg-slate-200 rounded w-full"></div>
-                                 <div className="h-1.5 sm:h-2 bg-slate-200 rounded w-[95%]"></div>
-                                 <div className="h-1.5 sm:h-2 bg-slate-200 rounded w-[90%]"></div>
-                                 <div className="py-1 sm:py-2">
-                                     <div className="border-l-2 border-brand-600 pl-2 sm:pl-3">
-                                         <div className="h-2 sm:h-2.5 bg-slate-300 rounded w-[85%] mb-1"></div>
-                                         <div className="h-2 sm:h-2.5 bg-slate-300 rounded w-[60%]"></div>
-                                     </div>
-                                 </div>
-                                 <div className="h-1.5 sm:h-2 bg-slate-200 rounded w-full"></div>
-                             </div>
-                             
-                             <div className="mt-4 sm:mt-6 pt-3 border-t border-slate-200 text-center">
-                                 <div className="bg-slate-900 text-white text-[6px] sm:text-[8px] md:text-[10px] font-bold uppercase px-3 py-1.5 rounded-sm">
-                                     Subscribe to read more
-                                 </div>
-                             </div>
-                        </div>
-                    </div>
-                    <div className="absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-[#f4f1ea] to-transparent pointer-events-none"></div>
-                </div>
-            </div>
-
-            <div className="hidden md:flex absolute bottom-2 right-2 md:bottom-4 md:right-4 lg:right-[-20px] bg-white border-2 border-slate-900 rounded-full w-16 h-16 md:w-20 md:h-20 lg:w-28 lg:h-28 items-center justify-center z-30 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] md:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] lg:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] animate-float">
+            {/* Zero Jargon Badge - Mobile optimized position */}
+            <div className="absolute bottom-6 right-4 xs:bottom-8 xs:right-6 sm:bottom-10 sm:right-8 md:bottom-12 md:right-10 lg:bottom-auto lg:top-1/3 lg:right-[-40px] lg:transform lg:-translate-y-1/2 bg-white border-2 border-slate-900 rounded-full w-12 h-12 xs:w-14 xs:h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-28 lg:h-28 flex items-center justify-center z-30 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] xs:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] lg:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] animate-float">
                 <div className="text-center">
-                    <Award size={16} className="mx-auto mb-0.5 text-slate-900 md:w-5 md:h-5" />
-                    <div className="font-black text-[8px] md:text-[10px] lg:text-xs leading-none uppercase">Zero<br/>Jargon</div>
+                    <Award size={12} className="mx-auto mb-0.5 text-slate-900 xs:w-3 xs:h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 lg:w-6 lg:h-6" />
+                    <div className="font-black text-[6px] xs:text-[7px] sm:text-[8px] md:text-[10px] lg:text-xs leading-none uppercase">Zero<br/>Jargon</div>
                 </div>
             </div>
           </div>
