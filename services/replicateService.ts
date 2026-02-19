@@ -97,7 +97,7 @@ export const generateImage = async (
         'Authorization': `Bearer ${REPLICATE_API_TOKEN}`,
       },
       body: JSON.stringify({
-        version: '8faf1d2d24375a1707455fda7ec57f4d15d9f4db9b4b04f0a87c2e799e40b89e', // FLUX.1 [schnell] model version ID
+        version: 'black-forest-labs/flux-schnell', // FLUX.1 [schnell] model identifier
         input: {
           prompt: prompt,
           aspect_ratio: '16:9',
