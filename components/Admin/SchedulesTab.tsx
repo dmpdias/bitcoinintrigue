@@ -189,7 +189,7 @@ export const SchedulesTab: React.FC<SchedulesTabProps> = ({ workflows, onLoadDat
   };
 
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col h-screen gap-4 p-4">
       {/* Error Display */}
       {error && (
         <div className="bg-red-50 border-2 border-red-200 p-4 rounded">
@@ -211,16 +211,16 @@ export const SchedulesTab: React.FC<SchedulesTabProps> = ({ workflows, onLoadDat
 
       {/* Debug Info */}
       {process.env.NODE_ENV === 'development' && (
-        <div className="bg-blue-50 border border-blue-200 p-2 rounded text-[10px] font-mono text-blue-700">
-          <div>Schedules Count: {schedules.length}</div>
-          <div>Is Loading: {isLoading ? 'true' : 'false'}</div>
-          <div>Workflows Available: {workflows.length}</div>
+        <div className="bg-blue-50 border border-blue-200 p-3 rounded text-[10px] font-mono text-blue-700">
+          <div>✅ Schedules Count: {schedules.length}</div>
+          <div>⏳ Is Loading: {isLoading ? 'true' : 'false'}</div>
+          <div>📋 Workflows Available: {workflows.length}</div>
         </div>
       )}
 
-    <div className="grid md:grid-cols-12 gap-6 h-[600px]">
+    <div className="grid grid-cols-1 md:grid-cols-12 gap-6 flex-1 min-h-0">
       {/* Left: Schedule List */}
-      <div className="md:col-span-3 bg-white border-2 border-slate-900 p-4 flex flex-col h-full shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
+      <div className="col-span-1 md:col-span-3 bg-white border-2 border-slate-900 p-4 flex flex-col min-h-0 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
         <div className="flex justify-between items-center mb-4">
           <h3 className="font-black uppercase text-sm flex items-center gap-2">
             <Clock size={16} className="text-brand-600" /> Schedules
@@ -259,7 +259,7 @@ export const SchedulesTab: React.FC<SchedulesTabProps> = ({ workflows, onLoadDat
       </div>
 
       {/* Center: Schedule Editor */}
-      <div className="md:col-span-5 bg-white border-2 border-slate-900 p-6 flex flex-col h-full shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
+      <div className="col-span-1 md:col-span-5 bg-white border-2 border-slate-900 p-6 flex flex-col min-h-0 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
         {editingSchedule ? (
           <div className="flex flex-col h-full space-y-4">
             <h3 className="font-black uppercase text-sm flex items-center gap-2">
@@ -437,7 +437,7 @@ export const SchedulesTab: React.FC<SchedulesTabProps> = ({ workflows, onLoadDat
       </div>
 
       {/* Right: Execution History */}
-      <div className="md:col-span-4 bg-white border-2 border-slate-900 p-6 flex flex-col h-full shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
+      <div className="col-span-1 md:col-span-4 bg-white border-2 border-slate-900 p-6 flex flex-col min-h-0 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
         <h3 className="font-black uppercase text-sm mb-4">Execution History</h3>
         <div className="overflow-y-auto flex-grow space-y-2 pr-2 custom-scrollbar">
           {executionHistory.length > 0 ? (
