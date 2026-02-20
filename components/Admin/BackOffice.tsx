@@ -162,79 +162,54 @@ export const BackOffice: React.FC = () => {
 
     setIsRunning(true);
     addLog('System', `Starting Workflow: ${workflow.name}`, 'info');
-    
-    let context = ""; 
-    let currentDraft: BriefingData | null = null;
 
     try {
-      for (const agentId of workflow.steps) {
-        const agent = agents.find(a => a.id === agentId);
-        if (!agent || !agent.isActive) continue;
+      // ✅ FIX: Use agentService.runWorkflow() instead of duplicate implementation
+      // This respects the approval gate and halts properly
+      const agentsMap = new Map(agents.map(a => [a.id, a]));
 
-        addLog(agent.name, `Executing ${agent.role}...`, 'info');
-        
-        // Pass the context (previous step output) to the agent
-        const response = await agentService.runStep(agent, context);
-        
-        // Logic to handle Data Piping based on Role
-        if (agent.role === 'researcher' || agent.role === 'planner') {
-            context = response; // Text flow
-            addLog(agent.name, `Output generated (${response.length} chars).`, 'success');
-        } 
-        else if (agent.role === 'writer') {
-            context = response; 
-            currentDraft = parseBriefingJSON(response);
-            if (currentDraft) addLog(agent.name, `Draft written (${currentDraft.stories.length} stories).`, 'success');
-            else addLog(agent.name, 'Failed to parse JSON output.', 'warning');
-        } 
-        else if (agent.role === 'reviewer') {
-            context = response;
-            const reviewed = parseBriefingJSON(response);
-            if (reviewed) {
-                currentDraft = reviewed;
-                addLog(agent.name, 'Review complete.', 'success');
-            }
-        } 
-        else if (agent.role === 'seo') {
-            context = response;
-            const finalized = parseBriefingJSON(response);
-            if (finalized) {
-                currentDraft = finalized;
-                addLog(agent.name, 'SEO Metadata added.', 'success');
-            }
-        }
-        else if (agent.role === 'image') {
-            context = response;
-            const withImages = parseBriefingJSON(response);
-            if (withImages) {
-                currentDraft = withImages;
-                addLog(agent.name, 'Images generated and embedded.', 'success');
-            } else {
-                addLog(agent.name, 'Image generation completed.', 'success');
-            }
-        }
+      // Pass workflow.requiresApproval - if not set, defaults to true
+      const requiresApproval = workflow.requiresApproval ?? true;
+
+      const result = await agentService.runWorkflow(
+        workflow.id,
+        workflow.steps,
+        agentsMap,
+        requiresApproval
+      );
+
+      // Log execution details
+      for (const log of result.executionLogs) {
+        addLog(log.agent, `${log.status}${log.error ? ': ' + log.error : ''}`,
+          log.status === 'success' ? 'success' : log.status === 'warning' ? 'warning' : 'error');
       }
 
-      // Final Save
-      if (currentDraft) {
-          const finalIssue: BriefingData = {
-              ...currentDraft,
-              id: `issue-${Date.now()}`,
-              status: 'review', // Sets to Draft/Review mode
-              date: new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }),
-              issueNumber: (issues.length > 0 ? (issues[0].issueNumber || 100) + 1 : 1),
-              lastUpdated: new Date().toISOString()
-          };
-          
-          await storageService.saveIssue(finalIssue);
-          addLog('System', 'Draft saved to database.', 'success');
-          
-          await loadData();
-          setSelectedIssue(finalIssue);
-          setEditingStoryIndex(0);
-          setActiveTab('pipeline');
+      if (result.success && result.issue) {
+        // ✅ Save the issue to database
+        const finalIssue: BriefingData = {
+          ...result.issue,
+          issueNumber: (issues.length > 0 ? (issues[0].issueNumber || 100) + 1 : 1),
+          date: new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }),
+        };
+
+        await storageService.saveIssue(finalIssue);
+        addLog('System', 'Draft saved to database.', 'success');
+
+        // ✅ If workflow halted (requires approval), set to pending_review
+        if (result.halted) {
+          addLog('System', '⏸️ Awaiting your approval before publishing...', 'info');
+          await storageService.saveIssue({
+            ...finalIssue,
+            approvalStatus: 'pending_review'
+          });
+        }
+
+        await loadData();
+        setSelectedIssue(finalIssue);
+        setEditingStoryIndex(0);
+        setActiveTab('pipeline');
       } else {
-          addLog('System', 'Workflow finished but no valid JSON draft was generated.', 'warning');
+        addLog('System', 'Workflow failed to generate content.', 'error');
       }
 
     } catch (error: any) {
@@ -679,14 +654,38 @@ export const BackOffice: React.FC = () => {
                                  <h2 className="text-2xl font-black uppercase tracking-tight">{selectedIssue.intro?.headline || "Untitled Issue"}</h2>
                              </div>
                              <div className="flex gap-3">
-                                 <button 
-                                    onClick={async () => { 
-                                        const updated = { ...selectedIssue, status: 'published' as const };
+                                 <button
+                                    onClick={async () => {
+                                        // ✅ FIX: If pending_review, approve and run X Posting Agent first
+                                        if (selectedIssue.approvalStatus === 'pending_review') {
+                                          try {
+                                            addLog('System', 'Approving issue and generating X posts...', 'info');
+                                            const agentsMap = new Map(agents.map(a => [a.id, a]));
+                                            const resumeResult = await agentService.resumeWorkflowAfterApproval(selectedIssue, agentsMap);
+                                            if (resumeResult.success && resumeResult.tweets && resumeResult.tweets.length > 0) {
+                                              for (const tweet of resumeResult.tweets) {
+                                                await storageService.saveXPostingScheduleEntry({
+                                                  id: `x-post-${selectedIssue.id}-${Date.now()}-${Math.random()}`,
+                                                  issueId: selectedIssue.id,
+                                                  storyIndex: resumeResult.tweets.indexOf(tweet),
+                                                  postText: tweet.text,
+                                                  scheduledTime: tweet.scheduledTime,
+                                                  status: 'scheduled',
+                                                  createdAt: new Date().toISOString()
+                                                });
+                                              }
+                                              addLog('System', `Generated ${resumeResult.tweets.length} X posts with staggered times.`, 'success');
+                                            }
+                                          } catch (e: any) {
+                                            addLog('System', `Warning: Could not generate X posts: ${e.message}`, 'warning');
+                                          }
+                                        }
+                                        const updated = { ...selectedIssue, status: 'published' as const, approvalStatus: 'approved' as const, approvedAt: new Date().toISOString(), approvedBy: 'user' };
                                         await storageService.saveIssue(updated);
                                         setSelectedIssue(updated);
                                         setIssues(prev => prev.map(i => i.id === updated.id ? updated : i));
                                         addLog('System', 'Issue Published Live.', 'success');
-                                    }} 
+                                    }}
                                     className="bg-brand-600 text-white px-4 py-2 font-black uppercase text-xs hover:bg-brand-700 shadow-[2px_2px_0px_0px_rgba(15,23,42,1)] active:shadow-none active:translate-x-[1px] active:translate-y-[1px]"
                                  >
                                     {selectedIssue.status === 'published' ? 'Update Live' : 'Publish Live'}
