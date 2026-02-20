@@ -3,15 +3,34 @@ import { BriefingData, AgentDefinition, WorkflowDefinition, Subscriber, Analytic
 import { supabase, supabaseConfig } from './supabaseClient';
 
 // Helper to map DB snake_case to CamelCase
-const mapIssueFromDB = (i: any): BriefingData => ({
-  id: i.id,
-  issueNumber: i.issue_number,
-  date: i.date,
-  intro: i.intro,
-  stories: i.stories,
-  status: i.status,
-  lastUpdated: i.last_updated
-});
+const mapIssueFromDB = (i: any): BriefingData => {
+  // ✅ Validate and fix missing fields
+  const intro = i.intro || {};
+  if (!intro.headline) {
+    console.warn('[mapIssueFromDB] Issue missing headline:', i.id);
+    intro.headline = 'Bitcoin Market Update';
+  }
+  if (!intro.content) {
+    intro.content = '';
+  }
+
+  const stories = Array.isArray(i.stories) ? i.stories : [];
+
+  return {
+    id: i.id,
+    issueNumber: i.issue_number,
+    date: i.date,
+    intro,
+    stories,
+    status: i.status,
+    lastUpdated: i.last_updated,
+    approvalStatus: i.approval_status,
+    approvedAt: i.approved_at,
+    approvedBy: i.approved_by,
+    rejectionReason: i.rejection_reason,
+    scheduledFor: i.scheduled_for
+  };
+};
 
 export const storageService = {
   initialize: () => {
@@ -39,6 +58,20 @@ export const storageService = {
   },
   
   saveIssue: async (issue: BriefingData) => {
+    // ✅ Validate and fix issue structure before saving
+    if (!issue.intro?.headline) {
+      console.warn('[storageService] Issue missing headline, using default');
+      issue.intro = {
+        headline: issue.intro?.content?.split('\n')[0] || 'Bitcoin Market Update',
+        content: issue.intro?.content || ''
+      };
+    }
+
+    if (!Array.isArray(issue.stories)) {
+      console.warn('[storageService] Issue has invalid stories array, resetting to empty');
+      issue.stories = [];
+    }
+
     const { error } = await supabase.from('issues').upsert({
       id: issue.id,
       issue_number: issue.issueNumber,
@@ -46,6 +79,10 @@ export const storageService = {
       intro: issue.intro,
       stories: issue.stories,
       status: issue.status,
+      approval_status: issue.approvalStatus || undefined,
+      approved_at: issue.approvedAt || undefined,
+      approved_by: issue.approvedBy || undefined,
+      rejection_reason: issue.rejectionReason || undefined,
       last_updated: new Date().toISOString()
     });
     if (error) throw error;

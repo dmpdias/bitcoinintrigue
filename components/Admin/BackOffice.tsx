@@ -185,11 +185,33 @@ export const BackOffice: React.FC = () => {
       }
 
       if (result.success && result.issue) {
-        // ✅ Save the issue to database
+        // ✅ Ensure issue has required fields (fix missing headline)
+        const baseIssue = result.issue;
+
+        // Ensure intro structure with headline
+        if (!baseIssue.intro?.headline) {
+          console.warn('Missing headline in issue, using generated one');
+          const generatedHeadline = baseIssue.intro?.content?.split('\n')[0] || 'Bitcoin Market Update';
+          baseIssue.intro = {
+            headline: generatedHeadline,
+            content: baseIssue.intro?.content || ''
+          };
+        }
+
+        // Ensure stories array exists
+        if (!Array.isArray(baseIssue.stories)) {
+          console.warn('Missing or invalid stories array in issue');
+          baseIssue.stories = [];
+        }
+
+        // Create final issue with all required fields
         const finalIssue: BriefingData = {
-          ...result.issue,
+          ...baseIssue,
+          id: baseIssue.id || `issue-${Date.now()}`,
           issueNumber: (issues.length > 0 ? (issues[0].issueNumber || 100) + 1 : 1),
-          date: new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }),
+          date: baseIssue.date || new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }),
+          status: baseIssue.status || 'review',
+          lastUpdated: baseIssue.lastUpdated || new Date().toISOString()
         };
 
         await storageService.saveIssue(finalIssue);
@@ -682,9 +704,10 @@ export const BackOffice: React.FC = () => {
                                         }
                                         const updated = { ...selectedIssue, status: 'published' as const, approvalStatus: 'approved' as const, approvedAt: new Date().toISOString(), approvedBy: 'user' };
                                         await storageService.saveIssue(updated);
-                                        setSelectedIssue(updated);
-                                        setIssues(prev => prev.map(i => i.id === updated.id ? updated : i));
                                         addLog('System', 'Issue Published Live.', 'success');
+
+                                        // ✅ Reload data from database to ensure approval status is persisted
+                                        await loadData(true);
                                     }}
                                     className="bg-brand-600 text-white px-4 py-2 font-black uppercase text-xs hover:bg-brand-700 shadow-[2px_2px_0px_0px_rgba(15,23,42,1)] active:shadow-none active:translate-x-[1px] active:translate-y-[1px]"
                                  >
@@ -693,9 +716,9 @@ export const BackOffice: React.FC = () => {
                                  
                                  <button onClick={async () => { await storageService.saveIssue(selectedIssue); addLog('System', 'Saved.', 'success'); }} className="bg-slate-100 text-slate-900 px-4 py-2 font-black uppercase text-xs hover:bg-slate-200">Save</button>
                                  
-                                 <button 
+                                 <button
                                     type="button"
-                                    onClick={() => setDeleteTarget({ type: 'issue', id: selectedIssue.id, name: selectedIssue.intro.headline })}
+                                    onClick={() => setDeleteTarget({ type: 'issue', id: selectedIssue.id, name: selectedIssue.intro?.headline || selectedIssue.stories?.[0]?.headline || 'Untitled' })}
                                     className="p-2 text-slate-400 hover:text-red-600 border border-transparent hover:border-red-100 rounded"
                                  >
                                      <Trash2 size={18} />
