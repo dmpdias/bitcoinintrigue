@@ -79,10 +79,10 @@ export const storageService = {
       intro: issue.intro,
       stories: issue.stories,
       status: issue.status,
-      approval_status: issue.approvalStatus || undefined,
-      approved_at: issue.approvedAt || undefined,
-      approved_by: issue.approvedBy || undefined,
-      rejection_reason: issue.rejectionReason || undefined,
+      approval_status: issue.approvalStatus || null,
+      approved_at: issue.approvedAt || null,
+      approved_by: issue.approvedBy || null,
+      rejection_reason: issue.rejectionReason || null,
       last_updated: new Date().toISOString()
     });
     if (error) throw error;
