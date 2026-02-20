@@ -285,16 +285,50 @@ export const BackOffice: React.FC = () => {
 
   const handleApproveIssue = async (issue: BriefingData) => {
       try {
+          // ✅ FIX 3: Resume workflow after approval and generate tweets
           const updated = {
               ...issue,
               approvalStatus: 'approved' as const,
               approvedAt: new Date().toISOString(),
               approvedBy: 'user' // In real app, would be current user
           };
+
+          // Save approved issue
           await storageService.saveIssue(updated);
+          addLog('System', `Issue "${issue.intro?.headline || 'Untitled'}" approved. Generating X posts...`, 'success');
+
+          // Resume workflow to run X Posting Agent
+          try {
+              const allAgents = await storageService.getAgents();
+              const agentsMap = new Map(allAgents.map(a => [a.id, a]));
+
+              const resumeResult = await agentService.resumeWorkflowAfterApproval(updated, agentsMap);
+
+              if (resumeResult.success && resumeResult.tweets && resumeResult.tweets.length > 0) {
+                  // Save tweets to x_posting_schedule table
+                  for (const tweet of resumeResult.tweets) {
+                      await storageService.saveXPostingScheduleEntry({
+                          id: `x-post-${updated.id}-${Date.now()}-${Math.random()}`,
+                          issueId: updated.id,
+                          storyIndex: resumeResult.tweets.indexOf(tweet),
+                          postText: tweet.text,
+                          scheduledTime: tweet.scheduledTime,
+                          status: 'scheduled',
+                          createdAt: new Date().toISOString()
+                      });
+                  }
+
+                  addLog('System', `Generated ${resumeResult.tweets.length} X posts scheduled for staggered posting.`, 'success');
+              } else {
+                  addLog('System', 'X Posting Agent ran but no tweets were generated.', 'warning');
+              }
+          } catch (resumeErr: any) {
+              console.error('Error resuming workflow:', resumeErr);
+              addLog('System', `Warning: X posts could not be generated: ${resumeErr.message}`, 'warning');
+          }
+
           setSelectedIssue(updated);
           setIssues(prev => prev.map(i => i.id === updated.id ? updated : i));
-          addLog('System', `Issue "${issue.intro?.headline || 'Untitled'}" approved for publishing.`, 'success');
       } catch (e: any) {
           addLog('System', `Failed to approve issue: ${e.message}`, 'error');
       }

@@ -137,6 +137,13 @@ export const agentService = {
         const agent = agentsMap.get(agentId);
         if (!agent || !agent.isActive) continue;
 
+        // ✅ FIX 2: Halt workflow at approval gate if required
+        // Don't execute content_review or x_posting agents yet - they run after user approval
+        if (requiresApproval && (agent.role === 'content_review' || agent.role === 'x_posting')) {
+          console.log(`[Workflow] Halting at approval gate before agent: ${agent.name}`);
+          break; // Stop execution here - wait for user approval
+        }
+
         try {
           console.log(`[Workflow] Executing agent: ${agent.name} (${agent.role})`);
 
@@ -271,6 +278,122 @@ export const agentService = {
           error: error.message
         }],
         halted: false
+      };
+    }
+  },
+
+  /**
+   * Resume workflow after user approval
+   * Runs X Posting Agent to generate tweets and save them with staggered times
+   */
+  resumeWorkflowAfterApproval: async (
+    issue: BriefingData,
+    agentsMap: Map<string, AgentDefinition>
+  ): Promise<{
+    success: boolean;
+    tweets?: Array<{text: string; scheduledTime: string}>;
+    executionLogs: Array<{agent: string; status: string; error?: string}>;
+  }> => {
+    const executionLogs: Array<{agent: string; status: string; error?: string}> = [];
+    let tweets: Array<{text: string; scheduledTime: string}> = [];
+
+    try {
+      // Find X Posting Agent
+      const xPostingAgent = Array.from(agentsMap.values()).find(a => a.role === 'x_posting');
+
+      if (!xPostingAgent) {
+        console.warn('[Workflow] X Posting Agent not found');
+        return {
+          success: false,
+          tweets: [],
+          executionLogs: [{agent: 'System', status: 'error', error: 'X Posting Agent not found'}]
+        };
+      }
+
+      console.log(`[Workflow] Resuming after approval - Running: ${xPostingAgent.name}`);
+
+      try {
+        // Run X Posting Agent with approved briefing as context
+        const response = await agentService.runStep(xPostingAgent, JSON.stringify(issue));
+
+        // Parse tweets from response
+        try {
+          const cleaned = response.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+          const parsed = JSON.parse(cleaned);
+
+          if (parsed.posts && Array.isArray(parsed.posts)) {
+            // Generate staggered posting times (2-hour intervals starting from now)
+            const now = new Date();
+            const baseTime = new Date(now.getTime() + 2 * 60 * 60 * 1000); // Start 2 hours from now
+
+            tweets = parsed.posts.map((post: string, index: number) => {
+              const scheduledTime = new Date(baseTime.getTime() + (index * 2 * 60 * 60 * 1000)); // 2-hour gaps
+              return {
+                text: post,
+                scheduledTime: scheduledTime.toISOString()
+              };
+            });
+
+            console.log(`[Workflow] X Posting Agent generated ${tweets.length} tweets with staggered times`);
+            executionLogs.push({
+              agent: xPostingAgent.name,
+              status: 'success'
+            });
+
+            return {
+              success: true,
+              tweets,
+              executionLogs
+            };
+          } else {
+            console.warn('[Workflow] No posts array found in X Posting Agent response');
+            executionLogs.push({
+              agent: xPostingAgent.name,
+              status: 'warning',
+              error: 'No posts array in response'
+            });
+            return {
+              success: false,
+              tweets: [],
+              executionLogs
+            };
+          }
+        } catch (parseError: any) {
+          console.error('[Workflow] Failed to parse X Posting Agent response:', parseError);
+          executionLogs.push({
+            agent: xPostingAgent.name,
+            status: 'error',
+            error: `Failed to parse response: ${parseError.message}`
+          });
+          return {
+            success: false,
+            tweets: [],
+            executionLogs
+          };
+        }
+      } catch (agentError: any) {
+        console.error(`[Workflow] X Posting Agent execution failed:`, agentError);
+        executionLogs.push({
+          agent: xPostingAgent.name,
+          status: 'error',
+          error: agentError.message
+        });
+        return {
+          success: false,
+          tweets: [],
+          executionLogs
+        };
+      }
+    } catch (error: any) {
+      console.error('[Workflow] Resume after approval failed:', error);
+      return {
+        success: false,
+        tweets: [],
+        executionLogs: [{
+          agent: 'System',
+          status: 'error',
+          error: error.message
+        }]
       };
     }
   }

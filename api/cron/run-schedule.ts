@@ -88,14 +88,28 @@ export default async function handler(req: NextRequest) {
           );
 
           if (result.success && result.issue) {
+            // ✅ FIX 1: Save the generated issue to database
+            const issueToBeSaved = {
+              ...result.issue,
+              scheduledFor: schedule.id,
+              approvalStatus: result.halted ? ('pending_review' as const) : ('approved' as const)
+            };
+
+            const savedIssue = await storageService.saveIssue(issueToBeSaved);
+            console.log(`[Workflow] Issue saved to database:`, {
+              id: savedIssue.id,
+              status: savedIssue.approvalStatus,
+              halted: result.halted
+            });
+
             // Update execution record with success
             executionRecord.status = 'completed';
+            executionRecord.issueId = savedIssue.id;
             executionRecord.executionLogs = result.executionLogs || [];
 
             // Save execution record
             await storageService.createExecutionRecord({
               ...executionRecord,
-              issueId: result.issue.id,
               completedAt: new Date().toISOString()
             });
 
