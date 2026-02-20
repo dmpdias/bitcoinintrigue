@@ -685,11 +685,12 @@ export const BackOffice: React.FC = () => {
                                             const agentsMap = new Map(agents.map(a => [a.id, a]));
                                             const resumeResult = await agentService.resumeWorkflowAfterApproval(selectedIssue, agentsMap);
                                             if (resumeResult.success && resumeResult.tweets && resumeResult.tweets.length > 0) {
-                                              for (const tweet of resumeResult.tweets) {
+                                              for (let index = 0; index < resumeResult.tweets.length; index++) {
+                                                const tweet = resumeResult.tweets[index];
                                                 await storageService.saveXPostingScheduleEntry({
                                                   id: `x-post-${selectedIssue.id}-${Date.now()}-${Math.random()}`,
                                                   issueId: selectedIssue.id,
-                                                  storyIndex: resumeResult.tweets.indexOf(tweet),
+                                                  storyIndex: index,
                                                   postText: tweet.text,
                                                   scheduledTime: tweet.scheduledTime,
                                                   status: 'scheduled',
